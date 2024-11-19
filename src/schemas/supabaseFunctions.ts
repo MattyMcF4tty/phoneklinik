@@ -1,28 +1,30 @@
+import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
 
 export type SupabaseFunctions = {
-  get_devices_by_brand: {
-    Args: { device_brand: string };
-    Returns: DeviceSchema[];
-  };
-  get_devices: {
-    Args: {};
-    Returns: DeviceSchema[];
-  };
-  get_devices_by_type: {
-    Args: { device_type: string };
-    Returns: DeviceSchema[];
-  };
-  get_devices_by_brand_and_model: {
-    Args: { device_brand: string; device_model: string };
-    Returns: DeviceSchema[];
-  };
-  get_devices_by_id: {
+  get_device_by_id: {
     Args: { device_id: number };
+    Returns: DeviceSchema;
+  };
+  query_devices: {
+    Args: {
+      device_brand: string | null;
+      device_model: string | null;
+      device_version: string | null;
+      device_type: string | null;
+    };
     Returns: DeviceSchema[];
   };
-  get_devices_by_brand_and_type: {
-    Args: { device_brand: string; device_type: string };
+  query_device_name: {
+    Args: {
+      device_name: string;
+    };
     Returns: DeviceSchema[];
+  };
+  get_device_parts_by_id: {
+    Args: {
+      parts_device_id: number;
+    };
+    Returns: DevicePartSchema[];
   };
 };

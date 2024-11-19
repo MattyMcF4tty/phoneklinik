@@ -8,10 +8,10 @@ export const getSupabaseClient = () => {
 
   // Validate supabaseUrl and supabasePublicKey.
   if (!supabaseUrl) {
-    throw new Error('SUPABASE_URL is not defined in envirotment.');
+    throw new Error('SUPABASE_URL is not defined in enviroment.');
   }
   if (!supabasePublicKey) {
-    throw new Error('SUPABASE_PUBLIC_KEY is not defined in envirotment.');
+    throw new Error('SUPABASE_PUBLIC_KEY is not defined in enviroment.');
   }
 
   // Handle errors and potential secret information.
