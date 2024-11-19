@@ -1,10 +1,11 @@
+import { BrandSchema } from './brandSchema';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
 
 export type SupabaseFunctions = {
   get_device_by_id: {
     Args: { device_id: number };
-    Returns: DeviceSchema;
+    Returns: DeviceSchema[];
   };
   query_devices: {
     Args: {
@@ -26,5 +27,15 @@ export type SupabaseFunctions = {
       parts_device_id: number;
     };
     Returns: DevicePartSchema[];
+  };
+  get_brands: {
+    Args: {};
+    Returns: BrandSchema[];
+  };
+  insert_brand: {
+    Args: {
+      brand_name: string;
+    };
+    Returns: void;
   };
 };

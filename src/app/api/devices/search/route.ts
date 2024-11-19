@@ -10,7 +10,11 @@ export async function GET(req: NextRequest) {
       device_name: name,
     });
 
-    return NextResponse.json({ data: devices }, { status: 200 });
+    if (devices.length <= 0) {
+      return NextResponse.json({ data: null }, { status: 200 });
+    }
+
+    return NextResponse.json({ data: devices[0] }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: 'Internal server error.' },

@@ -1,4 +1,4 @@
-import { getDevicesById } from '@/utils/supabase/devices';
+import { handleSupabaseFunction } from '@/utils/config/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: any) {
@@ -14,9 +14,15 @@ export async function GET(req: NextRequest, { params }: any) {
   }
 
   try {
-    const device = await getDevicesById(formattedId);
+    const devices = await handleSupabaseFunction('get_device_by_id', {
+      device_id: id,
+    });
 
-    return NextResponse.json({ data: device }, { status: 200 });
+    if (devices.length <= 0) {
+      return NextResponse.json({ data: null }, { status: 200 });
+    }
+
+    return NextResponse.json({ data: devices[0] }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: 'Internal server error.' },
