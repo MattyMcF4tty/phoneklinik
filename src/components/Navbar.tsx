@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
             />
              <LinkButton
               variant="navbar2"
-              url="/bestil"
+              url="/bestil-reparation"
         
             >
               Bestil reparation

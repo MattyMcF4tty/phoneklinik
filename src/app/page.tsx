@@ -19,7 +19,7 @@ export default function Home() {
           Vi tilbyder reparation af telefoner og MacBooks, samt salg af covers,
           opladere og andre telefonprodukter.
         </p>
-        <LinkButton  variant="navbar" url="/kontakt">
+        <LinkButton  variant="default" url="/kontakt">
           Kontakt os          
           </LinkButton>      </div>
 
