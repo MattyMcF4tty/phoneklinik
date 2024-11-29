@@ -2,6 +2,7 @@ import { AccessorySchema } from './accessorySchema';
 import { BrandSchema } from './brandSchema';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
+import { TimeSlotSchema } from './timeSlotSchema';
 
 export type SupabaseFunctions = {
   /* __________ DEVICES __________ */
@@ -44,14 +45,30 @@ export type SupabaseFunctions = {
   };
   /* __________ ACCESSORIES __________ */
   get_accessory_by_id: {
-    /* Missing a route */
+    /* TODO: Missing a route */
     Args: {
       accessory_id: string;
     };
     Returns: AccessorySchema[];
   };
   get_accessories: {
-    /* Missing a route */ Args: {};
+    /* TODO: Missing a route */
+    Args: {};
     Returns: AccessorySchema[];
+  };
+  /* __________ REPAIR_TIME_SLOTS __________ */
+  reserve_time_slot: {
+    Args: {
+      requested_date: Date;
+      requested_time: Time;
+      requester_email: string;
+    };
+    Returns: TimeSlotSchema[];
+  };
+  get_reserved_time_slots: {
+    Args: {
+      month: Date;
+    };
+    Returns: TimeSlotSchema[];
   };
 };

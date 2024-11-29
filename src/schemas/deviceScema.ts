@@ -5,6 +5,7 @@ export interface DeviceSchema {
   brand: string;
   model: string;
   type: string;
+  iconUrl: string;
 }
 
 export default class Device implements DeviceSchema {
@@ -13,12 +14,14 @@ export default class Device implements DeviceSchema {
   model: string;
   parts: DevicePart[] | null = null;
   type: string;
+  iconUrl: string;
 
   constructor(device: DeviceSchema) {
     this.id = device.id;
     this.brand = device.brand;
     this.model = device.model;
     this.type = device.type;
+    this.iconUrl = device.iconUrl;
   }
 
   async fetchParts() {

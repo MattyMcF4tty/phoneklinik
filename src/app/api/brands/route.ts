@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/* TODO: Missing function */
 export async function POST(req: NextRequest) {
   const bodyData = await req.json();
   const brandname = bodyData.brandName;

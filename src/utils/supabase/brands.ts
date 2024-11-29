@@ -23,3 +23,8 @@ export const getBrands = async (): Promise<Brand[]> => {
 
   return brands;
 };
+
+//TODO: Create function
+export const insertBrand = async (): Promise<boolean> => {
+  return true;
+};
