@@ -1,8 +1,11 @@
+import { AccessorySchema } from './accessorySchema';
 import { BrandSchema } from './brandSchema';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
+import { TimeSlotSchema } from './timeSlotSchema';
 
 export type SupabaseFunctions = {
+  /* __________ DEVICES __________ */
   get_device_by_id: {
     Args: { device_id: number };
     Returns: DeviceSchema[];
@@ -22,12 +25,14 @@ export type SupabaseFunctions = {
     };
     Returns: DeviceSchema[];
   };
+  /* __________ PARTS __________ */
   get_device_parts_by_id: {
     Args: {
       parts_device_id: number;
     };
     Returns: DevicePartSchema[];
   };
+  /* __________ BRANDS __________ */
   get_brands: {
     Args: {};
     Returns: BrandSchema[];
@@ -36,6 +41,34 @@ export type SupabaseFunctions = {
     Args: {
       brand_name: string;
     };
-    Returns: void;
+    Returns: BrandSchema[];
+  };
+  /* __________ ACCESSORIES __________ */
+  get_accessory_by_id: {
+    /* TODO: Missing a route */
+    Args: {
+      accessory_id: string;
+    };
+    Returns: AccessorySchema[];
+  };
+  get_accessories: {
+    /* TODO: Missing a route */
+    Args: {};
+    Returns: AccessorySchema[];
+  };
+  /* __________ REPAIR_TIME_SLOTS __________ */
+  reserve_time_slot: {
+    Args: {
+      requested_date: Date;
+      requested_time: Time;
+      requester_email: string;
+    };
+    Returns: TimeSlotSchema[];
+  };
+  get_reserved_time_slots: {
+    Args: {
+      month: Date;
+    };
+    Returns: TimeSlotSchema[];
   };
 };

@@ -28,7 +28,7 @@ export const getSupabaseClient = () => {
  * Handles the calling of supabase functions.
  * @param functionName The name of the database function you want to call.
  * @param args Potential arguments that the function can have.
- * @returns Returns database data.
+ * @returns database data.
  */
 export const handleSupabaseFunction = async <K extends keyof SupabaseFunctions>(
   functionName: K,
