@@ -25,3 +25,7 @@ export const validateDate = (date: any) => {
   }
   return date as Date;
 };
+
+export const decodeUrlSpaces = (input: string): string => { 
+  return input.replace(/%20/g, ' ');
+}

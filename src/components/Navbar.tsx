@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import LinkButton from '@/components/LinkButton';
+import Searchbar from './Searchbar';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,11 +80,7 @@ const Navbar: React.FC = () => {
           </LinkButton>
           </div>
           <div className="flex items-center space-x-2 w-2/5">
-            <input
-              type="text"
-              className="block w-full h-10 p-2 text-gray-900 bg-gray-50 rounded border border-gray-300"
-              placeholder="Find din enhed..."
-            />
+            <Searchbar/>
              <LinkButton
               variant="navbar2"
               url="/bestil-reparation"

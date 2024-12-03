@@ -50,7 +50,7 @@ export const queryDeviceName = async (name: string): Promise<Device | null> => {
   const response = await fetch(
     `${
       process.env.NEXT_PUBLIC_WEBSITE_URL
-    }/api/devices/search${searchParams.toString()}`,
+    }/api/devices/search?${searchParams.toString()}`,
     {
       method: 'GET',
       cache: 'no-cache',
@@ -107,7 +107,7 @@ export const queryDevices = async (search: {
   const response = await fetch(
     `${
       process.env.NEXT_PUBLIC_WEBSITE_URL
-    }/api/devices${searchParams.toString()}`,
+    }/api/devices?${searchParams.toString()}`,
     {
       method: 'GET',
       cache: 'no-cache',
@@ -117,6 +117,7 @@ export const queryDevices = async (search: {
 
   // Check if server response was ok and no error occured.
   if (!response.ok) {
+
     throw new Error(responseData.error);
   }
 
