@@ -9,60 +9,7 @@ import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import OrderRepair from "@/components/OrderRepair";
 
 export default function ReparationPage() {
-  const [brands, setBrands] = useState<string[]>([]);
-  const [models, setModels] = useState<string[]>([]);
-  const [versions, setVersions] = useState<string[]>([]);
-
-  const [brand, setBrand] = useState<string>("");
-  const [model, setModel] = useState<string>("");
-  const [version, setVersion] = useState<string>("");
-
-  const [location, setLocation] = useState<string>("");
-  const locations = ["Fisketorvet"];
-
-  useEffect(() => {
-    // Fetch brands on mount
-    const fetchBrands = async () => {
-      const devices = await queryDevices({brand: brand, model: model});
-      const uniqueBrands = Array.from(new Set(devices.map((device) => device.brand)));
-      setBrands(uniqueBrands);
-    };
-
-    fetchBrands();
-  }, []);
-
-  useEffect(() => {
-    // Fetch models when brand changes
-    if (brand) {
-      const fetchModels = async () => {
-        const devices = await queryDevices({ brand });
-        const uniqueModels = Array.from(new Set(devices.map((device) => device.model)));
-        setModels(uniqueModels);
-      };
-
-      fetchModels();
-    } else {
-      setModels([]);
-      setVersions([]);
-    }
-    setModel(""); // Reset model when brand changes
-  }, [brand]);
-
-  useEffect(() => {
-    // Fetch versions when model changes
-    if (model) {
-      const fetchVersions = async () => {
-        const devices = await queryDevices({ brand, model });
-        const uniqueVersions = Array.from(new Set(devices.map((device) => device.version)));
-        setVersions(uniqueVersions);
-      };
-
-      fetchVersions();
-    } else {
-      setVersions([]);
-    }
-    setVersion(""); // Reset version when model changes
-  }, [model]);
+ 
 
   return (
     <div className="bg-gray-100 h-screen w-full">
