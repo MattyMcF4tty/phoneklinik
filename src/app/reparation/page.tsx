@@ -2,6 +2,7 @@ import Cardholder from "@/components/Cardholder";
 import Navbar from "@/components/Navbar";
 import { getBrands } from "@/utils/supabase/brands";
 
+
 const ReparationPage = async () => {
   const brands = await getBrands()
     return( 
@@ -13,9 +14,9 @@ const ReparationPage = async () => {
 Reparation af dine enheder
         </h1>
         <p className="text-sm md:text-lg mb-6">
-          Vi tilbyder reparation af telefoner, MacBooks og ipads til alle modeller på markedet.
+          Vi tilbyder reparation af telefoner, MacBooks, ipads og smartwatches til alle modeller på markedet.
         </p>
-            </div>
+            </div> 
           <div className="flex items-center justify-center w-full h-[40vh]">
            
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">

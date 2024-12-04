@@ -17,7 +17,7 @@ export default async function TelefonReparationPage({ params }: any) {
           Reparation af {brand} produkter
         </h1>
         <p className="text-sm md:text-lg mb-6">
-          Find din iPhone-model og få din enhed repareret hurtigt og sikkert.
+          Find dit {brand} produkt og få din enhed repareret hurtigt og sikkert.
         </p>
       </div>
 
