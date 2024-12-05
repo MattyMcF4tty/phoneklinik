@@ -2,13 +2,14 @@
 
 import LinkButton from '@/components/LinkButton';
 import Navbar from '@/components/Navbar';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
-
   return (
     <div className="bg-gray-100 h-screen w-full">
       {/* Navbar */}
-      <Navbar/>
+      <Navbar />
 
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[60vh] flex flex-col justify-center items-center text-center px-6">
@@ -19,9 +20,10 @@ export default function Home() {
           Vi tilbyder reparation af telefoner og MacBooks, samt salg af covers,
           opladere og andre telefonprodukter.
         </p>
-        <LinkButton  variant="default" url="/kontakt">
-          Kontakt os          
-          </LinkButton>      </div>
+        <LinkButton variant="default" url="/kontakt">
+          Kontakt os
+        </LinkButton>{' '}
+      </div>
 
       {/* Info Section */}
       <div className="p-10 text-center bg-gray-100">
@@ -30,31 +32,37 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded shadow">
-          <a href='/reparation'>
-            <img
-              src="/Reparation.png"
-              alt="Reparation"
-              className="h-20 md:h-32 mx-auto mb-4"
-            />
-            <h3 className="font-semibold mb-2">Reparation</h3>
-            </a>
+            <Link href="/reparation">
+              <Image
+                src="/Reparation.png"
+                alt="Reparation"
+                width={100}
+                height={100}
+                className="h-20 md:h-32 mx-auto mb-4"
+              />
+              <h3 className="font-semibold mb-2">Reparation</h3>
+            </Link>
             <p>
               Få din telefon eller MacBook repareret hurtigt og professionelt.
             </p>
           </div>
           <div className="bg-white p-6 rounded shadow">
-            <img
+            <Image
               src="/cover.jpg"
               alt="Covers"
+              width={100}
+              height={100}
               className="h-20 md:h-32 mx-auto mb-4"
             />
             <h3 className="font-semibold mb-2">Covers</h3>
             <p>Beskyt din enhed med vores stilfulde covers.</p>
           </div>
           <div className="bg-white p-6 rounded shadow">
-            <img
+            <Image
               src="/tilbehor.jpg"
               alt="Tilbehør"
+              width={100}
+              height={100}
               className="h-20 md:h-32 mx-auto mb-4"
             />
             <h3 className="font-semibold mb-2">Tilbehør</h3>
@@ -68,9 +76,9 @@ export default function Home() {
         <p>&copy; 2024 PhoneKlinik. Alle rettigheder forbeholdt.</p>
         <p>
           Kontakt os:{' '}
-          <a href="mailto:info@phoneklinik.dk" className="underline">
+          <Link href="mailto:info@phoneklinik.dk" className="underline">
             info@phoneklinik.dk
-          </a>
+          </Link>
         </p>
       </footer>
     </div>

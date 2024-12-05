@@ -1,4 +1,3 @@
-import { DeviceSchema } from '@/schemas/deviceScema';
 import { SupabaseFunctions } from '@/schemas/supabaseFunctions';
 import { createClient } from '@supabase/supabase-js';
 

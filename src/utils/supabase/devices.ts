@@ -1,5 +1,3 @@
-import { SearchParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';
-import { handleSupabaseFunction } from '../config/supabase';
 import Device, { DeviceSchema } from '@/schemas/deviceScema';
 
 /**
@@ -117,7 +115,6 @@ export const queryDevices = async (search: {
 
   // Check if server response was ok and no error occured.
   if (!response.ok) {
-
     throw new Error(responseData.error);
   }
 

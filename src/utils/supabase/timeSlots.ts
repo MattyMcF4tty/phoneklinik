@@ -1,5 +1,6 @@
-import { TimeSlot } from '@/schemas/timeSlotSchema';
+import { TimeSlot, TimeSlotSchema } from '@/schemas/timeSlotSchema';
 import { validateEmail, validateTime } from '../misc';
+import { Time } from '@/schemas/customTypes';
 
 export const reserveTimeSlot = async (
   requestedDate: Date,
@@ -61,7 +62,7 @@ export const getResveredTimeSlots = async (
     return [];
   }
 
-  const timeSlots = timeSlotsData.map((timeSlot) => {
+  const timeSlots = timeSlotsData.map((timeSlot: TimeSlotSchema) => {
     return new TimeSlot(timeSlot);
   });
 

@@ -4,7 +4,7 @@
  * Minutes only go to `59`.
  * Seconds only go to `59`.
  */
-type Time = `${`${0 | 1}${number}` | `2${0 | 1 | 2 | 3}`}:${`${
+export type Time = `${`${0 | 1}${number}` | `2${0 | 1 | 2 | 3}`}:${`${
   | 0
   | 1
   | 2
@@ -12,5 +12,5 @@ type Time = `${`${0 | 1}${number}` | `2${0 | 1 | 2 | 3}`}:${`${
   | 4
   | 5}${number}`}:${`${0 | 1 | 2 | 3 | 4 | 5}${number}`}`;
 
-const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

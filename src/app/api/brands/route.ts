@@ -1,12 +1,13 @@
 import { handleSupabaseFunction } from '@/utils/config/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const brands = await handleSupabaseFunction('get_brands', {});
 
     return NextResponse.json({ data: brands }, { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: brandData }, { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }

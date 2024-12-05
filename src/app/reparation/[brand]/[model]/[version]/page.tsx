@@ -1,31 +1,22 @@
-"use server";
+import Navbar from '@/components/Navbar';
+import OrderRepair from '@/components/OrderRepair';
+import { decodeUrlSpaces, handleSelectedParts } from '@/utils/misc';
+import { getBrands } from '@/utils/supabase/brands';
+import { queryDeviceName } from '@/utils/supabase/devices';
+import Image from 'next/image';
 
-import Cardholder from "@/components/Cardholder";
-import LinkButton from "@/components/LinkButton";
-import Navbar from "@/components/Navbar";
-import OrderRepair from "@/components/OrderRepair";
-import { decodeUrlSpaces } from "@/utils/misc";
-import { queryDeviceName } from "@/utils/supabase/devices";
-import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-// Server action for handling selected parts
-export async function handleSelectedParts(formData: FormData): Promise<void> {
-  const selectedParts = formData.getAll("parts") as string[];
-  console.log("Selected parts:", selectedParts);
-
-  // Perform your logic, e.g., save to database
-  // await saveSelectedPartsToDatabase(selectedParts);
-
-  // No return value is needed here
+interface Context {
+  params: Promise<{ brand: string; model: string; version: string }>;
 }
-export default async function TelefonReparationPage({ params }: any) {
-  const { brand, model, version } = params;
+
+export default async function TelefonReparationPage({ params }: Context) {
+  const { model, version } = await params;
   const device = await queryDeviceName(`${model} ${decodeUrlSpaces(version)}`);
   if (!device) {
-    throw new Error("Device does not exist");
+    throw new Error('Device does not exist');
   }
   await device.fetchParts();
+  const brands = await getBrands();
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -35,8 +26,8 @@ export default async function TelefonReparationPage({ params }: any) {
         <div className="flex w-full max-w-4xl items-center space-x-6">
           {/* Image */}
           <div className="flex-shrink-0">
-            <img
-              src={device.iconUrl}
+            <Image
+              src={device.image_url}
               alt={model}
               className="h-full object-contain max-h-48"
             />
@@ -47,10 +38,10 @@ export default async function TelefonReparationPage({ params }: any) {
               {model} {decodeUrlSpaces(version)} reparation
             </h1>
             <p className="text-sm md:text-lg mb-6 text-start">
-              Har du brug for {model} {decodeUrlSpaces(version)} reparation,
-              kan du få hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift
-              af {model} {decodeUrlSpaces(version)} samt udskiftning af batteri
-              og reparation af andre reservedele.
+              Har du brug for {model} {decodeUrlSpaces(version)} reparation, kan
+              du få hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af{' '}
+              {model} {decodeUrlSpaces(version)} samt udskiftning af batteri og
+              reparation af andre reservedele.
             </p>
           </div>
         </div>
@@ -95,7 +86,7 @@ export default async function TelefonReparationPage({ params }: any) {
           </button>
         </form>
         <div>
-          <OrderRepair />
+          <OrderRepair brands={brands} />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import LinkButton from '@/components/LinkButton';
 import Searchbar from './Searchbar';
+import Link from 'next/link';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,16 +24,15 @@ const Navbar: React.FC = () => {
       <div className="bg-white flex items-center justify-between px-4 md:px-10 py-4 w-full">
         {/* Logo */}
         <div className="flex items-center">
-          <a href='/'>
+          <Link href="/">
             <Image
               src="/phoneklinik.jpg"
               width={150}
               height={150}
               alt="logo"
               className="md:w-26"
-              
             />
-          </a>
+          </Link>
         </div>
 
         {/* Hamburger Menu for Mobile */}
@@ -66,28 +66,24 @@ const Navbar: React.FC = () => {
         {/* Desktop Navbar Links */}
         <div className="hidden md:flex items-center justify-between w-full">
           <div className="flex flex-row items-center space-x-4">
-          <LinkButton variant="navbar" url="/reparation" > 
-          Reparation
-          </LinkButton>
-          <LinkButton variant="navbar" url="/salg">
-          Sælg din enhed
-          </LinkButton>
-          <LinkButton variant="navbar" url="/about">
-          Om os
-          </LinkButton>
-          <LinkButton  variant="navbar" url="/kontakt">
-          Kontakt os          
-          </LinkButton>
+            <LinkButton variant="navbar" url="/reparation">
+              Reparation
+            </LinkButton>
+            <LinkButton variant="navbar" url="/salg">
+              Sælg din enhed
+            </LinkButton>
+            <LinkButton variant="navbar" url="/about">
+              Om os
+            </LinkButton>
+            <LinkButton variant="navbar" url="/kontakt">
+              Kontakt os
+            </LinkButton>
           </div>
           <div className="flex items-center space-x-2 w-2/5">
-            <Searchbar/>
-             <LinkButton
-              variant="navbar2"
-              url="/bestil-reparation"
-        
-            >
+            <Searchbar />
+            <LinkButton variant="navbar2" url="/bestil-reparation">
               Bestil reparation
-                        </LinkButton>
+            </LinkButton>
           </div>
         </div>
       </div>
@@ -95,30 +91,24 @@ const Navbar: React.FC = () => {
       {/* Mobile Dropdown Menu */}
       {isMenuOpen && (
         <div className="bg-white flex flex-col items-center space-y-4 p-4 md:hidden">
-          <LinkButton variant="navbar" url="/reparation" > 
-          Reparation
+          <LinkButton variant="navbar" url="/reparation">
+            Reparation
           </LinkButton>
           <LinkButton variant="navbar" url="/salg">
-          Sælg din enhed
+            Sælg din enhed
           </LinkButton>
           <LinkButton variant="navbar" url="/about">
-          Om os
+            Om os
           </LinkButton>
-          <LinkButton  variant="navbar" url="/kontakt">
-          Kontakt os          
+          <LinkButton variant="navbar" url="/kontakt">
+            Kontakt os
           </LinkButton>
-
 
           {/* Search Input & "Bestil Reparation" in Mobile Menu */}
           <div className="flex flex-col items-center w-full mt-4">
-            <LinkButton
-              variant="navbar2"
-              url="/bestil"
-        
-            >
+            <LinkButton variant="navbar2" url="/bestil">
               Bestil reparation
-                        </LinkButton>
-
+            </LinkButton>
           </div>
         </div>
       )}

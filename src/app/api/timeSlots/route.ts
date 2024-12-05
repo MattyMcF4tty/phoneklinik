@@ -1,3 +1,4 @@
+import { emailRegex, timeRegex } from '@/schemas/customTypes';
 import { handleSupabaseFunction } from '@/utils/config/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -19,6 +20,8 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data: timeSlots }, { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
+
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }
@@ -63,6 +66,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ data: timeSlot }, { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
+
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }

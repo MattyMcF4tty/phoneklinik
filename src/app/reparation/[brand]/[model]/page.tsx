@@ -1,12 +1,14 @@
-import Cardholder from "@/components/Cardholder";
-import Navbar from "@/components/Navbar";
-import { queryDevices } from "@/utils/supabase/devices";
+import Cardholder from '@/components/Cardholder';
+import Navbar from '@/components/Navbar';
+import { queryDevices } from '@/utils/supabase/devices';
 
+interface Context {
+  params: Promise<{ brand: string; model: string }>;
+}
 
-
-export default async function TelefonReparationPage({ params }: any) {
+export default async function TelefonReparationPage({ params }: Context) {
   const { brand, model } = await params;
-  const devices = await queryDevices({brand: brand, model: model})
+  const devices = await queryDevices({ brand: brand, model: model });
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
@@ -22,9 +24,17 @@ export default async function TelefonReparationPage({ params }: any) {
 
       {/* iPhone Models Section */}
       <div className="container mx-auto px-4 py-10">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">
-      {devices.map((device) => (<Cardholder key={device.id} cardName={`${device.model} ${device.version}`} imageUrl={device.iconUrl} linkUrl={`/reparation/${device.brand.toLowerCase()}/${device.model.toLowerCase()}/${device.version.toLowerCase()}`} buttonText={`Find dit ${device.model} produkt`}
-                />))}        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">
+          {devices.map((device) => (
+            <Cardholder
+              key={device.id}
+              cardName={`${device.model} ${device.version}`}
+              imageUrl={device.image_url}
+              linkUrl={`/reparation/${device.brand.toLowerCase()}/${device.model.toLowerCase()}/${device.version.toLowerCase()}`}
+              buttonText={`Find dit ${device.model} produkt`}
+            />
+          ))}{' '}
+        </div>
       </div>
     </div>
   );

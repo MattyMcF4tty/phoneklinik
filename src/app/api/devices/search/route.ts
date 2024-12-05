@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data: devices[0] }, { status: 200 });
   } catch (error) {
+    console.error('Error occurred:', error);
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }

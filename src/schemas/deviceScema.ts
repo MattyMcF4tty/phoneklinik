@@ -1,4 +1,4 @@
-import DevicePart, { DevicePartSchema } from './devicePartSchema';
+import DevicePart from './devicePartSchema';
 
 export interface DeviceSchema {
   id: number;
@@ -6,7 +6,7 @@ export interface DeviceSchema {
   model: string;
   version: string;
   type: string;
-  iconUrl: string;
+  image_url: string;
 }
 
 export default class Device implements DeviceSchema {
@@ -16,7 +16,7 @@ export default class Device implements DeviceSchema {
   version: string;
   parts: DevicePart[] | null = null;
   type: string;
-  iconUrl: string;
+  image_url: string;
 
   constructor(device: DeviceSchema) {
     this.id = device.id;
@@ -24,14 +24,17 @@ export default class Device implements DeviceSchema {
     this.model = device.model;
     this.version = device.version;
     this.type = device.type;
-    this.iconUrl = device.iconUrl;
+    this.image_url = device.image_url;
   }
 
   async fetchParts() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/devices/${this.id}/parts`, {
-      method: 'GET',
-      cache: 'no-cache',
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/devices/${this.id}/parts`,
+      {
+        method: 'GET',
+        cache: 'no-cache',
+      }
+    );
 
     const responseData = await response.json();
     if (!response.ok) {

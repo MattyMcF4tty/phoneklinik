@@ -1,3 +1,4 @@
+import { emailRegex } from '@/schemas/customTypes';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,13 +20,26 @@ export const validateTime = (time: string) => {
   return time;
 };
 
-export const validateDate = (date: any) => {
-  if (!date || isNaN(Date.parse(date))) {
-    throw new Error(`${date} is not a valid Date object.`);
+export const validateDate = (dateString: string) => {
+  if (!dateString || isNaN(Date.parse(dateString))) {
+    throw new Error(`${dateString} is not a valid Date object.`);
   }
-  return date as Date;
+
+  const formattedDate = new Date(dateString);
+  return formattedDate as Date;
 };
 
-export const decodeUrlSpaces = (input: string): string => { 
+export const decodeUrlSpaces = (input: string): string => {
   return input.replace(/%20/g, ' ');
+};
+
+// Server action for handling selected parts
+export async function handleSelectedParts(formData: FormData): Promise<void> {
+  const selectedParts = formData.getAll('parts') as string[];
+  console.log('Selected parts:', selectedParts);
+
+  // Perform your logic, e.g., save to database
+  // await saveSelectedPartsToDatabase(selectedParts);
+
+  // No return value is needed here
 }

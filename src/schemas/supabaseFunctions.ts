@@ -1,5 +1,6 @@
 import { AccessorySchema } from './accessorySchema';
 import { BrandSchema } from './brandSchema';
+import { Time } from './customTypes';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
 import { TimeSlotSchema } from './timeSlotSchema';
@@ -34,7 +35,7 @@ export type SupabaseFunctions = {
   };
   /* __________ BRANDS __________ */
   get_brands: {
-    Args: {};
+    Args: object;
     Returns: BrandSchema[];
   };
   insert_brand: {
@@ -53,7 +54,7 @@ export type SupabaseFunctions = {
   };
   get_accessories: {
     /* TODO: Missing a route */
-    Args: {};
+    Args: object;
     Returns: AccessorySchema[];
   };
   /* __________ REPAIR_TIME_SLOTS __________ */

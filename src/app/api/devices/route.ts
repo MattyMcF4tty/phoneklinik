@@ -16,8 +16,12 @@ export async function GET(req: NextRequest) {
       device_type: type,
     });
 
+    console.log(devices);
+
     return NextResponse.json({ data: devices }, { status: 200 });
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       { error: 'Internal server error.' },
       { status: 500 }
