@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import OrderRepair from '@/components/OrderRepair';
+import Device from '@/schemas/deviceScema';
 import { decodeUrlSpaces } from '@/utils/misc';
 import { getBrands } from '@/utils/supabase/brands';
 import { queryDeviceName, queryDevices } from '@/utils/supabase/devices';
@@ -20,7 +21,7 @@ export default async function TelefonReparationPage({ params }: Context) {
   const { model, version, brand } = await params;
   const formattedVersion = decodeUrlSpaces(version);
 
-  const device = (await queryDevices({brand: brand, model: model, version:formattedVersion}))[0];
+  const device = new Device((await queryDevices({brand: brand, model: model, version:formattedVersion}))[0]);
   if (!device) {
     throw new Error('Device does not exist');
   }

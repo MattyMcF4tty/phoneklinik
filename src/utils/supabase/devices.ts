@@ -39,7 +39,7 @@ export const getDeviceById = async (id: number): Promise<Device> => {
  */
 export const queryDeviceName = async (
   name: string
-): Promise<Device[] | null> => {
+): Promise<Device[]> => {
   const searchParams = new URLSearchParams();
   searchParams.append('name', `${name}`);
 
@@ -61,15 +61,13 @@ export const queryDeviceName = async (
 
   const deviceData = responseData.data;
 
-  if (!deviceData) {
-    return null;
-  }
+ 
 
-  const device = deviceData.map((device: DeviceSchema) => {
+/*   const device = deviceData.map((device: DeviceSchema) => {
     return new Device(deviceData);
-  });
+  }); */
 
-  return device;
+  return deviceData;
 };
 
 /**
