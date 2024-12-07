@@ -1,4 +1,4 @@
-import DevicePart from './devicePartSchema';
+import { DevicePartSchema } from './devicePartSchema';
 
 export interface DeviceSchema {
   id: number;
@@ -7,16 +7,18 @@ export interface DeviceSchema {
   version: string;
   type: string;
   image_url: string;
+  release_date: string;
 }
 
-export default class Device implements DeviceSchema {
+export default class Device {
   id: number;
   brand: string;
   model: string;
   version: string;
-  parts: DevicePart[] | null = null;
+  parts: DevicePartSchema[] | null = null;
   type: string;
   image_url: string;
+  release_date: Date;
 
   constructor(device: DeviceSchema) {
     this.id = device.id;
@@ -25,6 +27,7 @@ export default class Device implements DeviceSchema {
     this.version = device.version;
     this.type = device.type;
     this.image_url = device.image_url;
+    this.release_date = new Date(device.release_date);
   }
 
   async fetchParts() {
@@ -45,5 +48,23 @@ export default class Device implements DeviceSchema {
     this.parts = parts;
 
     return this.parts;
+  }
+
+  toPlainObject(): {
+    deviceData: DeviceSchema;
+    partsData: DevicePartSchema[] | null;
+  } {
+    return {
+      deviceData: {
+        id: this.id,
+        brand: this.brand,
+        image_url: this.image_url,
+        model: this.model,
+        release_date: this.release_date.toDateString(),
+        type: this.type,
+        version: this.version,
+      },
+      partsData: this.parts ? this.parts : null,
+    };
   }
 }

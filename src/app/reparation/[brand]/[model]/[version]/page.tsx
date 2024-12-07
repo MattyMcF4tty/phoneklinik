@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import OrderRepair from '@/components/OrderRepair';
+import PartSelectForm from '@/components/PartSelectForm';
 import { decodeUrlSpaces } from '@/utils/misc';
 import { getBrands } from '@/utils/supabase/brands';
 import { queryDeviceName, queryDevices } from '@/utils/supabase/devices';
@@ -11,23 +12,23 @@ interface Context {
   params: Promise<{ brand: string; model: string; version: string }>;
 }
 
-async function handleSelectedParts(formData: FormData): Promise<void> {
-  const selectedParts = formData.getAll('parts') as string[];
-  console.log('Selected parts:', selectedParts);
-}
-
 export default async function TelefonReparationPage({ params }: Context) {
   const { model, version, brand } = await params;
   const formattedVersion = decodeUrlSpaces(version);
 
-  const device = (await queryDevices({brand: brand, model: model, version:formattedVersion}))[0];
+  const device = (
+    await queryDevices({
+      brand: brand,
+      model: model,
+      version: formattedVersion,
+    })
+  )[0];
   if (!device) {
     throw new Error('Device does not exist');
   }
   await device.fetchParts();
-  const brands = (await getBrands()).map((brand) => {
-    return brand.toPlainObject();
-  });
+
+  const { deviceData, partsData } = device.toPlainObject();
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -63,43 +64,13 @@ export default async function TelefonReparationPage({ params }: Context) {
       {/* Info Boxes Section */}
       <div className="flex flex-col md:flex-row justify-center items-start space-y-6 md:space-y-0 md:space-x-6 p-6">
         {/* Pricing Section */}
-        <form
-          action={handleSelectedParts}
-          className="bg-white rounded-lg shadow-md p-6 flex flex-col w-full mt-4 md:w-1/3"
-        >
-          <h1 className="text-xl font-bold mb-6">
-            Priser på {model} {formattedVersion} reparation
-          </h1>
-          {device.parts && device.parts.length > 0 ? (
-            <div className="flex flex-col space-y-4">
-              {device.parts.map((part) => (
-                <label
-                  key={part.id}
-                  className="flex justify-between items-center border-b pb-2"
-                >
-                  <input
-                    type="checkbox"
-                    name="parts"
-                    value={part.id}
-                    className="mr-2"
-                  />
-                  <span>{part.name}</span>
-                  <span className="font-bold">{part.price} kr.</span>
-                </label>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-600">Ingen dele fundet til denne enhed.</p>
-          )}
-          <button
-            type="submit"
-            className="bg-main-purple text-white rounded-lg px-4 py-2 mt-4"
-          >
-            Gem valg
-          </button>
-        </form>
+        <h1 className="text-xl font-bold mb-6">
+          Priser på {model} {formattedVersion} reparation
+        </h1>
         <div>
-          <OrderRepair brands={brands} />
+          {partsData && (
+            <PartSelectForm device={deviceData} parts={partsData} />
+          )}
         </div>
       </div>
     </div>

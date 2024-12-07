@@ -37,9 +37,7 @@ export const getDeviceById = async (id: number): Promise<Device> => {
  * @param name The name of the device. The name is a compination of the model and the version. Example: `'Iphone' + ' ' + '12'`.
  * @returns A device.
  */
-export const queryDeviceName = async (
-  name: string
-): Promise<Device[] | null> => {
+export const queryDeviceName = async (name: string): Promise<Device[]> => {
   const searchParams = new URLSearchParams();
   searchParams.append('name', `${name}`);
 
@@ -60,10 +58,6 @@ export const queryDeviceName = async (
   }
 
   const deviceData = responseData.data;
-
-  if (!deviceData) {
-    return null;
-  }
 
   const device = deviceData.map((device: DeviceSchema) => {
     return new Device(deviceData);

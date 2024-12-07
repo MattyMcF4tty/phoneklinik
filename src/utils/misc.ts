@@ -32,3 +32,22 @@ export const validateDate = (dateString: string) => {
 export const decodeUrlSpaces = (input: string): string => {
   return input.replace(/%20/g, ' ');
 };
+
+export const sendMail = async (title: string, body: string) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/email`,
+    {
+      method: 'POST',
+      cache: 'no-cache',
+      body: JSON.stringify({
+        title: title,
+        body: body,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = (await response.json()).error;
+    throw new Error(error);
+  }
+};
