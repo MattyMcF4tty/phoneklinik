@@ -14,4 +14,12 @@ export class Brand implements BrandSchema {
     this.name = brand.name;
     this.image_url = brand.image_url;
   }
+
+  toPlainObject(): BrandSchema {
+    return {
+      id: this.id,
+      name: this.name,
+      image_url: this.image_url,
+    };
+  }
 }

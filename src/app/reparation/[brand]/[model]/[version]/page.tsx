@@ -1,6 +1,8 @@
+'use server';
+
 import Navbar from '@/components/Navbar';
 import OrderRepair from '@/components/OrderRepair';
-import { decodeUrlSpaces, handleSelectedParts } from '@/utils/misc';
+import { decodeUrlSpaces } from '@/utils/misc';
 import { getBrands } from '@/utils/supabase/brands';
 import { queryDeviceName } from '@/utils/supabase/devices';
 import Image from 'next/image';
@@ -9,14 +11,23 @@ interface Context {
   params: Promise<{ brand: string; model: string; version: string }>;
 }
 
+async function handleSelectedParts(formData: FormData): Promise<void> {
+  const selectedParts = formData.getAll('parts') as string[];
+  console.log('Selected parts:', selectedParts);
+}
+
 export default async function TelefonReparationPage({ params }: Context) {
   const { model, version } = await params;
-  const device = await queryDeviceName(`${model} ${decodeUrlSpaces(version)}`);
+  const formattedVersion = decodeUrlSpaces(version);
+
+  const device = await queryDeviceName(`${model} ${formattedVersion}`);
   if (!device) {
     throw new Error('Device does not exist');
   }
   await device.fetchParts();
-  const brands = await getBrands();
+  const brands = (await getBrands()).map((brand) => {
+    return brand.toPlainObject();
+  });
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -29,19 +40,21 @@ export default async function TelefonReparationPage({ params }: Context) {
             <Image
               src={device.image_url}
               alt={model}
+              width={100}
+              height={100}
               className="h-full object-contain max-h-48"
             />
           </div>
           {/* Text */}
           <div className="flex-grow">
             <h1 className="text-2xl md:text-4xl font-bold mb-4 text-start">
-              {model} {decodeUrlSpaces(version)} reparation
+              {model} {formattedVersion} reparation
             </h1>
             <p className="text-sm md:text-lg mb-6 text-start">
-              Har du brug for {model} {decodeUrlSpaces(version)} reparation, kan
-              du få hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af{' '}
-              {model} {decodeUrlSpaces(version)} samt udskiftning af batteri og
-              reparation af andre reservedele.
+              Har du brug for {model} {formattedVersion} reparation, kan du få
+              hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af {model}{' '}
+              {formattedVersion} samt udskiftning af batteri og reparation af
+              andre reservedele.
             </p>
           </div>
         </div>
@@ -55,7 +68,7 @@ export default async function TelefonReparationPage({ params }: Context) {
           className="bg-white rounded-lg shadow-md p-6 flex flex-col w-full mt-4 md:w-1/3"
         >
           <h1 className="text-xl font-bold mb-6">
-            Priser på {model} {decodeUrlSpaces(version)} reparation
+            Priser på {model} {formattedVersion} reparation
           </h1>
           {device.parts && device.parts.length > 0 ? (
             <div className="flex flex-col space-y-4">

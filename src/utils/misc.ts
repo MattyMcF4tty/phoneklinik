@@ -32,14 +32,3 @@ export const validateDate = (dateString: string) => {
 export const decodeUrlSpaces = (input: string): string => {
   return input.replace(/%20/g, ' ');
 };
-
-// Server action for handling selected parts
-export async function handleSelectedParts(formData: FormData): Promise<void> {
-  const selectedParts = formData.getAll('parts') as string[];
-  console.log('Selected parts:', selectedParts);
-
-  // Perform your logic, e.g., save to database
-  // await saveSelectedPartsToDatabase(selectedParts);
-
-  // No return value is needed here
-}

@@ -5,7 +5,7 @@ import Device, { DeviceSchema } from '@/schemas/deviceScema';
  * @param id The id of the device you want to get.
  * @returns A device.
  */
-export const getDeviceById = async (id: number): Promise<Device | null> => {
+export const getDeviceById = async (id: number): Promise<Device> => {
   const searchParams = new URLSearchParams();
   searchParams.append('id', `${id}`);
 
@@ -27,10 +27,6 @@ export const getDeviceById = async (id: number): Promise<Device | null> => {
 
   const deviceData = responseData.data;
 
-  if (!deviceData) {
-    return null;
-  }
-
   const device = new Device(deviceData);
 
   return device;
@@ -41,7 +37,9 @@ export const getDeviceById = async (id: number): Promise<Device | null> => {
  * @param name The name of the device. The name is a compination of the model and the version. Example: `'Iphone' + ' ' + '12'`.
  * @returns A device.
  */
-export const queryDeviceName = async (name: string): Promise<Device | null> => {
+export const queryDeviceName = async (
+  name: string
+): Promise<Device[] | null> => {
   const searchParams = new URLSearchParams();
   searchParams.append('name', `${name}`);
 
@@ -67,7 +65,9 @@ export const queryDeviceName = async (name: string): Promise<Device | null> => {
     return null;
   }
 
-  const device = new Device(deviceData);
+  const device = deviceData.map((device: DeviceSchema) => {
+    return new Device(deviceData);
+  });
 
   return device;
 };

@@ -1,6 +1,6 @@
 import Cardholder from '@/components/Cardholder';
 import Navbar from '@/components/Navbar';
-import { queryDevices } from '@/utils/supabase/devices';
+import { getModels } from '@/utils/supabase/models';
 
 interface Context {
   params: Promise<{ brand: string }>;
@@ -8,7 +8,7 @@ interface Context {
 
 export default async function TelefonReparationPage({ params }: Context) {
   const { brand } = await params;
-  const devices = await queryDevices({ brand: brand });
+  const models = await getModels(brand);
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
@@ -25,13 +25,13 @@ export default async function TelefonReparationPage({ params }: Context) {
       {/* iPhone Models Section */}
       <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">
-          {devices.map((device) => (
+          {models.map((model) => (
             <Cardholder
-              key={device.id}
-              cardName={device.model}
-              imageUrl={device.image_url}
-              linkUrl={`/reparation/${device.brand.toLowerCase()}/${device.model.toLowerCase()}`}
-              buttonText={`Find dit ${device.model} produkt`}
+              key={model.id}
+              cardName={model.name}
+              imageUrl={model.image_url}
+              linkUrl={`/reparation/${brand.toLowerCase()}/${model.name.toLowerCase()}`}
+              buttonText={`Find dit ${model.name} produkt`}
             />
           ))}{' '}
         </div>

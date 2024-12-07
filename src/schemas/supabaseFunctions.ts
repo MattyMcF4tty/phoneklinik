@@ -3,6 +3,7 @@ import { BrandSchema } from './brandSchema';
 import { Time } from './customTypes';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
+import { ModelSchema } from './modelSchema';
 import { TimeSlotSchema } from './timeSlotSchema';
 
 export type SupabaseFunctions = {
@@ -71,5 +72,12 @@ export type SupabaseFunctions = {
       month: Date;
     };
     Returns: TimeSlotSchema[];
+  };
+  /* __________ MODELS __________ */
+  get_device_models_by_brand: {
+    Args: {
+      model_brand: string;
+    };
+    Returns: ModelSchema[];
   };
 };

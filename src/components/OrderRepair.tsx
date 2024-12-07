@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import LinkButton from '@/components/LinkButton';
 import { queryDevices } from '@/utils/supabase/devices';
-import { Brand } from '@/schemas/brandSchema';
+import { BrandSchema } from '@/schemas/brandSchema';
 
 interface OrderRepairProps {
-  brands: Brand[];
+  brands: BrandSchema[];
 }
 
 const OrderRepair: React.FC<OrderRepairProps> = ({ brands }) => {
