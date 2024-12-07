@@ -59,11 +59,11 @@ export const queryDeviceName = async (name: string): Promise<Device[]> => {
 
   const deviceData = responseData.data;
 
-  const device = deviceData.map((device: DeviceSchema) => {
+  /*   const device = deviceData.map((device: DeviceSchema) => {
     return new Device(deviceData);
-  });
+  }); */
 
-  return device;
+  return deviceData;
 };
 
 /**
