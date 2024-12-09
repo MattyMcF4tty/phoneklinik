@@ -8,9 +8,10 @@ import { DeviceSchema } from '@/schemas/deviceScema';
 interface PartSelectFormProps {
   device: DeviceSchema;
   parts: DevicePartSchema[];
+  header: string;
 }
 
-const PartSelectForm: FC<PartSelectFormProps> = ({ device, parts }) => {
+const PartSelectForm: FC<PartSelectFormProps> = ({ device, parts, header }) => {
   const [selectedParts, setSelectedParts] = useState<DevicePartSchema[]>([]);
 
   // Handle form change
@@ -33,22 +34,28 @@ const PartSelectForm: FC<PartSelectFormProps> = ({ device, parts }) => {
   );
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full flex flex-row justify-center ">
+      <div className='w-1/5 mt-4'>
       <form onChange={handleFormChange}>
         {parts.length > 0 ? (
           <div className="flex flex-col space-y-4">
+                  <h1 className='text-xl font-bold mb-6'>{header}</h1>
+
             {parts.map((part) => (
+              
               <label
                 key={part.id}
-                className="flex justify-between items-center border-b pb-2"
+                className="flex items-center justify-between border-b pb-2"
               >
+                <div className=''>
                 <input
                   type="checkbox"
                   name="parts"
                   value={part.id}
-                  className="mr-2 select-none	"
+                  className="mr-4 select-none"
                 />
-                <span>{part.name}</span>
+                <span className=''>{part.name}</span>
+                </div>
                 <span className="font-bold">{part.price} kr.</span>
               </label>
             ))}
@@ -57,9 +64,12 @@ const PartSelectForm: FC<PartSelectFormProps> = ({ device, parts }) => {
           <p className="text-gray-600">Ingen dele fundet til denne enhed.</p>
         )}
       </form>
-      <p>Sammenlagt pris: {fullPrice}kr</p>
+      <p className='mt-2'>Total pris: {fullPrice}kr</p>
+      </div>
+      <div className='ml-10'>
 
       <PartialOrderRepair device={device} selectedParts={selectedParts} />
+      </div>
     </div>
   );
 };

@@ -131,7 +131,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
             onChange={(e) => setComment(e.target.value)}
           />
           <div className="flex items-center justify-center mt-4">
-            <button disabled={loading} onClick={handleOrderTime}>
+            <button disabled={loading} onClick={handleOrderTime} className='bg-gradient-to-r from-main-purple h-12 to-main-blue text-white w-full rounded-lg'>
               bestil tid
             </button>
           </div>

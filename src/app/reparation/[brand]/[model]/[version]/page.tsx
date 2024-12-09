@@ -64,17 +64,12 @@ export default async function TelefonReparationPage({ params }: Context) {
         </div>
       </div>
 
-      {/* Info Boxes Section */}
-      <div className="flex flex-col md:flex-row justify-center items-start space-y-6 md:space-y-0 md:space-x-6 p-6">
-        {/* Pricing Section */}
-        <h1 className="text-xl font-bold mb-6">
-          Priser på {model} {formattedVersion} reparation
-        </h1>
-        <div>
-          {partsData && (
-            <PartSelectForm device={deviceData} parts={partsData} />
+      {/*Pricing Section */}
+      <div className="flex flex-col space-y-6 md:space-y-0 md:space-x-6 p-6">
+       
+        {partsData && (
+            <PartSelectForm device={deviceData} parts={partsData} header={`Priser på ${model} ${formattedVersion} reparation`}/>
           )}
-        </div>
       </div>
     </div>
   );

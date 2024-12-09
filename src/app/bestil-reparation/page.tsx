@@ -20,9 +20,11 @@ export default async function ReparationPage() {
         <div className="flex flex-col bg-white rounded-lg shadow-md p-4 w-1/5 mt-4">
           {/* Billede */}
           <Image
-            src={'phoneklinik.jpg'}
+            src={'/phoneklinik.jpg'}
             alt={'billede'}
             className="w-full h-48 object-cover rounded-t-lg"
+            width={100}
+            height={100}
           />
           {/* Tekst */}
           <div className="mt-4">
@@ -59,7 +61,7 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <OrderRepair brands={brands} />
+     <OrderRepair brands={brands} />
       </div>
     </div>
   );
