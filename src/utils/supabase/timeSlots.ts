@@ -3,23 +3,20 @@ import { validateEmail, validateTime } from '../misc';
 import { Time } from '@/schemas/customTypes';
 
 export const reserveTimeSlot = async (
-  requestedDate: Date,
-  requestedTime: Time,
+  requestedTime: Date,
   customerEmail: string
 ): Promise<TimeSlot> => {
   // Validate arguments
-  const validatedEmail = validateEmail(customerEmail);
-  const validatedTime = validateTime(requestedTime);
-
+  /*   const validatedEmail = validateEmail(customerEmail);
+   */
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/timeSlots`,
     {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify({
-        requestedDate: requestedDate.toDateString(),
-        requestedTime: validatedTime,
-        customerEmail: validatedEmail,
+        requestedTime: requestedTime.toDateString(),
+        customerEmail: customerEmail,
       }),
     }
   );

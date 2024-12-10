@@ -61,15 +61,14 @@ export type SupabaseFunctions = {
   /* __________ REPAIR_TIME_SLOTS __________ */
   reserve_time_slot: {
     Args: {
-      requested_date: Date;
-      requested_time: Time;
+      requested_time: string;
       requester_email: string;
     };
     Returns: TimeSlotSchema[];
   };
   get_reserved_time_slots: {
     Args: {
-      month: Date;
+      requested_month: string;
     };
     Returns: TimeSlotSchema[];
   };

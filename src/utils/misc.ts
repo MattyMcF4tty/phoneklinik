@@ -51,3 +51,28 @@ export const sendMail = async (title: string, body: string) => {
     throw new Error(error);
   }
 };
+
+export const createDateTimeObject = (date: string, time: string): Date => {
+  return new Date(`${date}T${time}:00`);
+};
+
+export const isTimeReserved = (
+  datetime: Date,
+  reservedTimes: Date[]
+): boolean => {
+  return reservedTimes.some(
+    (reserved) => reserved.getTime() === datetime.getTime()
+  );
+};
+
+export const generateTimeSlots = (): string[] => {
+  const slots = [];
+  const start = 10; // Start time in hours
+  const end = 18; // End time in hours
+
+  for (let hour = start; hour < end; hour++) {
+    slots.push(`${hour}:00`, `${hour}:30`);
+  }
+
+  return slots;
+};

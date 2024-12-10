@@ -17,15 +17,13 @@ export default async function TelefonReparationPage({ params }: Context) {
   const { model, version, brand } = await params;
   const formattedVersion = decodeUrlSpaces(version);
 
-  const device = new Device(
-    (
-      await queryDevices({
-        brand: brand,
-        model: model,
-        version: formattedVersion,
-      })
-    )[0]
-  );
+  const device = (
+    await queryDevices({
+      brand: brand,
+      model: model,
+      version: formattedVersion,
+    })
+  )[0];
   if (!device) {
     throw new Error('Device does not exist');
   }
@@ -66,10 +64,13 @@ export default async function TelefonReparationPage({ params }: Context) {
 
       {/*Pricing Section */}
       <div className="flex flex-col space-y-6 md:space-y-0 md:space-x-6 p-6">
-       
         {partsData && (
-            <PartSelectForm device={deviceData} parts={partsData} header={`Priser på ${model} ${formattedVersion} reparation`}/>
-          )}
+          <PartSelectForm
+            device={deviceData}
+            parts={partsData}
+            header={`Priser på ${model} ${formattedVersion} reparation`}
+          />
+        )}
       </div>
     </div>
   );

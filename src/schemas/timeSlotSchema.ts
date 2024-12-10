@@ -2,24 +2,15 @@ import { Time } from './customTypes';
 
 export interface TimeSlotSchema {
   id: number;
-  date: Date;
-  time: Time;
-  customerEmail: string | null;
-  status: string | null;
+  time: string;
 }
 
-export class TimeSlot implements TimeSlotSchema {
+export class TimeSlot {
   id: number;
-  date: Date;
-  time: Time;
-  customerEmail: string | null;
-  status: string | null;
+  time: Date;
 
   constructor(timeSlot: TimeSlotSchema) {
     this.id = timeSlot.id;
-    this.date = timeSlot.date;
-    this.time = timeSlot.time;
-    this.customerEmail = timeSlot.customerEmail;
-    this.status = timeSlot.status;
+    this.time = new Date(timeSlot.time);
   }
 }

@@ -15,8 +15,10 @@ export async function GET(req: NextRequest) {
 
   try {
     const timeSlots = await handleSupabaseFunction('get_reserved_time_slots', {
-      month: new Date(month),
+      requested_month: new Date(month).toISOString(),
     });
+
+    console.log(timeSlots);
 
     return NextResponse.json({ data: timeSlots }, { status: 200 });
   } catch (error) {
@@ -31,21 +33,15 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const bodyData = await req.json();
-  const requestedDate = bodyData.requestedDate;
   const requestedTime = bodyData.requestedTime;
   const customerEmail = bodyData.customerEmail;
 
-  if (!requestedDate || isNaN(Date.parse(requestedDate))) {
+  if (!requestedTime || isNaN(Date.parse(requestedTime))) {
     return NextResponse.json(
-      { error: `${requestedDate} is not a valid date object.` },
+      { error: `${requestedTime} is not a valid date object.` },
       { status: 400 }
     );
-  } else if (!requestedTime || timeRegex.test(requestedTime)) {
-    return NextResponse.json(
-      { error: `${requestedTime} is not a valid time. Must be HH:MM:SS` },
-      { status: 400 }
-    );
-  } else if (
+  } /* else if (
     typeof customerEmail != 'string' ||
     emailRegex.test(customerEmail)
   ) {
@@ -53,12 +49,11 @@ export async function POST(req: NextRequest) {
       { error: `${customerEmail} is not a valid email.` },
       { status: 400 }
     );
-  }
+  } */
 
   try {
     const timeSlots = await handleSupabaseFunction('reserve_time_slot', {
-      requested_date: new Date(requestedDate),
-      requested_time: requestedTime,
+      requested_time: new Date(requestedTime).toISOString(),
       requester_email: customerEmail,
     });
 
