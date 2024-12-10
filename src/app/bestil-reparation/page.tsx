@@ -1,12 +1,16 @@
+
 import Navbar from '@/components/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import OrderRepair from '@/components/OrderRepair';
 import Image from 'next/image';
 import { getBrands } from '@/utils/supabase/brands';
+import Device from '@/schemas/deviceScema';
 
 export default async function ReparationPage() {
   const brands = await getBrands();
+
+
   return (
     <div className="bg-gray-100 h-screen w-full">
       <Navbar />
@@ -61,7 +65,7 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-     <OrderRepair brands={brands} />
+        <OrderRepair brands={brands}/>
       </div>
     </div>
   );
