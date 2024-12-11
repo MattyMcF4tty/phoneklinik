@@ -3,7 +3,7 @@ import OrderRepair from '@/components/OrderRepair';
 import { getBrands } from '@/utils/supabase/brands';
 
 export default async function SellPhonePage() {
-  const brands = await getBrands();
+  const brands = (await getBrands()).map((brand) => ({ ...brand }));
   return (
     <div className="bg-gray-100 h-screen w-full">
       <Navbar />
@@ -17,7 +17,7 @@ export default async function SellPhonePage() {
         </p>
       </div>
       <div className="flex items-center justify-center w-full h-[40vh]">
-        {/* <OrderRepair brands={brands}/> */}
+        { <OrderRepair brands={brands}/> }
       </div>
     </div>
   );

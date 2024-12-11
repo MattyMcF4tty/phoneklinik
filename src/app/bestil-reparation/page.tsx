@@ -8,7 +8,7 @@ import { getBrands } from '@/utils/supabase/brands';
 import Device from '@/schemas/deviceScema';
 
 export default async function ReparationPage() {
-  const brands = await getBrands();
+  const brands = (await getBrands()).map((brand) => ({ ...brand }));
 
 
   return (

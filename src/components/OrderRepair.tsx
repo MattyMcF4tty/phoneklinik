@@ -80,25 +80,26 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands }) => {
           </select>
 
           <select
-            value={model}
-            onChange={(e) => {
-              setModel(e.target.value);
-              setVersion(''); // Reset version when model changes
-            }}
-            className={`w-full py-2 px-4 rounded mb-4 ${
-              currentBrand
-                ? 'bg-gray-200 text-gray-600'
-                : 'bg-gray-300 text-gray-400'
-            }`}
-            disabled={!currentBrand}
-          >
-            <option value="">Vælg model</option>
-            {models.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+  value={model} // Use `model` for the selected value
+  onChange={(e) => {
+    setModel(e.target.value); // Update `model` state with the selected value
+    setVersion(''); // Reset version when model changes
+  }}
+  className={`w-full py-2 px-4 rounded mb-4 ${
+    currentBrand
+      ? 'bg-gray-200 text-gray-600'
+      : 'bg-gray-300 text-gray-400'
+  }`}
+  disabled={!currentBrand}
+>
+  <option value="">Vælg model</option>
+  {models.map((m) => (
+    <option key={m} value={m}>
+      {m}
+    </option>
+  ))}
+</select>
+
 
           <select
             value={version}
