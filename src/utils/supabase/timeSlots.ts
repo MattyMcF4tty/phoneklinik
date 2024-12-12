@@ -1,6 +1,4 @@
 import { TimeSlot, TimeSlotSchema } from '@/schemas/timeSlotSchema';
-import { validateEmail, validateTime } from '../misc';
-import { Time } from '@/schemas/customTypes';
 
 export const reserveTimeSlot = async (
   requestedTime: Date,
@@ -15,7 +13,7 @@ export const reserveTimeSlot = async (
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify({
-        requestedTime: requestedTime.toDateString(),
+        requestedTime: requestedTime.toISOString(),
         customerEmail: customerEmail,
       }),
     }
@@ -40,7 +38,7 @@ export const getResveredTimeSlots = async (
   const response = await fetch(
     `${
       process.env.NEXT_PUBLIC_WEBSITE_URL
-    }/api/timeSlots?month=${month.toDateString()}`,
+    }/api/timeSlots?month=${month.toISOString()}`,
     {
       method: 'GET',
       cache: 'no-cache',

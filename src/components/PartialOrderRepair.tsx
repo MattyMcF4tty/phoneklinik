@@ -33,6 +33,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
   const [comment, setComment] = useState<string>('');
 
   const [date, setDate] = useState<string>('');
+  const month = new Date(date).getMonth();
 
   const [reservedTimes, setReservedTimes] = useState<Date[]>([]);
   const [validTimes, setValidTimes] = useState<string[]>([]); // List of valid times
@@ -41,44 +42,44 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  // Fetch reserved times for the selected date
+  const fetchReservedTimes = async () => {
+    try {
+      console.log('Fetching reserved times...');
+      const timeslots = await getResveredTimeSlots(new Date(date)); // Fetch reserved time slots for the selected date
+      const formattedTimes = timeslots.map(
+        (timeslot) => new Date(timeslot.time)
+      ); // Convert times to Date objects
+      setReservedTimes(formattedTimes); // Update state with reserved times
+      console.log(reservedTimes);
+    } catch (error) {
+      console.error('Error fetching reserved times:', error);
+    }
+  };
+
+  const generateValidTimes = async (currentDate: string) => {
+    // Wait for reserved times to be fetched and update state
+    await fetchReservedTimes(); // This ensures reservedTimes is updated
+
+    const unvalidatedTimes = generateTimeSlots(); // Generate all possible time slots
+
+    // Filter out reserved times from unvalidatedTimes
+    const validatedTimes = unvalidatedTimes.filter((timeSlot) => {
+      const datetime = createDateTimeObject(currentDate, timeSlot); // Combine date and time slot into a Date object
+
+      // Check if this datetime exists in reservedTimes
+      const isReserved = reservedTimes.some((reserved) => {
+        return reserved.getTime() === datetime.getTime();
+      });
+
+      return !isReserved; // Keep the time slot only if it's not reserved
+    });
+
+    setValidTimes(validatedTimes); // Update the state with valid times
+  };
   useEffect(() => {
     if (date) {
-      const selectedMonth = new Date(date).getMonth();
-      const selectedYear = new Date(date).getFullYear();
-
-      // Fetch reserved times for the selected date
-      const fetchReservedTimes = async () => {
-        try {
-          const timeslots = await getResveredTimeSlots(new Date(date));
-
-          const formattedTimes = timeslots.map((timeslot) => {
-            return timeslot.time;
-          });
-
-          setReservedTimes(formattedTimes);
-        } catch (error) {
-          console.error('Error fetching reserved times:', error);
-        }
-      };
-
-      const generateValidTimes = () => {
-        const unvalidatedTimes = generateTimeSlots();
-        const validatedTimes = unvalidatedTimes.filter((timeSlot) => {
-          const datetime = createDateTimeObject(date, timeSlot);
-
-          // Check if the time is reserved
-          const isReserved = reservedTimes.some(
-            (reserved) => reserved.getTime() === datetime.getTime()
-          );
-
-          return !isReserved;
-        });
-
-        setValidTimes(validatedTimes);
-      };
-
-      fetchReservedTimes();
-      generateValidTimes();
+      generateValidTimes(date);
     }
   }, [date]);
 
@@ -120,6 +121,14 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
     } catch (error) {
       console.error('Error handling order time:', error);
     } finally {
+      setMail('');
+      setName('');
+      setComment('');
+      setPhone('');
+      setLocation('');
+      setTime('');
+      setDate('');
+
       setLoading(false);
     }
   };

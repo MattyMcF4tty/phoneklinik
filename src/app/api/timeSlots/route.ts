@@ -18,8 +18,6 @@ export async function GET(req: NextRequest) {
       requested_month: new Date(month).toISOString(),
     });
 
-    console.log(timeSlots);
-
     return NextResponse.json({ data: timeSlots }, { status: 200 });
   } catch (error) {
     console.error('Error occurred:', error);
