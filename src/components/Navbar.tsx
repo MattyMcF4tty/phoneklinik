@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
             <LinkButton variant="navbar" url="/sell-phone">
               Sælg din enhed
             </LinkButton>
-            <LinkButton variant="navbar" url="/about">
+            <LinkButton variant="navbar" url="/om-os">
               Om os
             </LinkButton>
             <LinkButton variant="navbar" url="/kontakt">

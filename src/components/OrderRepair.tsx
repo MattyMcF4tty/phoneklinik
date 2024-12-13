@@ -7,9 +7,11 @@ import { BrandSchema } from '@/schemas/brandSchema';
 
 interface OrderRepairProps {
   brands: BrandSchema[];
+  Titel: string;
+  comment: string;
 }
 
-const OrderRepair: React.FC<OrderRepairProps> = ({ brands }) => {
+const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => {
   const [models, setModels] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
 
@@ -58,7 +60,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands }) => {
     <div className="">
       <div className="ml-4 p-4 w-[35rem] flex flex-col">
         <div className="bg-gradient-to-r from-main-purple h-14 to-main-blue p-2 flex items-center rounded-t-lg">
-          <h1 className="text-xl text-white font-bold">Vælg din reparation</h1>
+          <h1 className="text-xl text-white font-bold">{Titel}</h1>
         </div>
 
         <div className="bg-white p-4 rounded-b-lg shadow-md">
@@ -162,7 +164,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands }) => {
           </div>
 
           <textarea
-            placeholder="Evt. kommentar til bestillingen..."
+            placeholder={`${comment}`}
             className="w-full h-24 border rounded-lg p-2 text-gray-600 mt-4"
           />
           <div className="flex items-center justify-center mt-4">

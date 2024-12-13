@@ -65,7 +65,7 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <OrderRepair brands={brands}/>
+        <OrderRepair brands={brands} Titel='Bestil reparation' comment='Evt kommentar...'/>
       </div>
     </div>
   );

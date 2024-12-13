@@ -15,9 +15,10 @@ export default async function SellPhonePage() {
         <p className="text-sm md:text-lg mb-6 w-1/2">
         Giv din telefon nyt liv og få penge på lommen. I stedet for, at din gamle iPhone ligger og samler støv i skuffen, så sælg den hellere til os og få betaling direkte. Uanset standen eller om den er defekt.
         </p>
+        <p>Svar på nedenstående skema og så svarer vi tilbage hurtigst muligt!</p>
       </div>
-      <div className="flex items-center justify-center w-full h-[40vh]">
-        { <OrderRepair brands={brands}/> }
+      <div className="flex items-center justify-center w-full">
+        { <OrderRepair brands={brands} Titel='Sælg din enhed' comment='Beskriv stand og eventuelle skader'/> }
       </div>
     </div>
   );

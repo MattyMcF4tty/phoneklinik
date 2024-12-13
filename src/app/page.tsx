@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="bg-gray-100 h-screen w-full">
+    <div className="bg-gray-100 h-full w-full">
       {/* Navbar */}
       <Navbar />
 
@@ -71,16 +71,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white p-6 text-center">
-        <p>&copy; 2024 PhoneKlinik. Alle rettigheder forbeholdt.</p>
-        <p>
-          Kontakt os:{' '}
-          <Link href="mailto:info@phoneklinik.dk" className="underline">
-            info@phoneklinik.dk
-          </Link>
-        </p>
-      </footer>
+     
     </div>
   );
 }
