@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
   const mailOptions = {
     from: process.env.NO_REPLY_MAIL,
-    to: 'matthias.r.kristensen@gmail.com' /* process.env.PHONEKLINIK_MAIL */,
+    to: process.env.PHONEKLINIK_MAIL,
     subject: title,
     text: body,
   };

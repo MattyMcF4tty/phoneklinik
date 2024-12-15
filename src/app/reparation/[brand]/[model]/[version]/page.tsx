@@ -1,12 +1,9 @@
 'use server';
 
 import Navbar from '@/components/Navbar';
-import OrderRepair from '@/components/OrderRepair';
 import PartSelectForm from '@/components/PartSelectForm';
-import Device from '@/schemas/deviceScema';
 import { decodeUrlSpaces } from '@/utils/misc';
-import { getBrands } from '@/utils/supabase/brands';
-import { queryDeviceName, queryDevices } from '@/utils/supabase/devices';
+import { queryDevices } from '@/utils/supabase/devices';
 import Image from 'next/image';
 
 interface Context {
@@ -39,13 +36,15 @@ export default async function TelefonReparationPage({ params }: Context) {
         <div className="flex w-full max-w-4xl items-center space-x-6">
           {/* Image */}
           <div className="flex-shrink-0">
-            <Image
-              src={device.image_url}
-              alt={model}
-              width={100}
-              height={100}
-              className="h-full object-contain max-h-48"
-            />
+              <Image
+                src={device.image_url}
+                alt={model}
+                width={0}
+                height={0}
+                sizes="100vw"
+                className='max-h-48 w-full h-full '
+              />
+
           </div>
           {/* Text */}
           <div className="flex-grow">

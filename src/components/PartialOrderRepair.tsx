@@ -37,10 +37,10 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
 
   const [reservedTimes, setReservedTimes] = useState<Date[]>([]);
   const [validTimes, setValidTimes] = useState<string[]>([]); // List of valid times
-
   const [time, setTime] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
+  const denyReserve = loading || !name || !mail || !phone || !location || !date || !time || selectedParts.length <= 0
 
   // Fetch reserved times for the selected date
   const fetchReservedTimes = async () => {
@@ -77,11 +77,33 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
 
     setValidTimes(validatedTimes); // Update the state with valid times
   };
+
   useEffect(() => {
-    if (date) {
-      generateValidTimes(date);
-    }
+    const fetchAndGenerateTimes = async () => {
+      if (!date) return;
+  
+      try {
+        console.log('Fetching reserved times...');
+        const timeslots = await getResveredTimeSlots(new Date(date));
+        const formattedTimes = timeslots.map((timeslot) => new Date(timeslot.time));
+        setReservedTimes(formattedTimes);
+  
+        // Generate valid times after reserved times have been updated
+        const unvalidatedTimes = generateTimeSlots();
+        const validatedTimes = unvalidatedTimes.filter((timeSlot) => {
+          const datetime = createDateTimeObject(date, timeSlot);
+          return !formattedTimes.some((reserved) => reserved.getTime() === datetime.getTime());
+        });
+  
+        setValidTimes(validatedTimes);
+      } catch (error) {
+        console.error('Error fetching reserved times:', error);
+      }
+    };
+  
+    fetchAndGenerateTimes();
   }, [date]);
+  
 
   const handleOrderTime = async () => {
     try {
@@ -121,6 +143,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
     } catch (error) {
       console.error('Error handling order time:', error);
     } finally {
+      setValidTimes((prevTimes) => prevTimes.filter((t) => t !== time));
       setMail('');
       setName('');
       setComment('');
@@ -221,9 +244,13 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
           />
           <div className="flex items-center justify-center mt-4">
             <button
-              disabled={loading}
+              disabled={denyReserve}
               onClick={handleOrderTime}
-              className="bg-gradient-to-r from-main-purple h-12 to-main-blue text-white w-full rounded-lg"
+              className={`h-12 text-white w-full rounded-lg ${
+                denyReserve
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-main-purple to-main-blue"
+              }`}
             >
               bestil tid
             </button>

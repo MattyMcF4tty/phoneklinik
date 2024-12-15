@@ -17,7 +17,7 @@ const ReparationPage = async () => {
           til alle modeller på markedet.
         </p>
       </div>
-      <div className="flex items-center justify-center w-full h-[40vh]">
+      <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">
           {brands.map((brand) => (
             <Cardholder

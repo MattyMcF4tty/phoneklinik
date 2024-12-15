@@ -20,10 +20,12 @@ const Cardholder: React.FC<cardProps> = ({
         <Image
           src={imageUrl}
           alt={cardName}
-          width={100}
-          height={100}
-          className="h-20 md:h-32 mx-auto mb-4"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="h-20 md:h-32 w-auto mx-auto mb-4 relative"
         />
+
         <h3 className="font-semibold mb-2">{cardName}</h3>
         <Link
           className="flex items-center justify-center w-1/2 h-10 bg-gradient-to-r from-main-purple to-main-blue text-white rounded"

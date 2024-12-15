@@ -9,17 +9,19 @@ export default async function SellPhonePage() {
       <Navbar />
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">
-          Sælg din enhed
-        </h1>
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">Sælg din enhed</h1>
         <p className="text-sm md:text-lg mb-6 w-1/2">
-        Giv din telefon nyt liv og få penge på lommen. I stedet for, at din gamle iPhone ligger og samler støv i skuffen, så sælg den hellere til os og få betaling direkte. Uanset standen eller om den er defekt.
+          Giv din telefon nyt liv og få penge på lommen. I stedet for, at din
+          gamle iPhone ligger og samler støv i skuffen, så sælg den hellere til
+          os og få betaling direkte. Uanset standen eller om den er defekt.
         </p>
-        <p>Svar på nedenstående skema og så svarer vi tilbage hurtigst muligt!</p>
+        <p>
+          Svar på nedenstående skema og så svarer vi tilbage hurtigst muligt!
+        </p>
       </div>
       <div className="flex items-center justify-center w-full">
-        { <OrderRepair brands={brands} Titel='Sælg din enhed' comment='Beskriv stand og eventuelle skader'/> }
+        {<OrderRepair brands={brands} Titel="Sælg din enhed" />}
       </div>
     </div>
   );
-};
+}

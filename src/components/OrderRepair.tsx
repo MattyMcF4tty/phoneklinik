@@ -1,17 +1,18 @@
- 'use client';
+'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import LinkButton from '@/components/LinkButton';
 import { queryDevices } from '@/utils/supabase/devices';
 import { BrandSchema } from '@/schemas/brandSchema';
+import { getModels } from '@/utils/supabase/models';
+import { sendMail } from '@/utils/misc';
 
 interface OrderRepairProps {
   brands: BrandSchema[];
   Titel: string;
-  comment: string;
 }
 
-const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => {
+const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
   const [models, setModels] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
 
@@ -19,42 +20,81 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => 
   const [model, setModel] = useState<string>('');
   const [version, setVersion] = useState<string>('');
 
-  const [location, setLocation] = useState<string>('');
-  const locations = ['Fisketorvet'];
+  // User data
+  const [email, setEmail] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
 
+  const [comment, setComment] = useState<string>('');
+  /*   const [location, setLocation] = useState<string>('');
+  const locations = ['Fisketorvet']; */
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const denyRequest =
+    loading || !currentBrand || !model || !version || !email || !name || !phone;
+
+  // Fetch brand models
   useEffect(() => {
-    const fetchModelsAndVersions = async () => {
+    setModel('');
+    setModels([]);
+    const fecthModels = async () => {
       if (currentBrand) {
-        const devices = await queryDevices({ brand: currentBrand });
-        const uniqueModels = Array.from(
-          new Set(devices.map((device) => device.model))
-        );
-        setModels(uniqueModels);
-        setModel('');
-        setVersions([]);
-        setVersion('');
-      } else {
-        setModels([]);
-        setModel('');
-        setVersions([]);
-        setVersion('');
-      }
-
-      if (model) {
-        const devices = await queryDevices({ brand: currentBrand, model });
-        const uniqueVersions = Array.from(
-          new Set(devices.map((device) => device.version))
-        );
-        setVersions(uniqueVersions);
-        setVersion('');
-      } else {
-        setVersions([]);
-        setVersion('');
+        const modelsData = await getModels(currentBrand);
+        const modelNames = modelsData.map((modelData) => {
+          return modelData.name;
+        });
+        setModels(modelNames);
       }
     };
 
-    fetchModelsAndVersions();
-  }, [currentBrand, model]);
+    fecthModels();
+  }, [currentBrand]);
+
+  // Fetch model versions
+  useEffect(() => {
+    setVersion('');
+    setVersions([]);
+    const fetchVersions = async () => {
+      if (model) {
+        const devices = await queryDevices({
+          brand: currentBrand,
+          model: model,
+        });
+        const versionNames = devices.map((device) => {
+          return device.version;
+        });
+        setVersions(versionNames);
+      }
+    };
+
+    fetchVersions();
+  }, [model]);
+
+  const handleRequest = async () => {
+    try {
+      setLoading(true);
+      await sendMail(
+        `SELL: ${currentBrand} ${model} ${version}`,
+        `Customer ${name} wants to sell a ${currentBrand} ${model} ${version}.
+
+          Damages:
+          "${comment}"
+          
+          Contact customer:
+          Email: ${email}
+          Phone: ${phone}
+          `
+      );
+
+      alert(
+        'Your request has been send!\n You will recive an evaluation as soon as possible though your mail.'
+      );
+    } catch (error) {
+      console.error('Error handling order time:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="">
@@ -63,13 +103,12 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => 
           <h1 className="text-xl text-white font-bold">{Titel}</h1>
         </div>
 
+        {/* SELECT BRAND */}
         <div className="bg-white p-4 rounded-b-lg shadow-md">
           <select
             value={currentBrand}
             onChange={(e) => {
               setCurrentBrand(e.target.value);
-              setModel(''); // Reset model and version when brand changes
-              setVersion('');
             }}
             className="bg-gray-200 text-gray-600 w-full py-2 px-4 rounded mb-4"
           >
@@ -81,28 +120,28 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => 
             ))}
           </select>
 
+          {/* SELECT MODEL */}
           <select
-  value={model} // Use `model` for the selected value
-  onChange={(e) => {
-    setModel(e.target.value); // Update `model` state with the selected value
-    setVersion(''); // Reset version when model changes
-  }}
-  className={`w-full py-2 px-4 rounded mb-4 ${
-    currentBrand
-      ? 'bg-gray-200 text-gray-600'
-      : 'bg-gray-300 text-gray-400'
-  }`}
-  disabled={!currentBrand}
->
-  <option value="">Vælg model</option>
-  {models.map((m) => (
-    <option key={m} value={m}>
-      {m}
-    </option>
-  ))}
-</select>
+            value={model}
+            onChange={(e) => {
+              setModel(e.target.value);
+            }}
+            className={`w-full py-2 px-4 rounded mb-4 ${
+              currentBrand
+                ? 'bg-gray-200 text-gray-600'
+                : 'bg-gray-300 text-gray-400'
+            }`}
+            disabled={!currentBrand}
+          >
+            <option value="">Vælg model</option>
+            {models.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
 
-
+          {/* SELECT VERSION */}
           <select
             value={version}
             onChange={(e) => setVersion(e.target.value)}
@@ -119,7 +158,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => 
             ))}
           </select>
           <div className="flex flex-row">
-            <select
+            {/*             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="bg-gray-200 text-gray-600 w-full py-2 px-4 rounded mb-4 mr-4"
@@ -130,47 +169,73 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel, comment }) => 
                   {l}
                 </option>
               ))}
-            </select>
+            </select> */}
 
             <input
               type="text"
               placeholder="Navn"
+              id="name"
+              name="name"
               className="w-full py-2 px-4 rounded mb-4 border"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
-          <div className="flex flex-row">
+          {/*           <div className="flex flex-row">
             <input
               type="date"
+              id="date"
+              name="date"
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
             />
             <input
               type="time"
+              id="time"
+              name="time"
               className="w-full py-2 px-4 rounded mb-4 border"
             />
-          </div>
+          </div> */}
 
           <div className="flex flex-row">
             <input
               type="tel"
+              id="phone"
+              name="phone"
               placeholder="Telefonnummer"
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <input
               type="email"
+              id="email"
+              name="email"
               placeholder="Email"
               className="w-full py-2 px-4 rounded mb-4 border"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <textarea
-            placeholder={`${comment}`}
+            placeholder="Beskriv eventuelle skader."
             className="w-full h-24 border rounded-lg p-2 text-gray-600 mt-4"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
           />
           <div className="flex items-center justify-center mt-4">
-            <LinkButton variant={'navbar2'} url="" className="w-full">
-              Bestil tid
-            </LinkButton>
+            <button
+              onClick={handleRequest}
+              disabled={denyRequest}
+              className={`h-12 text-white w-full rounded-lg ${
+                denyRequest
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-main-purple to-main-blue'
+              }`}
+            >
+              Send anmodning
+            </button>
           </div>
         </div>
       </div>

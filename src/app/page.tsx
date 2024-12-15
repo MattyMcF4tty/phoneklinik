@@ -36,9 +36,10 @@ export default function Home() {
               <Image
                 src="/Reparation.png"
                 alt="Reparation"
-                width={100}
-                height={100}
-                className="h-20 md:h-32 mx-auto mb-4"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-20 md:h-32 w-auto mx-auto mb-4"
               />
               <h3 className="font-semibold mb-2">Reparation</h3>
             </Link>
@@ -50,9 +51,10 @@ export default function Home() {
             <Image
               src="/cover.jpg"
               alt="Covers"
-              width={100}
-              height={100}
-              className="h-20 md:h-32 mx-auto mb-4"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-20 md:h-32 w-auto mx-auto mb-4"
             />
             <h3 className="font-semibold mb-2">Covers</h3>
             <p>Beskyt din enhed med vores stilfulde covers.</p>
@@ -61,17 +63,16 @@ export default function Home() {
             <Image
               src="/tilbehor.jpg"
               alt="Tilbehør"
-              width={100}
-              height={100}
-              className="h-20 md:h-32 mx-auto mb-4"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-20 md:h-32 w-auto mx-auto mb-4"
             />
             <h3 className="font-semibold mb-2">Tilbehør</h3>
             <p>Find tilbehør, der passer til din enhed.</p>
           </div>
         </div>
       </div>
-
-     
     </div>
   );
 }

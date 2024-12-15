@@ -1,4 +1,3 @@
-import { emailRegex, timeRegex } from '@/schemas/customTypes';
 import { handleSupabaseFunction } from '@/utils/config/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
