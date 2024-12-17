@@ -98,7 +98,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
 
   return (
     <div className="">
-      <div className="ml-4 p-4 w-[35rem] flex flex-col">
+      <div className="md:ml-4 p-4 md:w-[35rem] w-[20rem] flex flex-col">
         <div className="bg-gradient-to-r from-main-purple h-14 to-main-blue p-2 flex items-center rounded-t-lg">
           <h1 className="text-xl text-white font-bold">{Titel}</h1>
         </div>
@@ -202,7 +202,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
               type="tel"
               id="phone"
               name="phone"
-              placeholder="Telefonnummer"
+              placeholder="Tlf nr."
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}

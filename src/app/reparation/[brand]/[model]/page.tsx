@@ -24,14 +24,15 @@ export default async function TelefonReparationPage({ params }: Context) {
 
       {/* iPhone Models Section */}
       <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full p-4">
           {devices.map((device) => (
             <Cardholder
               key={device.id}
               cardName={`${device.model} ${device.version}`}
               imageUrl={device.image_url}
               linkUrl={`/reparation/${device.brand.toLowerCase()}/${device.model.toLowerCase()}/${device.version.toLowerCase()}`}
-              buttonText={`Find dit ${device.model} produkt`}
+              /* buttonText={`${device.model} ${device.version} Reparation`} */
+              buttonText='Se priser'
             />
           ))}{' '}
         </div>

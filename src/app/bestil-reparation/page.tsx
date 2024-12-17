@@ -12,16 +12,16 @@ export default async function ReparationPage() {
 
 
   return (
-    <div className="bg-gray-100 h-screen w-full">
+    <div className="bg-gray-100 h-full w-full md:mb-20 mb-6">
       <Navbar />
       <div className="flex items-center justify-center">
         <h1 className="mt-6 mb-8 text-4xl font-bold text-gray-700">
           PhoneKlinik København
         </h1>
       </div>
-      <div className="flex items-start justify-center">
-        {/* Info Box */}
-        <div className="flex flex-col bg-white rounded-lg shadow-md p-4 w-1/5 mt-4">
+      <div className="flex md:flex-row flex-col md:items-start h-full justify-center  items-center">
+        {/* Info Box */} 
+        <div className="flex flex-col bg-white rounded-lg shadow-md p-4 md:w-1/5 w-[18rem]  md:ml-0 mt-4">
           {/* Billede */}
           <Image
             src={'/phoneklinik.jpg'}
@@ -65,7 +65,7 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <OrderRepair brands={brands} Titel='Bestil reparation' comment='Evt kommentar...'/>
+        <OrderRepair brands={brands} Titel='Bestil reparation'/>
       </div>
     </div>
   );

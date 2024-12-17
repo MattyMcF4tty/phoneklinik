@@ -16,19 +16,19 @@ const Cardholder: React.FC<cardProps> = ({
 }) => {
   return (
     <div>
-      <div className="bg-white p-6 rounded shadow flex flex-col items-center">
+      <div className="bg-white md:p-6 p-2 rounded shadow flex flex-col items-center">
         <Image
           src={imageUrl}
           alt={cardName}
           width={0}
           height={0}
           sizes="100vw"
-          className="h-20 md:h-32 w-auto mx-auto mb-4 relative"
+          className="h-16 md:h-32 w-auto mx-auto mb-4 relative"
         />
 
         <h3 className="font-semibold mb-2">{cardName}</h3>
         <Link
-          className="flex items-center justify-center w-1/2 h-10 bg-gradient-to-r from-main-purple to-main-blue text-white rounded"
+          className="flex items-center justify-center md:w-1/2 w-full text-sm h-10 bg-gradient-to-r from-main-purple to-main-blue text-white rounded"
           href={linkUrl}
         >
           <button>{buttonText}</button>

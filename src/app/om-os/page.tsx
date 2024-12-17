@@ -22,7 +22,7 @@ export default function AboutUs() {
         <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
           Vores mission og værdier
         </h2>
-        <p className="mb-4 text-center w-1/2">
+        <p className="mb-4 text-center md:w-1/2">
           PhoneKlinik blev grundlagt med en vision om at hjælpe vores kunder
           med at få deres enheder tilbage i perfekt stand på en hurtig og
           pålidelig måde. Vi tilbyder ikke kun reparationer, men også et bredt

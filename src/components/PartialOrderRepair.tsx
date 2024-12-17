@@ -159,7 +159,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
   return (
     <div className="">
       {/* Form Box */}
-      <div className="ml-4 p-4 w-[35rem] flex flex-col">
+      <div className="md:ml-4 p-4 md:w-[35rem] w-[23rem] flex flex-col">
         <div className="bg-gradient-to-r from-main-purple h-14 to-main-blue p-2 flex items-center rounded-t-lg">
           <h1 className="text-xl text-white font-bold">Vælg din reparation</h1>
         </div>
