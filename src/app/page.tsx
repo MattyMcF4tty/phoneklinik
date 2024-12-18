@@ -13,29 +13,26 @@ export default function Home() {
       <Navbar />
 
       <div className="relative md:h-[60vh] h-[35vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden">
-  {/* Video Background */}
-  <VideoEmbed/>
+        {/* Video Background */}
+        <VideoEmbed />
 
-  {/* Overlay (for gradient effect) */}
-  <div className="absolute inset-0 bg-gradient-to-r from-main-purple to-main-blue opacity-60 z-10"></div>
+        {/* Overlay (for gradient effect) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-main-purple to-main-blue opacity-60 z-10"></div>
 
-  {/* Animated Text */}
-  <div className="relative z-20 text-white p-6 animate-slideIn">
-    <h1 className="text-2xl md:text-4xl font-bold mb-4">
-      Velkommen til PhoneKlinik
-    </h1>
-    <p className="text-sm md:text-lg mb-6">
-      Vi tilbyder reparation af telefoner og MacBooks, samt salg af covers, opladere og andre telefonprodukter.
-    </p>
-    <LinkButton variant="default" url="/kontakt-os">
-      Kontakt os
-    </LinkButton>
-  </div>
-</div>
-
-
-
-
+        {/* Animated Text */}
+        <div className="relative z-20 text-white p-6 animate-slideIn">
+          <h1 className="text-2xl md:text-4xl font-bold mb-4">
+            Velkommen til PhoneKlinik
+          </h1>
+          <p className="text-sm md:text-lg mb-6">
+            Vi tilbyder reparation af telefoner og MacBooks, samt salg af
+            covers, opladere og andre telefonprodukter.
+          </p>
+          <LinkButton variant="default" url="/kontakt-os">
+            Kontakt os
+          </LinkButton>
+        </div>
+      </div>
 
       {/* Info Section */}
       <div className="p-10 text-center bg-gray-100">
