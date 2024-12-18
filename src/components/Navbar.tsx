@@ -37,12 +37,9 @@ const Navbar: React.FC = () => {
 
         {/* Hamburger Menu for Mobile */}
         <div className="md:hidden flex flex-row items-center">
-          <input
-            type="text"
-            className="block w-full h-10 p-2 text-gray-900 bg-gray-50 rounded border border-gray-300 mr-2"
-            placeholder="Find din enhed..."
-          />
-          <button
+        <Searchbar />
+
+        <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="focus:outline-none"
           >

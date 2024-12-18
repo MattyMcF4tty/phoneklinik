@@ -30,14 +30,20 @@ const Searchbar: React.FC = () => {
     try {
       const fetchedDevices = await queryDeviceName(name);
       setDevices(fetchedDevices);
-      console.log(fetchedDevices)
-    } catch (error) {
-      console.error("Error fetching devices:", error);
-      alert("Something went wrong. Please try again.");
+      console.log(fetchedDevices);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error fetching devices:", error.message);
+        alert(`Something went wrong: ${error.message}. Please try again.`);
+      } else {
+        console.error("An unknown error occurred.");
+        alert("An unknown error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
   
   
 
@@ -67,9 +73,10 @@ const Searchbar: React.FC = () => {
         className="block w-full h-10 p-2 text-gray-900 bg-gray-50 rounded border border-gray-300"
         placeholder="Find din enhed..."
         value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-          handleSearch(e.target.value);
+        onInput={(e) => {
+          const newValue = e.currentTarget.value; // Capture the current value
+          setInputValue(newValue); // Update the state
+          handleSearch(newValue); // Trigger the search with the updated value
         }}
         onKeyDown={handleKeyDown}
       />
@@ -77,7 +84,7 @@ const Searchbar: React.FC = () => {
       {/* Dropdown List */}
       {isLoading && <p className="absolute mt-2 text-gray-500">Loading...</p>}
       {!isLoading && devices.length > 0 && (
-       <ul className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto text-balck">
+       <ul className="absolute z-20 mt-2 w-full bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto text-balck">
        {devices.map((device, index) => (
          <li
            key={index}

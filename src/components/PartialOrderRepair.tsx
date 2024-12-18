@@ -220,7 +220,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               type="tel"
               name="phone"
               id="phone"
-              placeholder="Telefonnummer"
+              placeholder="tlf. nr."
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
               onChange={(e) => setPhone(e.target.value)}
             />
