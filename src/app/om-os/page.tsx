@@ -1,6 +1,5 @@
-import Footer from '@/components/Footer';
-
 import Navbar from '@/components/Navbar';
+import Image from 'next/image';
 
 export default function AboutUs() {
   return (
@@ -23,10 +22,10 @@ export default function AboutUs() {
           Vores mission og værdier
         </h2>
         <p className="mb-4 text-center md:w-1/2">
-          PhoneKlinik blev grundlagt med en vision om at hjælpe vores kunder
-          med at få deres enheder tilbage i perfekt stand på en hurtig og
-          pålidelig måde. Vi tilbyder ikke kun reparationer, men også et bredt
-          udvalg af tilbehør, der kombinerer funktionalitet og design.
+          PhoneKlinik blev grundlagt med en vision om at hjælpe vores kunder med
+          at få deres enheder tilbage i perfekt stand på en hurtig og pålidelig
+          måde. Vi tilbyder ikke kun reparationer, men også et bredt udvalg af
+          tilbehør, der kombinerer funktionalitet og design.
         </p>
         <p className="mb-4 text-center mt-16">
           Vi stræber efter at levere den bedste kundeoplevelse gennem:
@@ -49,36 +48,43 @@ export default function AboutUs() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded shadow text-center">
-            <img
-              src="/team_member_1.jpg"
-              alt="Team Member"
+            <Image
+              src={'/team_member_1.jpg'}
+              alt={'Team Member'}
               className="w-24 h-24 rounded-full mx-auto mb-4"
+              width={0}
+              height={0}
+              sizes="100vw"
             />
             <h3 className="font-semibold">Anna Jensen</h3>
             <p>Teknikchef</p>
           </div>
           <div className="bg-white p-6 rounded shadow text-center">
-            <img
-              src="/team_member_2.jpg"
-              alt="Team Member"
+            <Image
+              src={'/team_member_2.jpg'}
+              alt={'Team Member'}
               className="w-24 h-24 rounded-full mx-auto mb-4"
+              width={0}
+              height={0}
+              sizes="100vw"
             />
             <h3 className="font-semibold">Lars Nielsen</h3>
             <p>Kundeservicemedarbejder</p>
           </div>
           <div className="bg-white p-6 rounded shadow text-center">
-            <img
-              src="/team_member_3.jpg"
-              alt="Team Member"
+            <Image
+              src={'/team_member_3.jpg'}
+              alt={'Team Member'}
               className="w-24 h-24 rounded-full mx-auto mb-4"
+              width={0}
+              height={0}
+              sizes="100vw"
             />
             <h3 className="font-semibold">Sofie Pedersen</h3>
             <p>Produktansvarlig</p>
           </div>
         </div>
       </div>
-      
-
     </div>
   );
 }

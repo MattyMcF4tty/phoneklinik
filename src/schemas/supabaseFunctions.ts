@@ -1,6 +1,5 @@
 import { AccessorySchema } from './accessorySchema';
 import { BrandSchema } from './brandSchema';
-import { Time } from './customTypes';
 import { DevicePartSchema } from './devicePartSchema';
 import { DeviceSchema } from './deviceScema';
 import { ModelSchema } from './modelSchema';

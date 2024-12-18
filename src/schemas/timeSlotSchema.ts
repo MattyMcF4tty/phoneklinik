@@ -1,5 +1,3 @@
-import { Time } from './customTypes';
-
 export interface TimeSlotSchema {
   id: number;
   time: string;

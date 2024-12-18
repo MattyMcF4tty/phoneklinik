@@ -1,4 +1,5 @@
 import { TimeSlot, TimeSlotSchema } from '@/schemas/timeSlotSchema';
+import { getBaseUrl } from '../misc';
 
 export const reserveTimeSlot = async (
   requestedTime: Date,
@@ -7,17 +8,14 @@ export const reserveTimeSlot = async (
   // Validate arguments
   /*   const validatedEmail = validateEmail(customerEmail);
    */
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/timeSlots`,
-    {
-      method: 'POST',
-      cache: 'no-cache',
-      body: JSON.stringify({
-        requestedTime: requestedTime.toISOString(),
-        customerEmail: customerEmail,
-      }),
-    }
-  );
+  const response = await fetch(`${getBaseUrl()}/api/timeSlots`, {
+    method: 'POST',
+    cache: 'no-cache',
+    body: JSON.stringify({
+      requestedTime: requestedTime.toISOString(),
+      customerEmail: customerEmail,
+    }),
+  });
 
   const responseData = await response.json();
 
@@ -36,9 +34,7 @@ export const getResveredTimeSlots = async (
   month: Date
 ): Promise<TimeSlot[]> => {
   const response = await fetch(
-    `${
-      process.env.NEXT_PUBLIC_WEBSITE_URL
-    }/api/timeSlots?month=${month.toISOString()}`,
+    `${getBaseUrl()}/api/timeSlots?month=${month.toISOString()}`,
     {
       method: 'GET',
       cache: 'no-cache',

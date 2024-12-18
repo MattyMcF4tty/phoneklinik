@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
 export async function POST(req: NextRequest) {
   const bodyData = await req.json();
   const title = bodyData.title;
   const body = bodyData.body;
-  const nodemailer = require('nodemailer');
 
   if (!title) {
     return NextResponse.json(

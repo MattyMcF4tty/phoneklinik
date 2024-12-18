@@ -1,3 +1,4 @@
+import { getBaseUrl } from '@/utils/misc';
 import { DevicePartSchema } from './devicePartSchema';
 
 export interface DeviceSchema {
@@ -32,7 +33,7 @@ export default class Device {
 
   async fetchParts() {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/devices/${this.id}/parts`,
+      `${getBaseUrl()}/api/devices/${this.id}/parts`,
       {
         method: 'GET',
         cache: 'no-cache',

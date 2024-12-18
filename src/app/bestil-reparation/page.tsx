@@ -1,15 +1,12 @@
-
 import Navbar from '@/components/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import OrderRepair from '@/components/OrderRepair';
 import Image from 'next/image';
 import { getBrands } from '@/utils/supabase/brands';
-import Device from '@/schemas/deviceScema';
 
 export default async function ReparationPage() {
   const brands = (await getBrands()).map((brand) => ({ ...brand }));
-
 
   return (
     <div className="bg-gray-100 h-full w-full md:mb-20 mb-6">
@@ -20,7 +17,7 @@ export default async function ReparationPage() {
         </h1>
       </div>
       <div className="flex md:flex-row flex-col md:items-start h-full justify-center  items-center">
-        {/* Info Box */} 
+        {/* Info Box */}
         <div className="flex flex-col bg-white rounded-lg shadow-md p-4 md:w-1/5 w-[18rem]  md:ml-0 mt-4">
           {/* Billede */}
           <Image
@@ -65,7 +62,7 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <OrderRepair brands={brands} Titel='Bestil reparation'/>
+        <OrderRepair brands={brands} Titel="Bestil reparation" />
       </div>
     </div>
   );

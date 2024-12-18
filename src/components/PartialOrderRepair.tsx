@@ -13,8 +13,6 @@ import {
   getResveredTimeSlots,
   reserveTimeSlot,
 } from '@/utils/supabase/timeSlots';
-import { Time } from '@/schemas/customTypes';
-import { TimeSlot } from '@/schemas/timeSlotSchema';
 
 interface PartialOrderRepairProps {
   device: DeviceSchema;
@@ -33,77 +31,52 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
   const [comment, setComment] = useState<string>('');
 
   const [date, setDate] = useState<string>('');
-  const month = new Date(date).getMonth();
-
+  /*   const month = new Date(date).getMonth();
+   */
   const [reservedTimes, setReservedTimes] = useState<Date[]>([]);
   const [validTimes, setValidTimes] = useState<string[]>([]); // List of valid times
   const [time, setTime] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const denyReserve = loading || !name || !mail || !phone || !location || !date || !time || selectedParts.length <= 0
-
-  // Fetch reserved times for the selected date
-  const fetchReservedTimes = async () => {
-    try {
-      console.log('Fetching reserved times...');
-      const timeslots = await getResveredTimeSlots(new Date(date)); // Fetch reserved time slots for the selected date
-      const formattedTimes = timeslots.map(
-        (timeslot) => new Date(timeslot.time)
-      ); // Convert times to Date objects
-      setReservedTimes(formattedTimes); // Update state with reserved times
-      console.log(reservedTimes);
-    } catch (error) {
-      console.error('Error fetching reserved times:', error);
-    }
-  };
-
-  const generateValidTimes = async (currentDate: string) => {
-    // Wait for reserved times to be fetched and update state
-    await fetchReservedTimes(); // This ensures reservedTimes is updated
-
-    const unvalidatedTimes = generateTimeSlots(); // Generate all possible time slots
-
-    // Filter out reserved times from unvalidatedTimes
-    const validatedTimes = unvalidatedTimes.filter((timeSlot) => {
-      const datetime = createDateTimeObject(currentDate, timeSlot); // Combine date and time slot into a Date object
-
-      // Check if this datetime exists in reservedTimes
-      const isReserved = reservedTimes.some((reserved) => {
-        return reserved.getTime() === datetime.getTime();
-      });
-
-      return !isReserved; // Keep the time slot only if it's not reserved
-    });
-
-    setValidTimes(validatedTimes); // Update the state with valid times
-  };
+  const denyReserve =
+    loading ||
+    !name ||
+    !mail ||
+    !phone ||
+    !location ||
+    !date ||
+    !time ||
+    selectedParts.length <= 0;
 
   useEffect(() => {
     const fetchAndGenerateTimes = async () => {
       if (!date) return;
-  
+
       try {
         console.log('Fetching reserved times...');
         const timeslots = await getResveredTimeSlots(new Date(date));
-        const formattedTimes = timeslots.map((timeslot) => new Date(timeslot.time));
+        const formattedTimes = timeslots.map(
+          (timeslot) => new Date(timeslot.time)
+        );
         setReservedTimes(formattedTimes);
-  
+
         // Generate valid times after reserved times have been updated
         const unvalidatedTimes = generateTimeSlots();
         const validatedTimes = unvalidatedTimes.filter((timeSlot) => {
           const datetime = createDateTimeObject(date, timeSlot);
-          return !formattedTimes.some((reserved) => reserved.getTime() === datetime.getTime());
+          return !formattedTimes.some(
+            (reserved) => reserved.getTime() === datetime.getTime()
+          );
         });
-  
+
         setValidTimes(validatedTimes);
       } catch (error) {
         console.error('Error fetching reserved times:', error);
       }
     };
-  
+
     fetchAndGenerateTimes();
   }, [date]);
-  
 
   const handleOrderTime = async () => {
     try {
@@ -248,8 +221,8 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               onClick={handleOrderTime}
               className={`h-12 text-white w-full rounded-lg ${
                 denyReserve
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-main-purple to-main-blue"
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-main-purple to-main-blue'
               }`}
             >
               bestil tid

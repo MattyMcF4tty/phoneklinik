@@ -1,7 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
-import LinkButton from '@/components/LinkButton';
+import { useEffect, useState } from 'react';
 import { queryDevices } from '@/utils/supabase/devices';
 import { BrandSchema } from '@/schemas/brandSchema';
 import { getModels } from '@/utils/supabase/models';

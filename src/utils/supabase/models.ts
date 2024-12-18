@@ -1,13 +1,11 @@
 import { Model, ModelSchema } from '@/schemas/modelSchema';
+import { getBaseUrl } from '../misc';
 
 export const getModels = async (brand: string): Promise<Model[]> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/models?brand=${brand}`,
-    {
-      method: 'GET',
-      cache: 'no-cache',
-    }
-  );
+  const response = await fetch(`${getBaseUrl()}/api/models?brand=${brand}`, {
+    method: 'GET',
+    cache: 'no-cache',
+  });
 
   const responseData = await response.json();
 

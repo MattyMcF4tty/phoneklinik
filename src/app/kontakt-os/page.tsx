@@ -1,4 +1,3 @@
-import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,11 +41,17 @@ export default function ContactUs() {
             </ul>
             <h3 className="text-lg font-bold text-gray-800 mt-6">Kontakt:</h3>
             <div className="flex items-center mt-2">
-              <FontAwesomeIcon icon={faPhone} className="text-main-purple w-5 mr-2" />
+              <FontAwesomeIcon
+                icon={faPhone}
+                className="text-main-purple w-5 mr-2"
+              />
               <p className="text-gray-600">+45 1234 5678</p>
             </div>
             <div className="flex items-center mt-2">
-              <FontAwesomeIcon icon={faEnvelope} className="text-main-purple w-5 mr-2" />
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="text-main-purple w-5 mr-2"
+              />
               <p className="text-gray-600">info@phoneklinik.dk</p>
             </div>
           </div>
@@ -60,7 +65,10 @@ export default function ContactUs() {
         </h2>
         <form className="bg-white p-6 rounded-lg shadow-lg w-full md:w-2/3 mx-auto">
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Navn
             </label>
             <input
@@ -72,7 +80,10 @@ export default function ContactUs() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               E-mail
             </label>
             <input
@@ -84,8 +95,11 @@ export default function ContactUs() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="tel" className="block text-sm font-medium text-gray-700 mb-1">
-            Telefon 
+            <label
+              htmlFor="tel"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Telefon
             </label>
             <input
               type="tel"
@@ -96,7 +110,10 @@ export default function ContactUs() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="message"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Besked
             </label>
             <textarea
