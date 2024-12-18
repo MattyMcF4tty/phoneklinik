@@ -1,5 +1,4 @@
 import { Model, ModelSchema } from '@/schemas/modelSchema';
-import { getBaseUrl } from '../misc';
 
 export const getModels = async (brand: string): Promise<Model[]> => {
   const response = await fetch(

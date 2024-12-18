@@ -1,5 +1,4 @@
 import Device, { DeviceSchema } from '@/schemas/deviceScema';
-import { getBaseUrl } from '../misc';
 
 /**
  * Gets a device based of its id.

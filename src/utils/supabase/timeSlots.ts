@@ -1,5 +1,4 @@
 import { TimeSlot, TimeSlotSchema } from '@/schemas/timeSlotSchema';
-import { getBaseUrl } from '../misc';
 
 export const reserveTimeSlot = async (
   requestedTime: Date,

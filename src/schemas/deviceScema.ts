@@ -1,4 +1,3 @@
-import { getBaseUrl } from '@/utils/misc';
 import { DevicePartSchema } from './devicePartSchema';
 
 export interface DeviceSchema {
