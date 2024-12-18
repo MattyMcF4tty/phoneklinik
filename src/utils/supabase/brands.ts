@@ -1,5 +1,4 @@
 import { Brand, BrandSchema } from '@/schemas/brandSchema';
-import { getBaseUrl } from '../misc';
 
 export const getBrands = async (): Promise<Brand[]> => {
   const response = await fetch(`https://phoneklinik.vercel.app/api/brands`, {
