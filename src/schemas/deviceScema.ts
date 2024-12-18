@@ -33,7 +33,7 @@ export default class Device {
 
   async fetchParts() {
     const response = await fetch(
-      `${getBaseUrl()}/api/devices/${this.id}/parts`,
+      `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/devices/${this.id}/parts`,
       {
         method: 'GET',
         cache: 'no-cache',

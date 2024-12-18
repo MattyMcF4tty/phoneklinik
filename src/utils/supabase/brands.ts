@@ -1,10 +1,13 @@
 import { Brand, BrandSchema } from '@/schemas/brandSchema';
 
 export const getBrands = async (): Promise<Brand[]> => {
-  const response = await fetch(`${process.env.VERCEL_URL}/api/brands`, {
-    method: 'GET',
-    cache: 'no-cache',
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/brands`,
+    {
+      method: 'GET',
+      cache: 'no-cache',
+    }
+  );
 
   const responseData = await response.json();
 

@@ -34,14 +34,17 @@ export const decodeUrlSpaces = (input: string): string => {
 };
 
 export const sendMail = async (title: string, body: string) => {
-  const response = await fetch(`${getBaseUrl()}/api/email`, {
-    method: 'POST',
-    cache: 'no-cache',
-    body: JSON.stringify({
-      title: title,
-      body: body,
-    }),
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/email`,
+    {
+      method: 'POST',
+      cache: 'no-cache',
+      body: JSON.stringify({
+        title: title,
+        body: body,
+      }),
+    }
+  );
 
   if (!response.ok) {
     const error = (await response.json()).error;
@@ -74,7 +77,7 @@ export const generateTimeSlots = (): string[] => {
   return slots;
 };
 
-export const getBaseUrl = (): string => {
+/* export const getBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
     // Client-side: Use `window.location`
     return `${window.location.protocol}//${window.location.host}`;
@@ -85,4 +88,4 @@ export const getBaseUrl = (): string => {
       ? `https://${vercelUrl}`
       : `http://localhost:${process.env.PORT || 3000}`;
   }
-};
+}; */

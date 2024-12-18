@@ -11,7 +11,9 @@ export const getDeviceById = async (id: number): Promise<Device> => {
   searchParams.append('id', `${id}`);
 
   const response = await fetch(
-    `${getBaseUrl()}/api/devices/${searchParams.toString()}`,
+    `${
+      process.env.NEXT_PUBLIC_WEBSITE_URL
+    }/api/devices/${searchParams.toString()}`,
     {
       method: 'GET',
       cache: 'no-cache',
@@ -41,7 +43,9 @@ export const queryDeviceName = async (name: string): Promise<Device[]> => {
   searchParams.append('name', `${name}`);
 
   const response = await fetch(
-    `${getBaseUrl()}/api/devices/search?${searchParams.toString()}`,
+    `${
+      process.env.NEXT_PUBLIC_WEBSITE_URL
+    }/api/devices/search?${searchParams.toString()}`,
     {
       method: 'GET',
       cache: 'no-cache',
@@ -94,7 +98,9 @@ export const queryDevices = async (search: {
 
   // Fetch data from the server
   const response = await fetch(
-    `${getBaseUrl()}/api/devices?${searchParams.toString()}`,
+    `${
+      process.env.NEXT_PUBLIC_WEBSITE_URL
+    }/api/devices?${searchParams.toString()}`,
     {
       method: 'GET',
       cache: 'no-cache',
