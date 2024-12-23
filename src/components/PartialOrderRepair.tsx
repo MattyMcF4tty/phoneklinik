@@ -161,6 +161,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               placeholder="Navn"
               className="w-full py-2 px-4 rounded mb-4 border"
               onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
 
@@ -171,6 +172,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               id="date"
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
               onChange={(e) => setDate(e.target.value)}
+              value={date}
             />
             <select
               name="time"
@@ -196,6 +198,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               placeholder="tlf. nr."
               className="w-full py-2 px-4 rounded mb-4 border mr-4"
               onChange={(e) => setPhone(e.target.value)}
+              value={phone}
             />
             <input
               type="email"
@@ -204,6 +207,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
               placeholder="Email"
               className="w-full py-2 px-4 rounded mb-4 border"
               onChange={(e) => setMail(e.target.value)}
+              value={mail}
             />
           </div>
 
@@ -214,6 +218,7 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
             placeholder="Evt. kommentar til bestillingen..."
             className="w-full h-24 border rounded-lg p-2 text-gray-600 mt-4"
             onChange={(e) => setComment(e.target.value)}
+            value={comment}
           />
           <div className="flex items-center justify-center mt-4">
             <button

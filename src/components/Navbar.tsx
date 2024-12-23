@@ -37,11 +37,11 @@ const Navbar: React.FC = () => {
 
         {/* Hamburger Menu for Mobile */}
         <div className="md:hidden flex flex-row items-center">
-        <Searchbar />
+          <Searchbar />
 
-        <button
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="focus:outline-none"
+            className="focus:outline-none ml-4"
           >
             <svg
               className="w-6 h-6"

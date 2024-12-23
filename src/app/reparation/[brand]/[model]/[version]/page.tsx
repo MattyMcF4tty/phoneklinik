@@ -32,33 +32,37 @@ export default async function TelefonReparationPage({ params }: Context) {
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
-        <div className="flex w-full max-w-4xl items-center space-x-6">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white min-h-[30vh] flex flex-col justify-center items-center text-center px-6">
+        <div className="flex w-full max-w-4xl items-center space-x-6 px-4">
           {/* Image */}
           <div className="flex-shrink-0">
-              <Image
-                src={device.image_url}
-                alt={model}
-                width={0}
-                height={0}
-                sizes="100vw"
-                className='max-h-48 w-full h-full '
-              />
-
+            <Image
+              src={device.image_url}
+              alt={model}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="max-h-48 w-full h-full"
+            />
           </div>
           {/* Text */}
-          <div className="flex-grow">
-            <h1 className="text-2xl md:text-4xl md:mt-0 mt-4 font-bold mb-4 text-start">
-              {model} {formattedVersion} reparation
-            </h1>
-            <p className="text-sm md:text-lg mb-2 text-start">
-              Har du brug for {model} {formattedVersion} reparation, kan du få
-              hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af {model}{' '}
-              {formattedVersion} samt udskiftning af batteri og reparation af
-              andre reservedele.
-            </p>
-            <p className="text-sm md:text-lg mb-6 text-start">
-            Udvælg først nedenunder på skemaet hvilke dele der skal reparares og udfyld dernæst formen.</p>
+          <div className="flex-grow max-w-full">
+            <div>
+              <h1 className="text-2xl md:text-4xl md:mt-0 mt-4 font-bold mb-4 text-start">
+                {model} {formattedVersion} reparation
+              </h1>
+              <p className="text-sm md:text-lg mb-2 text-start">
+                Har du brug for {model} {formattedVersion} reparation, kan du få
+                hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af{' '}
+                {model} {formattedVersion} samt udskiftning af batteri og
+                reparation af andre reservedele.
+              </p>
+              <p className="text-sm md:text-lg mb-6 text-start">
+                Udvælg først nedenunder på skemaet hvilke dele der skal
+                reparares og udfyld dernæst formen.
+              </p>
+            </div>
           </div>
         </div>
       </div>
