@@ -5,6 +5,7 @@ import { queryDevices } from '@/utils/supabase/devices';
 interface Context {
   params: Promise<{ brand: string; model: string }>;
 }
+export const revalidate = 86400; // Revalidate every 24 hours (in seconds)
 
 export default async function TelefonReparationPage({ params }: Context) {
   const { brand, model } = await params;
@@ -32,7 +33,7 @@ export default async function TelefonReparationPage({ params }: Context) {
               imageUrl={device.image_url}
               linkUrl={`/reparation/${device.brand.toLowerCase()}/${device.model.toLowerCase()}/${device.version.toLowerCase()}`}
               /* buttonText={`${device.model} ${device.version} Reparation`} */
-              buttonText='Se priser'
+              buttonText="Se priser"
             />
           ))}{' '}
         </div>

@@ -15,7 +15,7 @@ export const getDeviceById = async (id: number): Promise<Device> => {
     }/api/devices/${searchParams.toString()}`,
     {
       method: 'GET',
-      cache: 'no-cache',
+      next: { revalidate: 86400 }, // Cache and revalidate every 24 hours
     }
   );
 
@@ -47,7 +47,7 @@ export const queryDeviceName = async (name: string): Promise<Device[]> => {
     }/api/devices/search?${searchParams.toString()}`,
     {
       method: 'GET',
-      cache: 'no-cache',
+      next: { revalidate: 86400 }, // Cache and revalidate every 24 hours
     }
   );
 
@@ -102,7 +102,7 @@ export const queryDevices = async (search: {
     }/api/devices?${searchParams.toString()}`,
     {
       method: 'GET',
-      cache: 'no-cache',
+      next: { revalidate: 86400 }, // Cache and revalidate every 24 hours
     }
   );
   const responseData = await response.json();

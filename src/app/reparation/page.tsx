@@ -2,6 +2,8 @@ import Cardholder from '@/components/Cardholder';
 import Navbar from '@/components/Navbar';
 import { getBrands } from '@/utils/supabase/brands';
 
+export const revalidate = 86400; // Revalidate every 24 hours (in seconds)
+
 const ReparationPage = async () => {
   const brands = await getBrands();
   return (

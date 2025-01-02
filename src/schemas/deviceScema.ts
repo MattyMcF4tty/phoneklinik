@@ -35,7 +35,7 @@ export default class Device {
       `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/devices/${this.id}/parts`,
       {
         method: 'GET',
-        cache: 'no-cache',
+        next: { revalidate: 86400 }, // Cache and revalidate every 24 hours
       }
     );
 

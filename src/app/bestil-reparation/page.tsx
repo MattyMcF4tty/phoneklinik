@@ -4,6 +4,7 @@ import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import OrderRepair from '@/components/OrderRepair';
 import Image from 'next/image';
 import { getBrands } from '@/utils/supabase/brands';
+import PartSelect from '@/components/PartSelect';
 
 export default async function ReparationPage() {
   const brands = (await getBrands()).map((brand) => ({ ...brand }));
@@ -62,7 +63,10 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <OrderRepair brands={brands} Titel="Bestil reparation" />
+        <form>
+          <PartSelect parts={} />
+          <OrderRepair brands={brands} Titel="Bestil reparation" />
+        </form>
       </div>
     </div>
   );

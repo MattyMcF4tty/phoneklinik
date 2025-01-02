@@ -5,7 +5,7 @@ export const getModels = async (brand: string): Promise<Model[]> => {
     `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/models?brand=${brand}`,
     {
       method: 'GET',
-      cache: 'no-cache',
+      next: { revalidate: 86400 }, // Cache and revalidate every 24 hours
     }
   );
 
