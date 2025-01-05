@@ -1,28 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { DevicePartSchema } from '@/schemas/devicePartSchema';
-import {
-  createDateTimeObject,
-  generateTimeSlots,
-  isTimeReserved,
-} from '@/utils/misc';
-import {
-  getResveredTimeSlots,
-  reserveTimeSlot,
-} from '@/utils/supabase/timeSlots';
-import { bookRepair } from '@/utils/mail';
-import { DeviceSchema } from '@/schemas/deviceScema';
+import React, { FC, useEffect, useState } from 'react';
+import { useRepairForm } from './RepairFormProvider';
+import { getResveredTimeSlots } from '@/utils/supabase/timeSlots';
+import { createDateTimeObject, generateTimeSlots } from '@/utils/misc';
+import { getModels } from '@/utils/supabase/models';
+import { queryDevices } from '@/utils/supabase/devices';
+import { BrandSchema } from '@/schemas/brandSchema';
 
-interface PartialOrderRepairProps {
-  selectedParts: DevicePartSchema[];
-  device: DeviceSchema;
+interface OrderRepairProps {
+  brands: BrandSchema[];
 }
 
-const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
-  selectedParts,
-  device,
-}) => {
+const OrderRepair: FC<OrderRepairProps> = ({ brands }) => {
+  const repairFormData = useRepairForm();
+
   const [location, setLocation] = useState<string>('');
   const locations = ['Fisketorvet'];
   const [name, setName] = useState<string>('');
@@ -33,20 +25,26 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
   const [date, setDate] = useState<string>('');
   /*   const month = new Date(date).getMonth();
    */
-  const [reservedTimes, setReservedTimes] = useState<Date[]>([]);
   const [validTimes, setValidTimes] = useState<string[]>([]); // List of valid times
   const [time, setTime] = useState<string>('');
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [models, setModels] = useState<string[]>([]);
+  const [versions, setVersions] = useState<string[]>([]);
+
+  const [currentBrand, setCurrentBrand] = useState<string>('');
+  const [model, setModel] = useState<string>('');
+  const [version, setVersion] = useState<string>('');
+
   const denyReserve =
-    loading ||
+    repairFormData.loading ||
     !name ||
     !mail ||
     !phone ||
     !location ||
     !date ||
     !time ||
-    selectedParts.length <= 0;
+    repairFormData.selectedParts.length <= 0 ||
+    !repairFormData.bookingData;
 
   useEffect(() => {
     const fetchAndGenerateTimes = async () => {
@@ -58,7 +56,6 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
         const formattedTimes = timeslots.map(
           (timeslot) => new Date(timeslot.time)
         );
-        setReservedTimes(formattedTimes);
 
         // Generate valid times after reserved times have been updated
         const unvalidatedTimes = generateTimeSlots();
@@ -78,47 +75,98 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
     fetchAndGenerateTimes();
   }, [date]);
 
-  const handleOrderTime = async () => {
-    try {
-      const datetime = createDateTimeObject(date, time);
+  // Fetch brand models
+  useEffect(() => {
+    repairFormData.setDevice(undefined);
+    repairFormData.setSelectedParts([]);
 
-      if (isTimeReserved(datetime, reservedTimes)) {
-        alert('Selected time is already reserved. Please choose another time.');
-        return;
+    setModel('');
+    setModels([]);
+    const fecthModels = async () => {
+      if (currentBrand) {
+        const modelsData = await getModels(currentBrand);
+        const modelNames = modelsData.map((modelData) => {
+          return modelData.name;
+        });
+        setModels(modelNames);
       }
+    };
 
-      setLoading(true);
+    fecthModels();
+  }, [currentBrand]);
 
-      await reserveTimeSlot(datetime, mail);
-      await bookRepair({
-        device: device,
+  // Fetch model versions
+  useEffect(() => {
+    repairFormData.setDevice(undefined);
+    repairFormData.setSelectedParts([]);
+
+    setVersion('');
+    setVersions([]);
+    const fetchVersions = async () => {
+      if (model) {
+        const devices = await queryDevices({
+          brand: currentBrand,
+          model: model,
+        });
+        const versionNames = devices.map((device) => {
+          return device.version;
+        });
+        setVersions(versionNames);
+      }
+    };
+
+    fetchVersions();
+  }, [model]);
+
+  // Fetch model versions
+  useEffect(() => {
+    repairFormData.setDevice(undefined);
+    repairFormData.setSelectedParts([]);
+
+    const fetchVersions = async () => {
+      if (version) {
+        const devices = await queryDevices({
+          brand: currentBrand,
+          model: model,
+          version: version,
+        });
+
+        // TODO FIX
+        if (devices[0]) {
+          const deviceData = devices[0].toPlainObject().deviceData;
+          repairFormData.setDevice(deviceData);
+        } else {
+          console.error('No such device exist;', currentBrand, model, version);
+        }
+      }
+    };
+
+    fetchVersions();
+  }, [version]);
+
+  useEffect(() => {
+    if (denyReserve) {
+      repairFormData.setBookingData({
         comment: comment,
         date: date,
         email: mail,
-        location: location,
         name: name,
         phone: phone,
-        selectedParts: selectedParts,
         time: time,
+        location: location,
       });
-
-      alert('Dit tidspunktet er blevet reserveret!');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error handling order time:', error);
-    } finally {
-      setValidTimes((prevTimes) => prevTimes.filter((t) => t !== time));
-      setMail('');
-      setName('');
-      setComment('');
-      setPhone('');
-      setLocation('');
-      setTime('');
-      setDate('');
-
-      setLoading(false);
     }
-  };
+  }, [
+    comment,
+    date,
+    mail,
+    name,
+    phone,
+    time,
+    location,
+    repairFormData.selectedParts,
+    repairFormData.loading,
+  ]);
 
   return (
     <div className="">
@@ -129,6 +177,59 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
         </div>
 
         <div className="bg-white p-4 rounded-b-lg shadow-md">
+          <select
+            value={currentBrand}
+            onChange={(e) => {
+              setCurrentBrand(e.target.value);
+            }}
+            className="bg-gray-200 text-gray-600 w-full py-2 px-4 rounded mb-4"
+          >
+            <option value="">Vælg mærke</option>
+            {brands.map((brand) => (
+              <option key={brand.id} value={brand.name}>
+                {brand.name}
+              </option>
+            ))}
+          </select>
+
+          {/* SELECT MODEL */}
+          <select
+            value={model}
+            onChange={(e) => {
+              setModel(e.target.value);
+            }}
+            className={`w-full py-2 px-4 rounded mb-4 ${
+              currentBrand
+                ? 'bg-gray-200 text-gray-600'
+                : 'bg-gray-300 text-gray-400'
+            }`}
+            disabled={!currentBrand}
+          >
+            <option value="">Vælg model</option>
+            {models.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+
+          {/* SELECT VERSION */}
+          <select
+            value={version}
+            onChange={(e) => setVersion(e.target.value)}
+            className={`w-full py-2 px-4 rounded mb-4 ${
+              model ? 'bg-gray-200 text-gray-600' : 'bg-gray-300 text-gray-400'
+            }`}
+            disabled={!model}
+          >
+            <option value="">Vælg version</option>
+            {versions.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+
           {/* Dropdown for location */}
           <div className="flex flex-row">
             <select
@@ -213,8 +314,8 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
           />
           <div className="flex items-center justify-center mt-4">
             <button
+              type="submit"
               disabled={denyReserve}
-              onClick={handleOrderTime}
               className={`h-12 text-white w-full rounded-lg ${
                 denyReserve
                   ? 'bg-gray-400 cursor-not-allowed'
@@ -230,4 +331,4 @@ const PartialOrderRepair: React.FC<PartialOrderRepairProps> = ({
   );
 };
 
-export default PartialOrderRepair;
+export default OrderRepair;

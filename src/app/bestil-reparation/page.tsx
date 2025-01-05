@@ -1,10 +1,11 @@
 import Navbar from '@/components/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import OrderRepair from '@/components/OrderRepair';
+import OrderRepair from '@/components/repairFormWithContext/OrderRepair2';
 import Image from 'next/image';
 import { getBrands } from '@/utils/supabase/brands';
-import PartSelect from '@/components/PartSelect';
+import PartSelect from '@/components/repairFormWithContext/PartSelect';
+import RepairFormProvider from '@/components/repairFormWithContext/RepairFormProvider';
 
 export default async function ReparationPage() {
   const brands = (await getBrands()).map((brand) => ({ ...brand }));
@@ -63,10 +64,11 @@ export default async function ReparationPage() {
           </div>
         </div>
         {/* Form Box */}
-        <form>
-          <PartSelect parts={} />
-          <OrderRepair brands={brands} Titel="Bestil reparation" />
-        </form>
+        <RepairFormProvider deviceData={undefined}>
+          <PartSelect />
+          <OrderRepair brands={brands} />
+        </RepairFormProvider>
+        <form></form>
       </div>
     </div>
   );

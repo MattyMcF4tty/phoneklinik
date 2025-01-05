@@ -6,12 +6,12 @@ import { BrandSchema } from '@/schemas/brandSchema';
 import { getModels } from '@/utils/supabase/models';
 import { sendMail } from '@/utils/misc';
 
-interface OrderRepairProps {
+interface SellDeviceFormProps {
   brands: BrandSchema[];
   Titel: string;
 }
 
-const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
+const SellDeviceForm: React.FC<SellDeviceFormProps> = ({ brands, Titel }) => {
   const [models, setModels] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
 
@@ -86,7 +86,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
       );
 
       alert(
-        'Your request has been send!\n You will recive an evaluation as soon as possible though your mail.'
+        'Din anmodning er blevet modtaget \nDu Vil modtage en evaluering a din enhed hurtigst muligt gennem din mail.'
       );
     } catch (error) {
       console.error('Error handling order time:', error);
@@ -242,7 +242,7 @@ const OrderRepair: React.FC<OrderRepairProps> = ({ brands, Titel }) => {
   );
 };
 
-export default OrderRepair;
+export default SellDeviceForm;
 
 /* 
 'use client';

@@ -1,13 +1,12 @@
-import Navbar from '@/components/Navbar';
-import OrderRepair from '@/components/OrderRepair';
+import SellDeviceForm from '@/components/SellDeviceForm';
 import { getBrands } from '@/utils/supabase/brands';
 
 export default async function SellPhonePage() {
-  const brands = (await getBrands()).map((brand) => ({ ...brand }));
+  const brands = await getBrands();
+  const brandsData = brands.map((brand) => brand.toPlainObject());
+
   return (
     <div className="bg-gray-100 h-full w-full">
-      <Navbar />
-      {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
         <h1 className="text-2xl md:text-4xl font-bold mb-4">Sælg din enhed</h1>
         <p className="text-sm md:text-lg mb-6 md:w-1/2">
@@ -20,7 +19,7 @@ export default async function SellPhonePage() {
         </p>
       </div>
       <div className="flex items-center justify-center w-full">
-        {<OrderRepair brands={brands} Titel="Sælg din enhed" />}
+        <SellDeviceForm brands={brandsData} Titel="Sælg din enhed" />
       </div>
     </div>
   );
