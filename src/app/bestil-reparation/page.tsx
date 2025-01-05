@@ -65,7 +65,9 @@ export default async function ReparationPage() {
         </div>
         {/* Form Box */}
         <RepairFormProvider deviceData={undefined}>
-          <PartSelect />
+          <div className="px-10 mt-10">
+            <PartSelect />
+          </div>
           <OrderRepair brands={brands} />
         </RepairFormProvider>
         <form></form>
