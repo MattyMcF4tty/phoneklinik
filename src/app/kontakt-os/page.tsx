@@ -25,7 +25,7 @@ export default function ContactUs() {
         <div className="flex flex-col md:flex-row items-center justify-center gap-8">
           <div className="flex flex-col bg-white rounded-lg shadow-md p-6 md:w-1/3">
             <Image
-              src={'/phoneklinik.jpg'}
+              src={'/butik.jpg'}
               alt={'billede'}
               className="w-full h-48 object-cover rounded-lg mb-4"
               width={600}
@@ -34,25 +34,32 @@ export default function ContactUs() {
             <h3 className="text-lg font-bold text-gray-800">Adresse:</h3>
             <p className="text-gray-600 mb-4">Kalvebod Brygge 59, København</p>
             <h3 className="text-lg font-bold text-gray-800">Åbningstider:</h3>
-            <ul className="text-gray-600 space-y-1">
-              <li>Mandag-Fredag: 10:00 - 20:00</li>
-              <li>Lørdag: 10:00 - 20:00</li>
-              <li>Søndag: 10:00 - 20:00</li>
-            </ul>
+            <div className="flex flex-row justify-between">
+              <p className="text-gray-600 mt-2">Mandag-Fredag</p>
+              <p className="text-gray-600 mt-2">10:00 - 20:00</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-gray-600 mt-2">Lørdag</p>
+              <p className="text-gray-600 mt-2">10:00 - 20:00</p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-gray-600 mt-2">Søndag</p>
+              <p className="text-gray-600 mt-2">10:00 - 20:00</p>
+            </div>
             <h3 className="text-lg font-bold text-gray-800 mt-6">Kontakt:</h3>
             <div className="flex items-center mt-2">
               <FontAwesomeIcon
                 icon={faPhone}
                 className="text-main-purple w-5 mr-2"
               />
-              <p className="text-gray-600">+45 1234 5678</p>
+              <p className="text-gray-600">+45 22 55 66 67</p>
             </div>
             <div className="flex items-center mt-2">
               <FontAwesomeIcon
                 icon={faEnvelope}
                 className="text-main-purple w-5 mr-2"
               />
-              <p className="text-gray-600">info@phoneklinik.dk</p>
+              <p className="text-gray-600">phoneklinik@icloud.com</p>
             </div>
           </div>
         </div>

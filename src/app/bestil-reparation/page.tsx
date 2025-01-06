@@ -13,8 +13,17 @@ export default async function ReparationPage() {
   return (
     <div className="bg-gray-100 h-full w-full md:mb-20 mb-6">
       <Navbar />
-      <div className="flex items-center justify-center">
-        <h1 className="mt-6 mb-8 text-4xl font-bold text-gray-700">
+
+      <div className="flex flex-col items-center justify-center">
+        <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white min-h-[25vh] w-full flex flex-col justify-center items-center text-center px-6">
+          <p>
+            Du kan altid komme ind i en af vores butikker uden tidsbestilling og
+            få repararet din enhed. Vi har 95% af alle reservedele på lager, og
+            kan i de fleste tilfælde reparere din enhed mens du venter. Hvis du
+            vil være helt sikker, kan du bestille en tid.
+          </p>
+        </div>
+        <h1 className="mt-6 mb-8 text-3xl font-bold text-gray-700">
           PhoneKlinik København
         </h1>
       </div>
@@ -23,11 +32,11 @@ export default async function ReparationPage() {
         <div className="flex flex-col bg-white rounded-lg shadow-md p-4 md:w-1/5 w-[18rem]  md:ml-0 mt-4">
           {/* Billede */}
           <Image
-            src={'/phoneklinik.jpg'}
+            src={'/butik.jpg'}
             alt={'billede'}
             className="w-full h-48 object-cover rounded-t-lg"
-            width={100}
-            height={100}
+            width={150}
+            height={400}
           />
           {/* Tekst */}
           <div className="mt-4">
@@ -54,12 +63,12 @@ export default async function ReparationPage() {
               </h2>
               <div className="flex flex-row">
                 <FontAwesomeIcon icon={faPhone} className="w-[20px]" />
-                <p className="text-gray-600 ml-4">+45 1234 5678</p>
+                <p className="text-gray-600 ml-4">+45 22 55 66 67</p>
               </div>
             </div>
             <div className="flex items-center mt-2">
               <FontAwesomeIcon icon={faEnvelope} className="mr-4 w-[20px]" />
-              <p className="text-gray-600">info@phoneklinik.dk</p>
+              <p className="text-gray-600">phoneklinik@icloud.com</p>
             </div>
           </div>
         </div>

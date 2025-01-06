@@ -14,7 +14,7 @@ export default async function SellPhonePage() {
           gamle iPhone ligger og samler støv i skuffen, så sælg den hellere til
           os og få betaling direkte. Uanset standen eller om den er defekt.
         </p>
-        <p>
+        <p className="text-sm md:text-lg mb-6 md:w-1/2">
           Svar på nedenstående skema og så svarer vi tilbage hurtigst muligt!
         </p>
       </div>
