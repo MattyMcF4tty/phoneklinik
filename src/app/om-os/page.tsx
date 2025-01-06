@@ -10,7 +10,7 @@ export default function AboutUs() {
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
         <h1 className="text-2xl md:text-4xl font-bold mb-4">Om os</h1>
-        <p className="text-sm md:text-lg mb-6">
+        <p className="text-sm md:text-lg mb-6 w-1/2">
           Hos PhoneKlinik er vi specialister i at reparere alle typer
           smartphones og tablets. Uanset om du har brug for at få skiftet
           skærmen på din iPhone, udskiftet batteriet på din Samsung, eller
@@ -67,23 +67,23 @@ export default function AboutUs() {
           <h3 className="text-xl font-bold mb-4">Hvorfor vælge os?</h3>
           <ul className="text-sm text-gray-600 space-y-4">
             <li>
-              <span className="font-semibold">Hurtig reparation:</span> De
+              <span className="font-bold">Hurtig reparation:</span> De
               fleste reparationer udføres på stedet og er færdige inden for få
               timer.
             </li>
             <li>
-              <span className="font-semibold">Kvalitet og pålidelighed:</span>{' '}
+              <span className="font-bold">Kvalitet og pålidelighed:</span>{' '}
               Vi bruger kun dele af høj kvalitet, og vi tilbyder garanti på alle
               reparationer.
             </li>
             <li>
-              <span className="font-semibold">Erfarne teknikere:</span> Vores
+              <span className="font-bold">Erfarne teknikere:</span> Vores
               tekniske team har mange års erfaring med telefonreparationer, og
               vi holder os opdateret med de nyeste teknologier og
               reparationsteknikker.
             </li>
             <li>
-              <span className="font-semibold">Konkurrencedygtige priser:</span>{' '}
+              <span className="font-bold">Konkurrencedygtige priser:</span>{' '}
               Vi tilbyder fair og transparente priser, så du ved præcis, hvad du
               betaler for.
             </li>

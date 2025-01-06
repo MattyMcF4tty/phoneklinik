@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import SellDeviceForm from '@/components/SellDeviceForm';
 import { getBrands } from '@/utils/supabase/brands';
 
@@ -7,6 +8,8 @@ export default async function SellPhonePage() {
 
   return (
     <div className="bg-gray-100 h-full w-full">
+                <Navbar/>
+
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
         <h1 className="text-2xl md:text-4xl font-bold mb-4">Sælg din enhed</h1>
         <p className="text-sm md:text-lg mb-6 md:w-1/2">
