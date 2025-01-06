@@ -1,5 +1,4 @@
 import Navbar from '@/components/Navbar';
-import Image from 'next/image';
 
 export default function AboutUs() {
   return (
@@ -67,13 +66,12 @@ export default function AboutUs() {
           <h3 className="text-xl font-bold mb-4">Hvorfor vælge os?</h3>
           <ul className="text-sm text-gray-600 space-y-4">
             <li>
-              <span className="font-bold">Hurtig reparation:</span> De
-              fleste reparationer udføres på stedet og er færdige inden for få
-              timer.
+              <span className="font-bold">Hurtig reparation:</span> De fleste
+              reparationer udføres på stedet og er færdige inden for få timer.
             </li>
             <li>
-              <span className="font-bold">Kvalitet og pålidelighed:</span>{' '}
-              Vi bruger kun dele af høj kvalitet, og vi tilbyder garanti på alle
+              <span className="font-bold">Kvalitet og pålidelighed:</span> Vi
+              bruger kun dele af høj kvalitet, og vi tilbyder garanti på alle
               reparationer.
             </li>
             <li>
@@ -83,8 +81,8 @@ export default function AboutUs() {
               reparationsteknikker.
             </li>
             <li>
-              <span className="font-bold">Konkurrencedygtige priser:</span>{' '}
-              Vi tilbyder fair og transparente priser, så du ved præcis, hvad du
+              <span className="font-bold">Konkurrencedygtige priser:</span> Vi
+              tilbyder fair og transparente priser, så du ved præcis, hvad du
               betaler for.
             </li>
           </ul>
