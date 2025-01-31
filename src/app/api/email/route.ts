@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'asmtp.dandomain.dk',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.NO_REPLY_MAIL,
       pass: process.env.MAIL_PASSWORD,

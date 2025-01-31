@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
       <p>
         Kontakt os:{' '}
         <a href="mailto:info@phoneklinik.dk" className="underline">
-          phoneklinik@icloud.com{' '}
+          info@phoneklinik.dk{' '}
         </a>
       </p>
     </footer>

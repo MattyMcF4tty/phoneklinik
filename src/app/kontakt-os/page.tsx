@@ -1,9 +1,31 @@
+'use client';
+
 import Navbar from '@/components/Navbar';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { sendMail } from '@/utils/misc';
+import { FormEvent } from 'react';
 
 export default function ContactUs() {
+  async function handleContact(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault(); // Fix typo
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('tel') as string;
+    const message = formData.get('message') as string;
+
+    await sendMail(
+      `User Question from ${name}`,
+      `Message: ${message}\n\nEmail: ${email}\nPhone: ${phone}`
+    );
+
+    alert('Tak for din besked! Vi vender tilbage så hurtigt som muligt.');
+    e.currentTarget.reset(); // Reset form after submission
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen w-full">
       {/* Navbar */}
@@ -59,7 +81,7 @@ export default function ContactUs() {
                 icon={faEnvelope}
                 className="text-main-purple w-5 mr-2"
               />
-              <p className="text-gray-600">phoneklinik@icloud.com</p>
+              <p className="text-gray-600">info@phoneklinik.dk</p>
             </div>
           </div>
         </div>
@@ -70,7 +92,10 @@ export default function ContactUs() {
         <h2 className="text-xl md:text-2xl font-bold mb-6 text-center">
           Skriv til os
         </h2>
-        <form className="bg-white p-6 rounded-lg shadow-lg w-full md:w-2/3 mx-auto">
+        <form
+          onSubmit={handleContact}
+          className="bg-white p-6 rounded-lg shadow-lg w-full md:w-2/3 mx-auto"
+        >
           <div className="mb-4">
             <label
               htmlFor="name"

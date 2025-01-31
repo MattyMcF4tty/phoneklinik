@@ -68,7 +68,7 @@ export default async function ReparationPage() {
             </div>
             <div className="flex items-center mt-2">
               <FontAwesomeIcon icon={faEnvelope} className="mr-4 w-[20px]" />
-              <p className="text-gray-600">phoneklinik@icloud.com</p>
+              <p className="text-gray-600">info@phoneklinik.dk</p>
             </div>
           </div>
         </div>
