@@ -12,12 +12,14 @@ interface Context {
 
 export default async function TelefonReparationPage({ params }: Context) {
   const { model, version, brand } = await params;
+  const formattedModel = decodeUrlSpaces(model);
+  const formattedBrand = decodeUrlSpaces(brand);
   const formattedVersion = decodeUrlSpaces(version);
 
   const device = (
     await queryDevices({
-      brand: brand,
-      model: model,
+      brand: formattedBrand,
+      model: formattedModel,
       version: formattedVersion,
     })
   )[0];
@@ -39,7 +41,7 @@ export default async function TelefonReparationPage({ params }: Context) {
           <div className="flex-shrink-0">
             <Image
               src={device.image_url}
-              alt={model}
+              alt={formattedModel}
               width={0}
               height={0}
               sizes="100vw"
@@ -50,13 +52,13 @@ export default async function TelefonReparationPage({ params }: Context) {
           <div className="flex-grow max-w-full">
             <div>
               <h1 className="text-2xl md:text-4xl md:mt-0 mt-4 font-bold mb-4 text-start">
-                {model} {formattedVersion} reparation
+                {formattedModel} {formattedVersion} reparation
               </h1>
               <p className="text-sm md:text-lg mb-2 text-start">
-                Har du brug for {model} {formattedVersion} reparation, kan du få
-                hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift af{' '}
-                {model} {formattedVersion} samt udskiftning af batteri og
-                reparation af andre reservedele.
+                Har du brug for {formattedModel} {formattedVersion} reparation,
+                kan du få hjælp hos PhoneKlinik. PhoneKlinik tilbyder skærmskift
+                af {formattedModel} {formattedVersion} samt udskiftning af
+                batteri og reparation af andre reservedele.
               </p>
               <p className="text-sm md:text-lg mb-6 text-start">
                 Udvælg først nedenunder på skemaet hvilke dele der skal
@@ -73,7 +75,7 @@ export default async function TelefonReparationPage({ params }: Context) {
           <PartSelectForm
             device={deviceData}
             parts={partsData}
-            header={`Priser på ${model} ${formattedVersion} reparation`}
+            header={`Priser på ${formattedModel} ${formattedVersion} reparation`}
           />
         )}
       </div>

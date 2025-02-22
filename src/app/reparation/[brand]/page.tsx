@@ -1,5 +1,6 @@
 import Cardholder from '@/components/Cardholder';
 import Navbar from '@/components/Navbar';
+import { decodeUrlSpaces } from '@/utils/misc';
 import { getModels } from '@/utils/supabase/models';
 
 interface Context {
@@ -10,17 +11,21 @@ export const revalidate = 86400; // Revalidate every 24 hours (in seconds)
 
 export default async function TelefonReparationPage({ params }: Context) {
   const { brand } = await params;
-  const models = await getModels(brand);
+
+  const formattedBrand = decodeUrlSpaces(brand);
+
+  const models = await getModels(formattedBrand);
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
-          Reparation af {brand} produkter
+          Reparation af {formattedBrand} produkter
         </h1>
         <p className="text-sm md:text-lg mb-6">
-          Find dit {brand} produkt og få din enhed repareret hurtigt og sikkert.
+          Find dit {formattedBrand} produkt og få din enhed repareret hurtigt og
+          sikkert.
         </p>
       </div>
 
