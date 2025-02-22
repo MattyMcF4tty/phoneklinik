@@ -7,7 +7,7 @@ export const revalidate = 86400; // Revalidate every 24 hours (in seconds)
 const ReparationPage = async () => {
   const brands = await getBrands();
   return (
-    <div className="bg-gray-100 h-screen w-full">
+    <div className="bg-gray-100 min-h-screen h-full w-full">
       <Navbar />
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
