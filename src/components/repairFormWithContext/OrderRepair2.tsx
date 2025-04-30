@@ -83,6 +83,7 @@ const OrderRepair: FC<OrderRepairProps> = ({ brands }) => {
     setModel('');
     setModels([]);
     const fecthModels = async () => {
+      console.log('Fetching models');
       if (currentBrand) {
         const modelsData = await getModels(currentBrand);
         const modelNames = modelsData.map((modelData) => {
@@ -103,6 +104,7 @@ const OrderRepair: FC<OrderRepairProps> = ({ brands }) => {
     setVersion('');
     setVersions([]);
     const fetchVersions = async () => {
+      console.log('Fetching versions');
       if (model) {
         const devices = await queryDevices({
           brand: currentBrand,
