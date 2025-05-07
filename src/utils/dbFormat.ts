@@ -7,19 +7,19 @@ type SnakeCase<S extends string> = S extends `${infer Head}${infer Tail}`
     : `${Lowercase<Head>}_${SnakeCase<Tail>}`
   : S;
 
-// Converts snake_case to PascalCase at the type level (best effort)
-type PascalCase<S extends string> = S extends `${infer Head}_${infer Tail}`
-  ? `${Capitalize<Head>}${PascalCase<Tail>}`
-  : Capitalize<S>;
+// Converts snake_case to camelCase at the type level (best effort)
+type CamelCase<S extends string> = S extends `${infer Head}_${infer Tail}`
+  ? `${Lowercase<Head>}${Capitalize<CamelCase<Tail>>}`
+  : S;
 
 // Maps all keys of an object from PascalCase to snake_case
 export type Serialize<T> = {
   [K in keyof T as SnakeCase<Extract<K, string>>]: T[K];
 };
 
-// Maps all keys of an object from snake_case to PascalCase
+// Maps all keys of an object from snake_case to camelCase
 export type Deserialize<T> = {
-  [K in keyof T as PascalCase<Extract<K, string>>]: T[K];
+  [K in keyof T as CamelCase<Extract<K, string>>]: T[K];
 };
 
 // --- Runtime String Conversion Helpers ---
@@ -32,12 +32,13 @@ function toSnakeCase(str: string): string {
     .replace(/^_/, '');
 }
 
-// Converts "first_name" → "FirstName"
-function toPascalCase(str: string): string {
-  return str
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
+// Converts "first_name" → "firstName"
+function toCamelCase(str: string): string {
+  const [first, ...rest] = str.split('_');
+  return (
+    first.toLowerCase() +
+    rest.map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('')
+  );
 }
 
 // --- Runtime Object Converters ---
@@ -56,16 +57,16 @@ export function serializeToDbFormat<T extends Record<string, any>>(
   return result;
 }
 
-// Deserializes an object from database format (snake_case keys → PascalCase keys)
+// Deserializes an object from database format (snake_case keys → camelCase keys)
 export function deserializeFromDbFormat<T extends Record<string, any>>(
-  obj: T
-): Deserialize<T> {
+  obj: Record<string, any>
+): T {
   const result: any = {};
 
   for (const [key, value] of Object.entries(obj)) {
-    const pascalKey = toPascalCase(key);
-    result[pascalKey] = value;
+    const camelKey = toCamelCase(key);
+    result[camelKey] = value;
   }
 
-  return result;
+  return result as T;
 }
