@@ -152,7 +152,7 @@ class DevicePartHandler {
   public async getPart() {
     const parts = await DevicePartClient.query().id(this._id);
 
-    if (parts.length < 0) {
+    if (parts.length <= 0) {
       throw new AppError(
         'Part not found',
         `Part with id [${this._id}] does not exist`,

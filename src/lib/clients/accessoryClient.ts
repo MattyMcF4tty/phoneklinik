@@ -1,7 +1,11 @@
 import AppError from '@/schemas/errors/appError';
 import Accessory from '@/schemas/new/accessory';
 import { createClient } from '@/utils/config/supabase/serverClient';
-import { deserializeFromDbFormat, Serialize } from '@/utils/dbFormat';
+import {
+  deserializeFromDbFormat,
+  Serialize,
+  serializeToDbFormat,
+} from '@/utils/dbFormat';
 
 // Config
 const accessoryTable = 'accessories';
@@ -61,9 +65,15 @@ export default class AccessoryClient {
 }
 
 class AccessoryQueryBuilder {
+  private _id?: number;
   private _brand?: string;
   private _name?: string;
-  private _referenceDeviceId?: number;
+  private _supportedDevices?: number[];
+
+  public id(id: number) {
+    this._id = id;
+    return this;
+  }
 
   public brand(brand: string) {
     this._brand = brand;
@@ -75,8 +85,8 @@ class AccessoryQueryBuilder {
     return this;
   }
 
-  public referenceDeviceId(referenceDeviceId: number) {
-    this._referenceDeviceId = referenceDeviceId;
+  public supportedDevices(supportedDevices: number[]) {
+    this._supportedDevices = supportedDevices;
     return this;
   }
 
@@ -84,6 +94,10 @@ class AccessoryQueryBuilder {
     const supabase = await createClient();
 
     const query = supabase.from(accessoryTable).select('*');
+
+    if (this._id) {
+      query.eq('id', this._id);
+    }
 
     if (this._brand) {
       query.eq('brand', this._brand);
@@ -93,8 +107,8 @@ class AccessoryQueryBuilder {
       query.eq('name', this._name);
     }
 
-    if (this._referenceDeviceId) {
-      query.eq('reference_device_id', this._referenceDeviceId);
+    if (this._supportedDevices) {
+      query.contains('reference_device_id', this._supportedDevices);
     }
 
     const { data: accessoryData, error } = await query;
@@ -150,5 +164,82 @@ class AccessoryHandler {
 
   constructor(id: number) {
     this._id = id;
+  }
+
+  public async getAccessory(): Promise<Accessory> {
+    const supabase = await createClient();
+
+    const accessories = await AccessoryClient.query().id(this._id);
+
+    if (accessories.length <= 0) {
+      throw new AppError(
+        'Accessory not found',
+        `Accessory [${this._id}] does not exist`,
+        404
+      );
+    }
+
+    return accessories[0];
+  }
+
+  public async updateAccessory(
+    updatedAccessory: Partial<Omit<Accessory, 'id' | 'imageUrl'>>
+  ): Promise<Accessory> {
+    const supabase = await createClient();
+
+    const serializedAccessory = serializeToDbFormat(updatedAccessory);
+
+    const { data: accessoryData, error } = await supabase
+      .from(accessoryTable)
+      .update(serializedAccessory)
+      .eq('id', this._id)
+      .select('*')
+      .single();
+
+    if (error) {
+      throw new AppError(
+        'Something went wrong updating accessory',
+        `Unexpected error when updating accessory [${this._id}]: ${error.message}`,
+        500
+      );
+    }
+
+    if (!accessoryData) {
+      throw new AppError(
+        'Something went wrong updating accessory',
+        `Supabase returned null when updating accessory [${this._id}]`,
+        500
+      );
+    }
+
+    const deserializedAccessory =
+      deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
+
+    const imageUrl = supabase.storage
+      .from(accessoryImageBucket)
+      .getPublicUrl(
+        `${deserializedAccessory.brand}/${deserializedAccessory.id}`
+      ).data.publicUrl;
+
+    return { ...deserializedAccessory, imageUrl };
+  }
+
+  public async deleteAccessory(): Promise<boolean> {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from(accessoryTable)
+      .delete()
+      .eq('id', this._id);
+
+    if (error) {
+      throw new AppError(
+        'Something went wrong deleting accessory.',
+        `Unexpected error deleting accessory [${this._id}]: ${error.message}`,
+        500
+      );
+    }
+
+    return true;
   }
 }

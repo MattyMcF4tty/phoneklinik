@@ -240,7 +240,7 @@ class DeviceHandler {
   async getDevice(): Promise<Device> {
     const devices = await DeviceClient.query().id(this._id);
 
-    if (devices.length < 0) {
+    if (devices.length <= 0) {
       throw new AppError(
         'Device not found',
         `Device with id [${this._id}] does not exist`,
