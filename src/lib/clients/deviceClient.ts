@@ -12,7 +12,7 @@ import Brand from '@/schemas/new/brand';
 // Config
 const deviceTable = 'devices';
 const deviceImageBucket = 'device-images';
-const brandLogoBucket = 'brand-logos';
+const brandLogoBucket = 'brand-images';
 
 export default class DeviceClient {
   public static id(id: number) {

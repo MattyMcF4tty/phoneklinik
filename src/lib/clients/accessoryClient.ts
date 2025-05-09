@@ -10,7 +10,7 @@ import {
 // Config
 const accessoryTable = 'accessories';
 const accessoryImageBucket = 'accessory-images';
-const brandLogoBucket = 'brand-logos';
+const brandLogoBucket = 'brand-images';
 
 export default class AccessoryClient {
   public static async getUniqueBrands(): Promise<{

@@ -9,7 +9,7 @@ import {
 
 // Config
 const brandTable = 'brands';
-const brandLogoBucket = 'brand-logos';
+const brandLogoBucket = 'brand-images';
 
 export class BrandClient {
   public static query() {
