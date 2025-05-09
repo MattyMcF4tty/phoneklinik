@@ -7,6 +7,7 @@ import {
   serializeToDbFormat,
 } from '@/utils/dbFormat';
 import DevicePartClient from './devicePartClient';
+import Brand from '@/schemas/new/brand';
 
 // Config
 const deviceTable = 'devices';
@@ -22,7 +23,10 @@ export default class DeviceClient {
     return new DeviceQueryBuilder();
   }
 
-  public static async createDevice(newDevice: Omit<Device, 'id' | 'imageUrl'>) {
+  public static async createDevice(
+    newDevice: Omit<Device, 'id' | 'imageUrl'>,
+    deviceImage: Buffer
+  ): Promise<Device> {
     const supabase = await createClient();
 
     const serializedDevice = serializeToDbFormat(newDevice);
@@ -49,17 +53,38 @@ export default class DeviceClient {
       );
     }
 
-    const deserializedDevice = deserializeFromDbFormat<Device>(deviceData);
+    const deserializedDevice =
+      deserializeFromDbFormat<Omit<Device, 'imageUrl'>>(deviceData);
 
-    return deserializedDevice;
+    const { error: imageError } = await supabase.storage
+      .from(deviceImageBucket)
+      .upload(
+        `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`,
+        deviceImage,
+        { contentType: 'image/png' }
+      );
+
+    if (imageError) {
+      throw new AppError(
+        'Something went wrong uploading device image',
+        `Unexpected error uploading image for device [${deserializedDevice.id}]: ${imageError.message}`,
+        500
+      );
+    }
+
+    const imageUrl = supabase.storage
+      .from(deviceImageBucket)
+      .getPublicUrl(
+        `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`
+      ).data.publicUrl;
+
+    return { ...deserializedDevice, imageUrl };
   }
 
   /**
    * Fetches the unique device brands.
    */
-  public static async getUniqueBrands(): Promise<
-    { name: string; imageUrl: string }[]
-  > {
+  public static async getUniqueBrands(): Promise<Brand[]> {
     const supabase = await createClient();
     const { data: brandNames, error } = await supabase.rpc(
       'get_unique_device_brands'
@@ -252,7 +277,8 @@ class DeviceHandler {
   }
 
   async updateDevice(
-    updatedData: Partial<Omit<Device, 'id' | 'imageUrl'>>
+    updatedData: Partial<Omit<Device, 'id' | 'imageUrl'>>,
+    updatedImage?: Buffer
   ): Promise<Device> {
     const supabase = await createClient();
 
@@ -285,6 +311,24 @@ class DeviceHandler {
 
     const deserializedDevice =
       deserializeFromDbFormat<Omit<Device, 'imageUrl'>>(deviceData);
+
+    if (updatedImage) {
+      const { error } = await supabase.storage
+        .from(deviceImageBucket)
+        .update(
+          `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`,
+          updatedImage,
+          { contentType: 'image/png' }
+        );
+
+      if (error) {
+        throw new AppError(
+          'Something went wrong updating device image',
+          `Unexpected error updating device [${deserializedDevice.id}] image: ${error.message}`,
+          500
+        );
+      }
+    }
 
     const imageUrl = supabase.storage
       .from(deviceImageBucket)

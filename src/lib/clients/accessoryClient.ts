@@ -19,7 +19,6 @@ export default class AccessoryClient {
   }> {
     const supabase = await createClient();
 
-    //TODO: Make this function in supabase
     const { data: brandData, error } = await supabase.rpc(
       'get_unique_accessory_brands'
     );
@@ -61,6 +60,64 @@ export default class AccessoryClient {
 
   public static id(id: number) {
     return new AccessoryHandler(id);
+  }
+
+  public static async createAccessory(
+    newAccessory: Omit<Accessory, 'id' | 'imageUrl'>,
+    accessoryImage: Buffer
+  ): Promise<Accessory> {
+    const supabase = await createClient();
+
+    const serializedAccessory = serializeToDbFormat(newAccessory);
+
+    const { data: accessoryData, error } = await supabase
+      .from(accessoryTable)
+      .insert(serializedAccessory)
+      .select('*')
+      .single();
+
+    if (error) {
+      throw new AppError(
+        'Something went wrong creating accessory',
+        `Unexpected error creating new accessory: ${error.message}`,
+        500
+      );
+    }
+
+    if (!accessoryData) {
+      throw new AppError(
+        'Something went wrong creating accessory',
+        `Supabase returned null when trying to create new accessory`,
+        500
+      );
+    }
+
+    const deserializedAccessory =
+      deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
+
+    const { error: imageError } = await supabase.storage
+      .from(accessoryImageBucket)
+      .upload(
+        `${deserializedAccessory.brand}/${deserializedAccessory.name}`,
+        accessoryImage,
+        { contentType: 'image/png' }
+      );
+
+    if (imageError) {
+      throw new AppError(
+        'Something went wrong uploading accessory image',
+        `Unexpected error trying to upload image for new accessory [${deserializedAccessory.id}]: ${imageError.message}`,
+        500
+      );
+    }
+
+    const imageUrl = supabase.storage
+      .from(accessoryImageBucket)
+      .getPublicUrl(
+        `${deserializedAccessory.brand}/${deserializedAccessory.name}`
+      ).data.publicUrl;
+
+    return { ...deserializedAccessory, imageUrl };
   }
 }
 
@@ -183,7 +240,8 @@ class AccessoryHandler {
   }
 
   public async updateAccessory(
-    updatedAccessory: Partial<Omit<Accessory, 'id' | 'imageUrl'>>
+    updatedAccessory: Partial<Omit<Accessory, 'id' | 'imageUrl'>>,
+    updatedImage?: Buffer
   ): Promise<Accessory> {
     const supabase = await createClient();
 
@@ -214,6 +272,24 @@ class AccessoryHandler {
 
     const deserializedAccessory =
       deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
+
+    if (updatedImage) {
+      const { error } = await supabase.storage
+        .from(accessoryImageBucket)
+        .update(
+          `${deserializedAccessory.brand}/${deserializedAccessory.id}`,
+          updatedImage,
+          { contentType: 'image/png' }
+        );
+
+      if (error) {
+        throw new AppError(
+          'Something went wrong updating accessory image',
+          `Unexpected error updating accessory [${deserializedAccessory.id}] image: ${error.message}`,
+          500
+        );
+      }
+    }
 
     const imageUrl = supabase.storage
       .from(accessoryImageBucket)
