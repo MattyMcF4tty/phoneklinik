@@ -8,6 +8,7 @@ import {
 } from '@/utils/dbFormat';
 import DevicePartClient from './devicePartClient';
 import Brand from '@/schemas/new/brand';
+import Model from '@/schemas/new/model';
 
 // Config
 const deviceTable = 'devices';
@@ -81,6 +82,52 @@ export default class DeviceClient {
     return { ...deserializedDevice, imageUrl };
   }
 
+  public static async searchByName(
+    name: string
+  ): Promise<Pick<Device, 'id' | 'brand' | 'model' | 'version'>> {
+    const supabase = await createClient();
+
+    const lowerCaseName = name.toLowerCase();
+
+    const { data: deviceNameData, error } = await supabase.rpc(
+      'search_for_device_with_name',
+      { p_name: lowerCaseName }
+    );
+
+    if (error) {
+      throw new AppError(
+        `Something went wrong searching for ${name}`,
+        `Unexpected error when trying to search for device ${name}: ${error.message}`,
+        500
+      );
+    }
+
+    if (!deviceNameData) {
+      throw new AppError(
+        `Something went wrong searching for ${name}`,
+        `Supabase returned with null when trying to search for device ${name}`,
+        500
+      );
+    }
+
+    const deserializedDeviceNames: Pick<
+      Device,
+      'id' | 'brand' | 'model' | 'version'
+    > = deviceNameData.map(
+      (
+        serializedDeviceName: Serialize<
+          Pick<Device, 'id' | 'brand' | 'model' | 'version'>
+        >
+      ) => {
+        return deserializeFromDbFormat<
+          Pick<Device, 'id' | 'brand' | 'model' | 'version'>
+        >(serializedDeviceName);
+      }
+    );
+
+    return deserializedDeviceNames;
+  }
+
   /**
    * Fetches the unique device brands.
    */
@@ -103,7 +150,7 @@ export default class DeviceClient {
     return brandNames.map((brandName: string) => {
       const imageUrl = supabase.storage
         .from(brandLogoBucket)
-        .getPublicUrl(brandName + '.png').data.publicUrl;
+        .getPublicUrl(`${brandName}.png`).data.publicUrl;
 
       return {
         name: brandName,
@@ -115,14 +162,13 @@ export default class DeviceClient {
   /**
    * Fetches the unique device models for a given brand.
    */
-  public static async getUniqueModels(
-    brand?: string
-  ): Promise<{ name: string; imageUrl: string }[]> {
+  public static async getUniqueModels(brand?: string): Promise<Model[]> {
     const supabase = await createClient();
-    const { data: modelNames, error } = await supabase.rpc(
+    const { data: modelData, error } = await supabase.rpc(
       'get_unique_device_models',
       { p_brand: brand }
     );
+
     if (error) {
       throw new AppError(
         'Something went wrong fetching models.',
@@ -130,20 +176,25 @@ export default class DeviceClient {
         500
       );
     }
-    if (!modelNames) {
+    if (!modelData) {
       throw new AppError('No models found.', 'No models found.', 404);
     }
 
-    return modelNames.map((modelName: string) => {
-      const imageUrl = supabase.storage
-        .from('device-model-images')
-        .getPublicUrl(`${modelName}.png`).data.publicUrl;
+    const models: Model[] = modelData.map(
+      (model: { name: string; brand: string; image_path: string }) => {
+        const imageUrl = supabase.storage
+          .from(deviceImageBucket)
+          .getPublicUrl(model.image_path).data.publicUrl;
 
-      return {
-        name: modelName,
-        imageUrl,
-      };
-    });
+        return {
+          name: model.name,
+          brand: model.brand,
+          imageUrl,
+        };
+      }
+    );
+
+    return models;
   }
 }
 
@@ -228,7 +279,7 @@ class DeviceQueryBuilder {
         const imageUrl = supabase.storage
           .from(deviceImageBucket)
           .getPublicUrl(
-            `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`
+            `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}.png`
           ).data.publicUrl;
 
         return { ...deserializedDevice, imageUrl };
