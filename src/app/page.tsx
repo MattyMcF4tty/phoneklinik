@@ -8,30 +8,32 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="bg-gray-100 h-full w-full">
+    <div className="bg-white min-h-screen w-full">
       {/* Navbar */}
       <Navbar />
 
-      <div className="relative md:h-[35vh] h-[30vh] flex flex-col justify-center items-center text-center overflow-hidden">
-        {/* Video Background */}
-        <div className="w-full h-full bg-gradient-to-r from-main-purple to-main-blue flex items-center justify-center">
-          <div className="text-white p-6 flex flex-col items-center justify-center">
-            <h1 className="text-2xl md:text-4xl font-bold mb-4">
-              Velkommen til PhoneKlinik
-            </h1>
-            <p className="text-sm md:text-lg mb-6">
-              Vi tilbyder reparation af telefoner og MacBooks, samt salg af
-              covers, opladere og andre telefonprodukter.
-            </p>
-            <LinkButton variant="default" url="/kontakt-os" className="w-1/2">
+      {/* Hero Section */}
+      <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-16 gap-10">
+        {/* Text content */}
+        <div className="w-full md:w-1/2 text-center md:text-left">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+            Velkommen til PhoneKlinik
+          </h1>
+          <p className="text-md md:text-xl text-gray-600 mb-8">
+            Vi tilbyder reparation af telefoner og MacBooks, samt salg af
+            covers, opladere og andre telefonprodukter.
+          </p>
+          <div className="flex justify-center md:justify-start">
+            <LinkButton variant="default" url="/kontakt-os" className="w-48">
               Kontakt os
             </LinkButton>
           </div>
         </div>
-      </div>
 
-      <div className="h-[50vh] md:h-[56vh]">
-        <VideoEmbed />
+        {/* Video */}
+        <div className="w-full md:w-1/2 max-w-2xl aspect-video rounded-xl overflow-hidden shadow-lg">
+          <VideoEmbed />
+        </div>
       </div>
 
       {/* Info Section */}
