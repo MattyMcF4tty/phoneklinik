@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Footer from '@/components/Footer';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'PhoneKlinik',
@@ -18,9 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="bg-gray-50 min-h-screen flex flex-col">
+        <Toaster richColors={true} position="top-right" />
         <main className="flex flex-col grow px-[12%] min-h-screen py-10">
           {children}
-        </main>{' '}
+        </main>
         <Footer />
       </body>
     </html>

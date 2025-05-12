@@ -67,7 +67,7 @@ const SellDeviceForm: React.FC<SellDeviceFormProps> = ({ brands, Titel }) => {
     };
 
     fetchVersions();
-  }, [model]);
+  }, [model, currentBrand]);
 
   const handleRequest = async () => {
     try {
