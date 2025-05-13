@@ -19,7 +19,7 @@ const Page: NextPage = async () => {
           {models.map((model) => (
             <Link
               key={model.name}
-              href={`/dev/reparation/${model.brand}/${model.name}`}
+              href={`/reparation/${model.brand}/${model.name}`}
               className="text-blue-600 underline"
             >
               {model.brand} {model.name}

@@ -1,6 +1,6 @@
 import AppError from '@/schemas/errors/appError';
 import Device from '@/schemas/new/device';
-import { createClient } from '@/utils/config/supabase/serverClient';
+import { createClient } from '@/lib/supabase/serverClient';
 import {
   deserializeFromDbFormat,
   Serialize,
