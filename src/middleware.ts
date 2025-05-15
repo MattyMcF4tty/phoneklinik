@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from './lib/supabase/middleware';
-import { redirect } from 'next/dist/server/api-utils';
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === '/admin') {
@@ -9,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
   if (
     request.nextUrl.pathname.includes('admin') &&
-    !request.nextUrl.pathname.startsWith('/admin/login')
+    !request.nextUrl.pathname.startsWith('/admin/auth')
   ) {
     return await updateSession(request);
   }

@@ -22,3 +22,15 @@ html,
 body {
   font-family: 'Geist', sans-serif;
 }
+
+.input-default {
+  @apply w-full border-b outline-none focus:bg-slate-100 px-1 h-8 focus:shadow-inner;
+}
+
+.label-default {
+  @apply w-full font-semibold;
+}
+
+.highlighted-button {
+  @apply;
+}
