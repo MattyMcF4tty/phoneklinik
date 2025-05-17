@@ -1,4 +1,3 @@
-import AppError from '@/schemas/errors/appError';
 import Device from '@/schemas/new/device';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
@@ -9,6 +8,11 @@ import {
 import DevicePartClient from './devicePartClient';
 import Brand from '@/schemas/new/brand';
 import Model from '@/schemas/new/model';
+import {
+  ErrorInternal,
+  ErrorNotFound,
+  ErrorSupabase,
+} from '@/schemas/errors/appErrorTypes';
 
 // Config
 const deviceTable = 'devices';
@@ -39,18 +43,16 @@ export default class DeviceClient {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong creating device',
-        `Unexpected error when trying to create device: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelse af enhed.',
+        `Supabase error when trying to create device: ${error.message}`
       );
     }
 
     if (!deviceData) {
-      throw new AppError(
-        'Something went wrong creating device',
-        `Supabase returned null when trying to create device`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelse af enhed.',
+        `Supabase returned null when trying to create device`
       );
     }
 
@@ -66,10 +68,9 @@ export default class DeviceClient {
       );
 
     if (imageError) {
-      throw new AppError(
-        'Something went wrong uploading device image',
-        `Unexpected error uploading image for device [${deserializedDevice.id}]: ${imageError.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under upload af enhedens billede.',
+        `Supabase error uploading image for device [${deserializedDevice.id}]: ${imageError.message}`
       );
     }
 
@@ -95,18 +96,16 @@ export default class DeviceClient {
     );
 
     if (error) {
-      throw new AppError(
-        `Something went wrong searching for ${name}`,
-        `Unexpected error when trying to search for device ${name}: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        `Noget gik galt under søgning for enhed ${name}.`,
+        `Supabase error when trying to search for device ${name}: ${error.message}`
       );
     }
 
     if (!deviceNameData) {
-      throw new AppError(
-        `Something went wrong searching for ${name}`,
-        `Supabase returned with null when trying to search for device ${name}`,
-        500
+      throw new ErrorSupabase(
+        `Noget gik galt under søgning for enhed ${name}.`,
+        `Supabase returned with null when trying to search for device ${name}`
       );
     }
 
@@ -137,14 +136,16 @@ export default class DeviceClient {
       'get_unique_device_brands'
     );
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching brands.',
-        `Unexpected error fetching unique device brands: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af mærker.',
+        `Supabase error fetching unique device brands: ${error.message}`
       );
     }
     if (!brandNames) {
-      throw new AppError('No brands found.', 'No brands found.', 404);
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af mærker.',
+        'Supabase returned null when trying to get unique device brands'
+      );
     }
 
     return brandNames.map((brandName: string) => {
@@ -170,14 +171,18 @@ export default class DeviceClient {
     );
 
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching models.',
-        `Unexpected error fetching unique device models for brand ${brand}: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        `Noget gik galt under hentning af${brand ? ' ' + brand : ''} modeller.`,
+        `Supabase error fetching unique device models${
+          brand ? ' for brand ' + brand : ''
+        }: ${error.message}`
       );
     }
     if (!modelData) {
-      throw new AppError('No models found.', 'No models found.', 404);
+      throw new ErrorSupabase(
+        `Noget gik galt under hentning af${brand ? ' ' + brand : ''} modeller.`,
+        'Supabase returned with null when trying to fetch unique device models'
+      );
     }
 
     const models: Model[] = modelData.map(
@@ -254,9 +259,9 @@ class DeviceQueryBuilder {
     const { data: deviceData, error } = await query;
 
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching devices',
-        `Unexpected error when trying to get devices for ${
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af enheder.',
+        `Supabase error when trying to get device query for ${
           this._id && `id: ${this._id}`
         } ${this._brand && `brand: ${this._brand}`} ${
           this._model && `model: ${this._model}`
@@ -265,10 +270,10 @@ class DeviceQueryBuilder {
     }
 
     if (!deviceData) {
-      console.warn(
-        'Supabse returned with null data when trying to fetch device query.'
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af enheder.',
+        'Supabse returned with null data when trying to fetch device query'
       );
-      return [];
     }
 
     const deserializedDevices: Device[] = deviceData.map(
@@ -317,10 +322,9 @@ class DeviceHandler {
     const devices = await DeviceClient.query().id(this._id);
 
     if (devices.length <= 0) {
-      throw new AppError(
-        'Device not found',
-        `Device with id [${this._id}] does not exist`,
-        404
+      throw new ErrorNotFound(
+        'Enhed ikke fundet',
+        `Device with id [${this._id}] could not be found`
       );
     }
 
@@ -343,18 +347,16 @@ class DeviceHandler {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong updating device',
-        `Unexpected error updating device [${this._id}]:`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af enhed.',
+        `Supabase error updating device [${this._id}]: ${error.message}`
       );
     }
 
     if (!deviceData) {
-      throw new AppError(
-        'Something went wrong updating device',
-        `Supabase returned with null when updating device [${this._id}]`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af enhed.',
+        `Supabase returned with null when updating device [${this._id}]`
       );
     }
 
@@ -373,10 +375,9 @@ class DeviceHandler {
         );
 
       if (error) {
-        throw new AppError(
-          'Something went wrong updating device image',
-          `Unexpected error updating device [${deserializedDevice.id}] image: ${error.message}`,
-          500
+        throw new ErrorSupabase(
+          'Noget gik galt under opdatering af enhedens billede.',
+          `Supabase error updating device [${deserializedDevice.id}] image: ${error.message}`
         );
       }
     }
@@ -399,9 +400,9 @@ class DeviceHandler {
       .eq('id', this._id);
 
     if (error) {
-      throw new AppError(
-        'Failed to delete device',
-        `Unexpected error trying to delete device [${this._id}]: ${error.message}`
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af enhed.',
+        `Supabase error trying to delete device [${this._id}]: ${error.message}`
       );
     }
 

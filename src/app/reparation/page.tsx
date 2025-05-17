@@ -8,7 +8,6 @@ const BrandSelectionPage: NextPage = async () => {
   const brands = await DeviceClient.getUniqueBrands();
   return (
     <div className="flex flex-col items-center w-full">
-      <h1>Repair Page</h1>
       <div className="flex flex-wrap justify-evenly gap-8">
         {brands.map((brand) => (
           <ItemCard

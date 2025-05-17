@@ -5,10 +5,11 @@ import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'PhoneKlinik',
-  description: 'Phone repair service website.',
-  /*   icons: {
+  description:
+    'iPhone, iPad, Samsung Galaxy og Google Pixel reparation i København. Mobiltilbehør og hurtig service – besøg PhoneKlinik i dag.',
+  icons: {
     icon: '/favicon.ico',
-  }, */
+  },
 };
 
 export default function RootLayout({

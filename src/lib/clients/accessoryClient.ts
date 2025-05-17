@@ -1,4 +1,3 @@
-import AppError from '@/schemas/errors/appError';
 import Accessory from '@/schemas/new/accessory';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
@@ -6,6 +5,7 @@ import {
   Serialize,
   serializeToDbFormat,
 } from '@/utils/dbFormat';
+import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 
 // Config
 const accessoryTable = 'accessories';
@@ -24,18 +24,16 @@ export default class AccessoryClient {
     );
 
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching accessory brands',
-        `Unexpected error fetching unique accessory brands, ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehørs mærkerne.',
+        `Supabase error fetching unique accessory brands, ${error.message}`
       );
     }
 
     if (!brandData) {
-      throw new AppError(
-        'Something went wrong fetching accessory brands',
-        `Supabase returned null when fetching unique accessory brands`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehørs mærkerne.',
+        `Supabase returned null when fetching unique accessory brands`
       );
     }
 
@@ -77,18 +75,16 @@ export default class AccessoryClient {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong creating accessory',
-        `Unexpected error creating new accessory: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelsen af tilbehøret',
+        `Unexpected error creating new accessory: ${error.message}`
       );
     }
 
     if (!accessoryData) {
-      throw new AppError(
-        'Something went wrong creating accessory',
-        `Supabase returned null when trying to create new accessory`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelsen af tilbehøret',
+        `Supabase returned null when trying to create new accessory`
       );
     }
 
@@ -104,10 +100,9 @@ export default class AccessoryClient {
       );
 
     if (imageError) {
-      throw new AppError(
-        'Something went wrong uploading accessory image',
-        `Unexpected error trying to upload image for new accessory [${deserializedAccessory.id}]: ${imageError.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under upload af tilbehørsbilledet',
+        `Supabase error trying to upload image for new accessory [${deserializedAccessory.id}]: ${imageError.message}`
       );
     }
 
@@ -171,18 +166,16 @@ class AccessoryQueryBuilder {
     const { data: accessoryData, error } = await query;
 
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching accessories',
-        `Unexpected error when trying to fetch accessory query: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehør.',
+        `Supabase error when trying to fetch accessory query: ${error.message}`
       );
     }
 
     if (!accessoryData) {
-      throw new AppError(
-        'Something went wrong fetching accessories',
-        `Supabase returned null when trying to fetch accessory query`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehør.',
+        `Supabase returned null when trying to fetch accessory query`
       );
     }
 
@@ -229,10 +222,9 @@ class AccessoryHandler {
     const accessories = await AccessoryClient.query().id(this._id);
 
     if (accessories.length <= 0) {
-      throw new AppError(
-        'Accessory not found',
-        `Accessory [${this._id}] does not exist`,
-        404
+      throw new ErrorNotFound(
+        'Tilbehør ikke fundet.',
+        `Accessory [${this._id}] could not be found`
       );
     }
 
@@ -255,18 +247,16 @@ class AccessoryHandler {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong updating accessory',
-        `Unexpected error when updating accessory [${this._id}]: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at opdatere tilbehør.',
+        `Supabase error when updating accessory [${this._id}]: ${error.message}`
       );
     }
 
     if (!accessoryData) {
-      throw new AppError(
-        'Something went wrong updating accessory',
-        `Supabase returned null when updating accessory [${this._id}]`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at opdatere tilbehør.',
+        `Supabase returned null when updating accessory [${this._id}]`
       );
     }
 
@@ -283,10 +273,9 @@ class AccessoryHandler {
         );
 
       if (error) {
-        throw new AppError(
-          'Something went wrong updating accessory image',
-          `Unexpected error updating accessory [${deserializedAccessory.id}] image: ${error.message}`,
-          500
+        throw new ErrorSupabase(
+          'Noget gik galt med at opdatere billede.',
+          `Supabase error updating accessory [${deserializedAccessory.id}] image: ${error.message}`
         );
       }
     }
@@ -309,10 +298,9 @@ class AccessoryHandler {
       .eq('id', this._id);
 
     if (error) {
-      throw new AppError(
-        'Something went wrong deleting accessory.',
-        `Unexpected error deleting accessory [${this._id}]: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt med at slette tilbehør.',
+        `Supabase error deleting accessory [${this._id}]: ${error.message}`
       );
     }
 

@@ -1,4 +1,5 @@
 import DeviceClient from '@/lib/clients/deviceClient';
+import errorToCookie from '@/lib/errors/handleErrorSSR';
 import AppError from '@/schemas/errors/appError';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,16 +12,10 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ data: devices }, { status: 200 });
   } catch (err: unknown) {
+    await errorToCookie(err);
     if (err instanceof AppError) {
-      console.log(err.details);
-      return NextResponse.json(
-        { error: err.message },
-        { status: err.httpCode }
-      );
+      return NextResponse.json({ data: null }, { status: err.httpCode });
     }
-    return NextResponse.json(
-      { error: 'Internal server error.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ data: null }, { status: 500 });
   }
 }

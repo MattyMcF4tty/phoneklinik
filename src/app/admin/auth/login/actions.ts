@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/serverClient';
-import AppError from '@/schemas/errors/appError';
+import { ErrorInternal } from '@/schemas/errors/appErrorTypes';
 import { redirect } from 'next/navigation';
 
 export async function login(formData: FormData) {
@@ -42,10 +42,9 @@ export async function signOut() {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
-    throw new AppError(
-      'Something went wrong signing out',
-      `Unexpected error signing out: ${error.message}`,
-      500
+    throw new ErrorInternal(
+      'Noget gik galt under udlogningen.',
+      `Unexpected error signing out: ${error.message}`
     );
   }
 

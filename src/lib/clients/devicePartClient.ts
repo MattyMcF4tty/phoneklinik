@@ -1,4 +1,3 @@
-import AppError from '@/schemas/errors/appError';
 import DevicePart from '@/schemas/new/devicePart';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
@@ -6,6 +5,7 @@ import {
   Serialize,
   serializeToDbFormat,
 } from '@/utils/dbFormat';
+import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 
 // Config
 const partsTable = 'parts';
@@ -37,18 +37,16 @@ export default class DevicePartClient {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong adding part',
-        `Unexpected error when trying to add new part: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under tilføjelsen af del.',
+        `Supabase error when trying to add new part: ${error.message}`
       );
     }
 
     if (!partData) {
-      throw new AppError(
-        'No new part returned',
-        `Insert operation succeeded but no data was returned for part`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under tilføjelsen af del.',
+        `Supabase insert operation succeeded but no data was returned for part.`
       );
     }
 
@@ -98,28 +96,26 @@ class DevicePartQueryBuilder {
     const { data: partData, error } = await query;
 
     if (error) {
-      throw new AppError(
-        'Something went wrong fetching parts',
-        `Unexpected error when trying to fetch parts query ${
+      throw new ErrorSupabase(
+        'Noget gik galt under henting af dele.',
+        `Supabase error when trying to fetch parts query ${
           this._id &&
           `id: ${this._id} ${this._name && `name: ${this._name}`} ${
             this._deviceId && `deviceId: ${this._deviceId}`
           }`
-        }`,
-        500
+        }`
       );
     }
 
     if (!partData) {
-      throw new AppError(
-        'Something went wrong fetching parts',
+      throw new ErrorSupabase(
+        'Noget gik galt under henting af dele.',
         `Supabase returned null when trying to fetch parts query ${
           this._id &&
           `id: ${this._id} ${this._name && `name: ${this._name}`} ${
             this._deviceId && `deviceId: ${this._deviceId}`
           }`
-        }`,
-        500
+        }`
       );
     }
 
@@ -153,10 +149,9 @@ class DevicePartHandler {
     const parts = await DevicePartClient.query().id(this._id);
 
     if (parts.length <= 0) {
-      throw new AppError(
-        'Part not found',
-        `Part with id [${this._id}] does not exist`,
-        404
+      throw new ErrorNotFound(
+        'Del ikke fundet',
+        `Part with id [${this._id}] could not be found`
       );
     }
 
@@ -178,17 +173,16 @@ class DevicePartHandler {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong updating part',
-        `Unexpected error occurred when trying to update part [${this._id}]: ${error.message}`
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af del.',
+        `Supabase error occurred when trying to update part [${this._id}]: ${error.message}`
       );
     }
 
     if (!partData) {
-      throw new AppError(
-        'No updated part returned',
-        `Update operation succeeded but no data was returned for part ID ${this._id}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af del.',
+        `Supabase update operation succeeded but no data was returned for part ID ${this._id}`
       );
     }
 
@@ -206,10 +200,9 @@ class DevicePartHandler {
       .eq('id', this._id);
 
     if (error) {
-      throw new AppError(
-        'Something went wrong removing part',
-        `Unexpected error deleting part [${this._id}]: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af del',
+        `Supabase error deleting part [${this._id}]: ${error.message}`
       );
     }
 

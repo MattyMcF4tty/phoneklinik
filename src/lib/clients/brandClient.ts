@@ -1,4 +1,3 @@
-import AppError from '@/schemas/errors/appError';
 import Brand from '@/schemas/new/brand';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
@@ -6,6 +5,7 @@ import {
   serializeToDbFormat,
   Serialize,
 } from '@/utils/dbFormat';
+import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 
 // Config
 const brandTable = 'brands';
@@ -34,18 +34,16 @@ export class BrandClient {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong creating brand',
-        `Unexpected error creating brand: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelsen af mærke.',
+        `Supabase error creating brand: ${error.message}`
       );
     }
 
     if (!brandData) {
-      throw new AppError(
-        'Something went wrong creating brand',
-        `Supabase returned with null when trying to create new brand`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelsen af mærke.',
+        `Supabase returned with null when trying to create new brand`
       );
     }
 
@@ -59,9 +57,9 @@ export class BrandClient {
       });
 
     if (imageError) {
-      throw new AppError(
-        'Something went wrong uploading brand image',
-        `Unexpected error uploading brand [${deserializedBrand.name}] image: ${imageError.message}`
+      throw new ErrorSupabase(
+        'Noget gik galt under upload af mærkets billede.',
+        `Supabase error uploading brand [${deserializedBrand.name}] image: ${imageError.message}`
       );
     }
 
@@ -92,18 +90,17 @@ class BrandQueryBuilder {
     const { data: brandData, error } = await query;
 
     if (error) {
-      throw new AppError(
-        'Something went wrong getting brands',
-        `Unexpected error fetching brand query: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af mærker.',
+        `Supabase error fetching brand query: ${error.message}`
       );
     }
 
     if (!brandData) {
-      console.warn(
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af mærker.',
         'Supabase returned with null when trying to fetch brand query'
       );
-      return [];
     }
 
     const deserializedBrands = brandData.map(
@@ -141,10 +138,9 @@ class BrandHandler {
     const brands = await BrandClient.query().name(this._name);
 
     if (brands.length <= 0) {
-      throw new AppError(
-        'Brand not found',
-        `Brand [${this._name}] does not exist`,
-        404
+      throw new ErrorNotFound(
+        'Mærke ikke fundet.',
+        `Brand [${this._name}] could not found`
       );
     }
 
@@ -168,18 +164,16 @@ class BrandHandler {
       .single();
 
     if (error) {
-      throw new AppError(
-        'Something went wrong updating brand.',
-        `Unexpected error trying to update brand [${this._name}]: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af mærke.',
+        `Supabase error trying to update brand [${this._name}]: ${error.message}`
       );
     }
 
     if (!brandData) {
-      throw new AppError(
-        'Something went wrong updating brand.',
-        `Supabase returned null trying to update brand [${this._name}]`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af mærke.',
+        `Supabase returned null trying to update brand [${this._name}]`
       );
     }
 
@@ -194,10 +188,9 @@ class BrandHandler {
         });
 
       if (error) {
-        throw new AppError(
-          'Something went wrong updating brand image',
-          `Unexpected error updating image for brand [${this._name}]`,
-          500
+        throw new ErrorSupabase(
+          'Noget gik galt under opdatering af mærkets billede.',
+          `Supabase error updating image for brand [${this._name}]`
         );
       }
     }
@@ -220,18 +213,16 @@ class BrandHandler {
     // Image, Accessories and devices are deleted on the database
 
     if (error) {
-      throw new AppError(
-        'Something went wrong deleting brand',
-        `Unexpected error deleting brand [${this._name}]: ${error.message}`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase error deleting brand [${this._name}]: ${error.message}`
       );
     }
 
     if (!brandData) {
-      throw new AppError(
-        'Something went wrong deleting brand',
-        `Supabase returned null when deleting brand [${this._name}].`,
-        500
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase returned null when deleting brand [${this._name}].`
       );
     }
 

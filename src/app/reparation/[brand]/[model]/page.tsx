@@ -1,6 +1,6 @@
 import ItemCard from '@/components/cards/ItemCard';
 import DeviceClient from '@/lib/clients/deviceClient';
-import AppError from '@/schemas/errors/appError';
+import { ErrorNotFound } from '@/schemas/errors/appErrorTypes';
 import Device from '@/schemas/new/device';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -32,7 +32,7 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
       notFound();
     }
   } catch (err: unknown) {
-    if (err instanceof AppError && err.httpCode === 404) {
+    if (err instanceof ErrorNotFound) {
       notFound();
     }
 

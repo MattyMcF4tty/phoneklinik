@@ -32,5 +32,5 @@ body {
 }
 
 .highlighted-button {
-  @apply;
+  @apply w-20 border-x;
 }
