@@ -8,7 +8,7 @@ import {
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 
 // Config
-const partsTable = 'parts';
+const partsTable = 'device_parts';
 
 export default class DevicePartClient {
   public static query() {

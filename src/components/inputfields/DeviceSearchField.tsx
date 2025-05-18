@@ -3,7 +3,6 @@
 import Device from '@/schemas/new/device';
 import Link from 'next/link';
 import React, { FC, useState, useEffect } from 'react';
-import { toast } from 'sonner';
 
 interface DeviceSearchFieldProps {
   onSearch?: (value: string) => void;
@@ -19,6 +18,7 @@ const DeviceSearchField: FC<DeviceSearchFieldProps> = ({
   const [searchResult, setSearchResult] = useState<
     Pick<Device, 'id' | 'brand' | 'model' | 'version'>[]
   >([]);
+  const [focused, setFocused] = useState<boolean>(false);
 
   // Wait 300ms before fetching what the user has searched
   useEffect(() => {
@@ -56,22 +56,24 @@ const DeviceSearchField: FC<DeviceSearchFieldProps> = ({
   return (
     <search className="relative">
       <input
-        className="w-full outline-none focus:bg-gray-100"
+        className="input-search"
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        placeholder={placeholder || 'Search devices...'}
+        placeholder={placeholder || 'Find din enhed...'}
+        onFocus={() => setFocused(true)}
       />
       <div className="absolute flex flex-col max-h-40 w-full bg-white overflow-x-hidden overflow-y-scroll shadow-lg rounded-b-lg">
-        {searchResult.map((device) => (
-          <Link
-            key={device.id}
-            className="hover:bg-blue-50 py-1 px-2 flex flex-wrap"
-            href={`/dev/reparation/${device.brand}/${device.model}/${device.version}`}
-          >
-            {device.brand} {device.model} {device.version}
-          </Link>
-        ))}
+        {focused &&
+          searchResult.map((device) => (
+            <Link
+              key={device.id}
+              className="hover:bg-blue-50 py-1 px-2 flex flex-wrap"
+              href={`/reparation/${device.brand}/${device.model}/${device.version}`}
+            >
+              {device.brand} {device.model} {device.version}
+            </Link>
+          ))}
       </div>
     </search>
   );

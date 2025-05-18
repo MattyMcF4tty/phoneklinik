@@ -1,6 +1,7 @@
-import DeviceSearchField from '@/components/searchFields/DeviceSearchField';
+import PartList from '@/components/lists/devicePartList/List';
 import DeviceClient from '@/lib/clients/deviceClient';
 import { NextPage } from 'next';
+import Image from 'next/image';
 
 interface DevicePageProps {
   params: Promise<{ brand: string; model: string; version: string }>;
@@ -20,17 +21,32 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
       .version(formattedVersion)
   )[0];
 
+  const deviceParts = await DeviceClient.id(device.id).getParts();
+  const releaseDate = new Date(device.releaseDate);
+
   return (
-    <div className="grid grid-cols-2 grid-rows-3 gap-4 w-full grow border">
-      <div className=" bg-white shadow-lg rounded-lg col-start-1 col-span-1 row-start-1 row-span-1">
-        {device.brand}
-        <DeviceSearchField />
+    <div className="flex w-full grow gap-4">
+      <div className="content-box w-full flex flex-col">
+        <div className="flex flex-row">
+          <div className="relative w-1/2 aspect-square">
+            <Image
+              className="object-contain"
+              src={device.imageUrl || ''}
+              alt={`${device.version} image`}
+              fill
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-medium">
+              {device.brand} {device.model} {device.version}
+            </h1>
+            <h2>Type: {device.type}</h2>
+            <h2>Udgivelsesdato: {releaseDate.toLocaleDateString()}</h2>
+          </div>
+        </div>
       </div>
-      <div className=" bg-white shadow-lg rounded-lg col-start-2 col-span-1 row-start-1 row-span-3">
-        {device.model}
-      </div>
-      <div className=" bg-white shadow-lg rounded-lg col-start-1 col-span-1 row-start-2 row-span-2">
-        {device.version}
+      <div className="content-box w-full h-full gap-4 flex flex-wrap">
+        <PartList device={device} parts={deviceParts} />
       </div>
     </div>
   );

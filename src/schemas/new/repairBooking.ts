@@ -2,6 +2,7 @@ export default interface RepairBooking {
   id: number;
   name: string;
   email: string;
+  phone: string;
 
   customerNotes: string;
   internalNotes: string;

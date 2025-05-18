@@ -1,17 +1,10 @@
-'use client';
-
-import LinkButton from '@/components/LinkButton';
-import Navbar from '@/components/Navbar';
 import VideoEmbed from '@/components/Video';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="bg-white min-h-screen w-full">
-      {/* Navbar */}
-      <Navbar />
-
+    <div className="bg-white flex flex-col grow w-full shadow-lg rounded-md">
       {/* Hero Section */}
       <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-16 gap-10">
         {/* Text content */}
@@ -24,9 +17,9 @@ export default function Home() {
             covers, opladere og andre telefonprodukter.
           </p>
           <div className="flex justify-center md:justify-start">
-            <LinkButton variant="default" url="/kontakt-os" className="w-48">
+            <Link className="button-highlighted" href="/kontakt-os">
               Kontakt os
-            </LinkButton>
+            </Link>
           </div>
         </div>
 

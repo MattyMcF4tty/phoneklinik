@@ -23,14 +23,30 @@ body {
   font-family: 'Geist', sans-serif;
 }
 
+:root {
+  --navbar-height: 4rem; /* 64px */
+}
+
 .input-default {
-  @apply w-full border-b outline-none focus:bg-slate-100 px-1 h-8 focus:shadow-inner;
+  @apply w-full border-b outline-none focus:bg-slate-100 px-1 h-8 focus:shadow-inner focus-within:bg-slate-100;
+}
+
+.input-search {
+  @apply w-full border-b outline-none focus:bg-slate-50 px-1 h-8 focus:shadow-inner rounded-t-sm;
 }
 
 .label-default {
   @apply w-full font-semibold;
 }
 
-.highlighted-button {
-  @apply w-20 border-x;
+.button-navbar {
+  @apply hover:underline text-wrap text-center p-4;
+}
+
+.button-highlighted {
+  @apply text-white bg-main-purple px-6 py-3 font-semibold rounded shadow-md;
+}
+
+.content-box {
+  @apply rounded-md shadow-lg bg-white overflow-hidden p-4 duration-150;
 }

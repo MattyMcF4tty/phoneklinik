@@ -7,7 +7,7 @@ import { NextPage } from 'next';
 const BrandSelectionPage: NextPage = async () => {
   const brands = await DeviceClient.getUniqueBrands();
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full grow">
       <div className="flex flex-wrap justify-evenly gap-8">
         {brands.map((brand) => (
           <ItemCard

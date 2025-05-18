@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Footer from '@/components/Footer';
 import { Toaster } from 'sonner';
+import Navbar from '@/components/navbars/Navbar';
 
 export const metadata: Metadata = {
   title: 'PhoneKlinik',
@@ -18,11 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className="bg-gray-50 min-h-screen flex flex-col">
+    <html lang="da" className="h-full">
+      <body className="bg-slate-50 min-h-screen flex flex-col">
         <Toaster richColors={true} position="top-right" />
-        <main className="flex flex-col grow px-[12%] min-h-screen py-10">
-          {children}
+        <main className="relative flex flex-col grow min-h-screen ">
+          <Navbar />
+          <div className="flex flex-col grow pt-[calc(var(--navbar-height)_+_2.5rem)] pb-[2.5rem] px-[12%]">
+            {children}
+          </div>
         </main>
         <Footer />
       </body>
