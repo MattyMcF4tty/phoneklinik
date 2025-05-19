@@ -6,9 +6,9 @@ import DevicePart from '@/schemas/new/devicePart';
 import { NextPage } from 'next';
 import { useParams } from 'next/navigation';
 
-interface PageProps {}
+interface BookingPageProps {}
 
-const Page: NextPage<PageProps> = ({}) => {
+const BookingPage: NextPage<BookingPageProps> = ({}) => {
   const { brand, model, version } = useParams();
 
   const [parts, setParts] = useSessionStorage<DevicePart[]>(
@@ -76,4 +76,4 @@ const Page: NextPage<PageProps> = ({}) => {
   );
 };
 
-export default Page;
+export default BookingPage;
