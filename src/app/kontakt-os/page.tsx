@@ -28,8 +28,7 @@ export default function ContactUs() {
 
   return (
     <div className="bg-gray-100 min-h-screen w-full">
-      {/* Navbar */}
-      <Navbar />
+     
 
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-main-purple to-main-blue text-white h-[30vh] flex flex-col justify-center items-center text-center px-6">
