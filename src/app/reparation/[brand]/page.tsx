@@ -7,7 +7,7 @@ interface Context {
   params: Promise<{ brand: string }>;
 }
 
-export const revalidate = 86400; // Revalidate every 24 hours (in seconds)
+export const revalidate = 2629743; // Revalidate every month (in seconds)
 
 export default async function TelefonReparationPage({ params }: Context) {
   const { brand } = await params;
