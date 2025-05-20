@@ -40,8 +40,13 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
   }
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="flex flex-wrap justify-evenly gap-8 ">
+ <div className="bg-gray-50 min-h-screen w-full">
+           <header className="relative rounded-lg mb-20 h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
+        <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
+Vælg din telefon        </h1>
+
+      
+      </header>      <div className="flex flex-wrap justify-evenly gap-8 ">
         {devices.map((device) => (
           <ItemCard
             key={device.id}
