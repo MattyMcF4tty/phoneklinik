@@ -2,7 +2,8 @@
 
 import bookRepair from '@/app/reparation/[brand]/[model]/[version]/booking/actions';
 import { useSearchParams } from 'next/navigation';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface BookRepairFormProps {}
 
@@ -11,7 +12,37 @@ const BookRepairForm: FC<BookRepairFormProps> = () => {
   const brokenParts = searchParams.getAll('brokenParts');
 
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const availabeSlots = ['17:30', '20:30', '12:23', '21:12'];
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const fetchSlots = async () => {
+      setLoadingSlots(true);
+      try {
+        const response = await fetch(
+          `/api/repair-bookings/available?date=${selectedDate}`
+        );
+        const responseJson = await response.json();
+
+        if (!response.ok) {
+          throw new Error(responseJson.error);
+        }
+
+        setAvailableSlots(responseJson.data || []);
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Noget gik galt';
+        toast.error(errorMessage);
+        setAvailableSlots([]);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+
+    fetchSlots();
+  }, [selectedDate]);
 
   const validatedParts = brokenParts.flatMap((part) => {
     const partId = Number(part);
@@ -102,11 +133,21 @@ const BookRepairForm: FC<BookRepairFormProps> = () => {
               className="input-default"
               disabled={!selectedDate}
             >
-              {availabeSlots.map((slot) => (
-                <option key={slot} className="bg-white" value={slot}>
-                  {slot}
+              {loadingSlots ? (
+                <option className="bg-white" disabled>
+                  Henter tider...
                 </option>
-              ))}
+              ) : availableSlots.length > 0 ? (
+                availableSlots.map((slot) => (
+                  <option key={slot} className="bg-white" value={slot}>
+                    {slot.slice(0, 5)}
+                  </option>
+                ))
+              ) : (
+                <option className="bg-white" disabled>
+                  Ingen tider fundet
+                </option>
+              )}
             </select>
           </div>
         </div>

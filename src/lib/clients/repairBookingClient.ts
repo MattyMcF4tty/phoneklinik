@@ -6,7 +6,34 @@ import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 // Config
 const repairBookingTable = 'repair_bookings';
 
-export default class RepairBookinClient {
+export default class RepairBookingClient {
+  static async getAvailableSlots(date: Date): Promise<string[]> {
+    const supabase = await createClient();
+
+    const { data: slotData, error } = await supabase.rpc(
+      'get_available_repair_slots',
+      {
+        p_date: date.toISOString(),
+      }
+    );
+
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af ledige tider.',
+        `Supabase error when trying to get available repair booking time slots: ${error.message}`
+      );
+    }
+
+    if (!slotData) {
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af ledige tider.',
+        `Supabase returned with null when trying to get available repair booking time slots.`
+      );
+    }
+
+    return slotData;
+  }
+
   static async bookRepair(
     newBooking: Pick<
       RepairBooking,
