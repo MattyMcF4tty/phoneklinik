@@ -7,4 +7,5 @@ export default interface DevicePart {
   stock: boolean;
   grade: number;
   createdAt: string;
+  repairTime: number;
 }

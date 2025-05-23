@@ -9,7 +9,15 @@ import { useParams } from 'next/navigation';
 interface BookingPageProps {}
 
 const BookingPage: NextPage<BookingPageProps> = ({}) => {
-  const { brand, model, version } = useParams();
+  const { brand, model, version } = useParams() as {
+    brand?: string;
+    model?: string;
+    version?: string;
+  };
+
+  if (!brand || !model || !version) {
+    throw new Error('Mangler brand, model eller version');
+  }
 
   const [parts, setParts] = useSessionStorage<DevicePart[]>(
     `${brand}_${model}_${version}_parts`,
@@ -69,7 +77,13 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
           <h1 className="w-full text-xl font-medium text-center h-10 mb-4">
             Kontaktoplysninger
           </h1>
-          <BookRepairForm />
+          <BookRepairForm
+            deviceName={{
+              brand: brand,
+              model: model,
+              version: version,
+            }}
+          />
         </div>
       </div>
     </div>

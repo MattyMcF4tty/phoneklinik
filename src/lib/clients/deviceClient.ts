@@ -8,11 +8,7 @@ import {
 import DevicePartClient from './devicePartClient';
 import Brand from '@/schemas/new/brand';
 import Model from '@/schemas/new/model';
-import {
-  ErrorInternal,
-  ErrorNotFound,
-  ErrorSupabase,
-} from '@/schemas/errors/appErrorTypes';
+import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 
 // Config
 const deviceTable = 'devices';

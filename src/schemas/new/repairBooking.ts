@@ -11,6 +11,9 @@ export default interface RepairBooking {
   reportedBrokenParts: number[];
   actualBrokenParts: number[];
 
+  estimatedPrice: number;
+  actualPrice: number;
+
   status:
     | 'pending'
     | 'repairing'
@@ -18,7 +21,7 @@ export default interface RepairBooking {
     | 'queued'
     | 'cancelled'
     | 'no_show';
-  pickUpCode: number;
+  pickUpCode: string;
 
   estimatedRepairTime: number;
   bookingDate: string;

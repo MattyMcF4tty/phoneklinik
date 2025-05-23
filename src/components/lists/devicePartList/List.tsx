@@ -17,6 +17,10 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
     `${device.brand}_${device.model}_${device.version}_parts`,
     []
   );
+  const [storedDeviceId, setStoredDeviceId] = useSessionStorage<number>(
+    `${device.brand}_${device.model}_${device.version}_id`,
+    device.id
+  );
 
   const combinedPartsPrice = selectedParts.reduce(
     (sum, part) => sum + part.price,

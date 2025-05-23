@@ -37,7 +37,13 @@ export default class RepairBookingClient {
   static async bookRepair(
     newBooking: Pick<
       RepairBooking,
-      'name' | 'email' | 'customerNotes' | 'reportedBrokenParts' | 'bookingDate'
+      | 'name'
+      | 'email'
+      | 'customerNotes'
+      | 'reportedBrokenParts'
+      | 'bookingDate'
+      | 'phone'
+      | 'deviceId'
     >
   ) {
     const supabase = await createClient();

@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ data: timeSlots }, { status: 200 });
   } catch (err: unknown) {
     if (err instanceof AppError) {
+      console.error('Error:', err.details);
       return NextResponse.json(
         { error: err.message },
         { status: err.httpCode }

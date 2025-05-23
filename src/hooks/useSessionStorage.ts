@@ -11,8 +11,10 @@ export default function useSessionStorage<T>(
   useEffect(() => {
     try {
       const item = sessionStorage.getItem(key);
-      if (item) {
+      if (item !== null) {
         setStoredValue(JSON.parse(item));
+      } else {
+        sessionStorage.setItem(key, JSON.stringify(initialValue));
       }
     } catch (error) {
       console.error('Error reading sessionStorage:', error);

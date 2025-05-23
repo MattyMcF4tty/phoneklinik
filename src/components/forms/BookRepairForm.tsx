@@ -1,19 +1,30 @@
 'use client';
 
 import bookRepair from '@/app/reparation/[brand]/[model]/[version]/booking/actions';
-import { useSearchParams } from 'next/navigation';
-import React, { FC, useEffect, useState } from 'react';
+import useSessionStorage from '@/hooks/useSessionStorage';
+import Device from '@/schemas/new/device';
+import DevicePart from '@/schemas/new/devicePart';
+import { ActionResponse } from '@/schemas/new/types';
+import React, { FC, useActionState, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-interface BookRepairFormProps {}
+interface BookRepairFormProps {
+  deviceName: Pick<Device, 'brand' | 'model' | 'version'>;
+}
 
-const BookRepairForm: FC<BookRepairFormProps> = () => {
-  const searchParams = useSearchParams();
-  const brokenParts = searchParams.getAll('brokenParts');
-
+const BookRepairForm: FC<BookRepairFormProps> = ({ deviceName }) => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  const [selectedParts] = useSessionStorage<DevicePart[]>(
+    `${deviceName.brand}_${deviceName.model}_${deviceName.version}_parts`,
+    []
+  );
+  const [deviceId] = useSessionStorage<number | undefined>(
+    `${deviceName.brand}_${deviceName.model}_${deviceName.version}_id`,
+    undefined
+  );
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -44,13 +55,26 @@ const BookRepairForm: FC<BookRepairFormProps> = () => {
     fetchSlots();
   }, [selectedDate]);
 
-  const validatedParts = brokenParts.flatMap((part) => {
-    const partId = Number(part);
-    return Number.isInteger(partId) ? [partId] : [];
-  });
+  const initialState: ActionResponse = {
+    success: undefined,
+    message: '',
+  };
+
+  const [state, formAction] = useActionState(bookRepair, initialState);
+
+  useEffect(() => {
+    if (state.success === true) {
+      toast.success('Reparation booket!');
+    } else if (state.success === false) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
-    <form className="w-full h-full bg-transparent flex flex-col items-center">
+    <form
+      action={formAction}
+      className="w-full h-full bg-transparent flex flex-col items-center"
+    >
       <div className="w-full flex flex-col mb-4 gap-4">
         <div className="w-full flex flex-row gap-4">
           <div className="w-1/2 flex flex-col">
@@ -168,22 +192,20 @@ const BookRepairForm: FC<BookRepairFormProps> = () => {
           type="hidden"
           name="deviceId"
           id="deviceId"
-          defaultValue={/* deviceId */ ''}
+          defaultValue={deviceId}
         />
-        {validatedParts.length > 0 &&
-          validatedParts.map((partId) => (
+        {selectedParts.length > 0 &&
+          selectedParts.map((part) => (
             <input
               type="hidden"
               name="partIds"
               id="partIds"
-              defaultValue={partId}
-              key={partId}
+              defaultValue={part.id}
+              key={part.id}
             />
           ))}
       </div>
-      <button formAction={bookRepair} className="button-highlighted">
-        Book reparation
-      </button>
+      <button className="button-highlighted">Book reparation</button>
     </form>
   );
 };
