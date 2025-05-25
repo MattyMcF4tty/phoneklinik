@@ -2,7 +2,7 @@
 
 import BookRepairForm from '@/components/forms/BookRepairForm';
 import useSessionStorage from '@/hooks/useSessionStorage';
-import DevicePart from '@/schemas/new/devicePart';
+import PartVariant from '@/schemas/new/partVariant';
 import { NextPage } from 'next';
 import { useParams } from 'next/navigation';
 
@@ -19,7 +19,7 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
     throw new Error('Mangler brand, model eller version');
   }
 
-  const [parts, setParts] = useSessionStorage<DevicePart[]>(
+  const [parts, setParts] = useSessionStorage<PartVariant[]>(
     `${brand}_${model}_${version}_parts`,
     []
   );
@@ -43,13 +43,10 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
             {parts.map((part) => (
               <div
                 key={part.id}
-                className="hover:bg-slate-100 rounded-md w-full flex flex-row justify-between items-center"
+                className="hover:bg-slate-100 rounded-md w-full h-10 flex flex-row justify-between items-center"
               >
                 <div className="flex flex-col">
                   <h3 className="text-base">{part.name}</h3>
-                  <h4 className="text-xs text-gray-600 italic">
-                    {part.grade ? 'Orignial' : 'Premium'}
-                  </h4>
                 </div>
 
                 <p className="">{part.price} kr.</p>
@@ -73,7 +70,7 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
             <h1>{totalPrice + vatPrice} kr.</h1>
           </div>
         </div>
-        <div className="content-box w-2/3">
+        <div className="content-box w-2/3 overflow-y-scroll">
           <h1 className="w-full text-xl font-medium text-center h-10 mb-4">
             Kontaktoplysninger
           </h1>

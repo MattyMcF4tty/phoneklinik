@@ -6,6 +6,7 @@ import PartListRow from './Row';
 import Device from '@/schemas/new/device';
 import useSessionStorage from '@/hooks/useSessionStorage';
 import Link from 'next/link';
+import PartVariant from '@/schemas/new/partVariant';
 
 interface PartListProps {
   device: Device;
@@ -13,26 +14,29 @@ interface PartListProps {
 }
 
 const PartList: FC<PartListProps> = ({ device, parts }) => {
-  const [selectedParts, setSelectedParts] = useSessionStorage<DevicePart[]>(
-    `${device.brand}_${device.model}_${device.version}_parts`,
-    []
-  );
-  const [storedDeviceId, setStoredDeviceId] = useSessionStorage<number>(
+  const [selectedPartVariants, setSelectedPartVariants] = useSessionStorage<
+    PartVariant[]
+  >(`${device.brand}_${device.model}_${device.version}_parts`, []);
+  useSessionStorage<number>(
     `${device.brand}_${device.model}_${device.version}_id`,
     device.id
   );
 
-  const combinedPartsPrice = selectedParts.reduce(
+  const combinedPartsPrice = selectedPartVariants.reduce(
     (sum, part) => sum + part.price,
     0
   );
 
-  const togglePart = (part: DevicePart) => {
-    const exists = selectedParts.some((p) => p.id === part.id);
+  const togglePart = (part: PartVariant) => {
+    console.log('Toggling part:', part);
+
+    const exists = selectedPartVariants.some((p) => p.id === part.id);
     if (exists) {
-      setSelectedParts(selectedParts.filter((p) => p.id !== part.id));
+      setSelectedPartVariants(
+        selectedPartVariants.filter((p) => p.id !== part.id)
+      );
     } else {
-      setSelectedParts([...selectedParts, part]);
+      setSelectedPartVariants([...selectedPartVariants, part]);
     }
   };
 
@@ -43,8 +47,8 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
           <PartListRow
             key={part.id}
             part={part}
-            selected={selectedParts.some((p) => p.id === part.id)}
-            onClick={() => togglePart(part)}
+            selectedVariants={selectedPartVariants}
+            toggleVariant={(partVariant) => togglePart(partVariant)}
           />
         ))}
       </div>
@@ -54,7 +58,7 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
         <p className="">{combinedPartsPrice} kr.</p>
       </div>
 
-      {selectedParts.length > 0 && (
+      {selectedPartVariants.length > 0 && (
         <Link
           href={`/reparation/${device.brand}/${device.model}/${device.version}/booking`}
           className="button-highlighted"

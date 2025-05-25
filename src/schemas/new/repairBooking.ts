@@ -8,8 +8,8 @@ export default interface RepairBooking {
   internalNotes: string;
 
   deviceId: number;
-  reportedBrokenParts: number[];
-  actualBrokenParts: number[];
+  selectedPartVariants: number[];
+  appliedPartVariants: number[];
 
   estimatedPrice: number;
   actualPrice: number;

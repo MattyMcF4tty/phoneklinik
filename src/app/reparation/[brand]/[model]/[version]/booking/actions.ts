@@ -63,7 +63,7 @@ export default async function bookRepair(
       name,
       customerNotes,
       bookingDate: new Date(`${bookingDate}T${bookingTime}`).toISOString(),
-      reportedBrokenParts: deviceParts,
+      selectedPartVariants: deviceParts,
       deviceId: Number(deviceId),
     });
 

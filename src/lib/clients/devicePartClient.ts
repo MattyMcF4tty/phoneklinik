@@ -6,9 +6,10 @@ import {
   serializeToDbFormat,
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import DevicePartVariantClient from './partVariantClient';
 
 // Config
-const partsTable = 'device_parts';
+const partsTable = 'parts';
 
 export default class DevicePartClient {
   public static query() {
@@ -21,7 +22,7 @@ export default class DevicePartClient {
 
   public async addPart(
     deviceId: number,
-    deviceData: Omit<DevicePart, 'id' | 'createdAt' | 'deviceId'>
+    deviceData: Omit<DevicePart, 'id' | 'createdAt' | 'deviceId' | 'variants'>
   ): Promise<DevicePart> {
     const supabase = await createClient();
 
@@ -119,10 +120,19 @@ class DevicePartQueryBuilder {
       );
     }
 
-    const deserializedParts = partData.map(
-      (serializedPart: Serialize<DevicePart>) => {
-        return deserializeFromDbFormat<DevicePart>(serializedPart);
-      }
+    const deserializedParts: DevicePart[] = await Promise.all(
+      partData.map(
+        async (serializedPart: Serialize<Omit<DevicePart, 'variants'>>) => {
+          const deserializedPart =
+            deserializeFromDbFormat<Omit<DevicePart, 'variants'>>(
+              serializedPart
+            );
+          const partVariant = await DevicePartVariantClient.getPartVariants(
+            serializedPart.id
+          );
+          return { ...deserializedPart, variants: partVariant };
+        }
+      )
     );
 
     return deserializedParts;
@@ -159,7 +169,7 @@ class DevicePartHandler {
   }
 
   public async updatePart(
-    updatedPart: Partial<Omit<DevicePart, 'id'>>
+    updatedPart: Partial<Omit<DevicePart, 'id' | 'variants'>>
   ): Promise<DevicePart> {
     const supabase = await createClient();
 
@@ -186,9 +196,12 @@ class DevicePartHandler {
       );
     }
 
-    const deserializedPart = deserializeFromDbFormat<DevicePart>(partData);
-
-    return deserializedPart;
+    const deserializedPart =
+      deserializeFromDbFormat<Omit<DevicePart, 'variants'>>(partData);
+    const partVariants = await DevicePartVariantClient.getPartVariants(
+      deserializedPart.id
+    );
+    return { ...deserializedPart, variants: partVariants };
   }
 
   public async deletePart(): Promise<boolean> {
@@ -208,5 +221,9 @@ class DevicePartHandler {
 
     console.log(`Device part ${this._id} has been deleted succesfully.`);
     return true;
+  }
+
+  public variant(variantId: number) {
+    return DevicePartVariantClient.id(this._id, variantId);
   }
 }

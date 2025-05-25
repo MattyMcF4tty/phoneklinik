@@ -40,7 +40,7 @@ export default class RepairBookingClient {
       | 'name'
       | 'email'
       | 'customerNotes'
-      | 'reportedBrokenParts'
+      | 'selectedPartVariants'
       | 'bookingDate'
       | 'phone'
       | 'deviceId'

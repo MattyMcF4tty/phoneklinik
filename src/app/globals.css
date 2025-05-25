@@ -48,5 +48,5 @@ body {
 }
 
 .content-box {
-  @apply rounded-md shadow-lg bg-white overflow-hidden p-4 duration-150;
+  @apply rounded-md shadow-lg bg-white p-4 duration-150;
 }
