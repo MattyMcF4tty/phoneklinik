@@ -89,3 +89,10 @@ export const generateTimeSlots = (): string[] => {
       : `http://localhost:${process.env.PORT || 3000}`;
   }
 }; */
+
+import { fileTypeFromBuffer } from 'file-type';
+
+export async function getMimeType(buffer: Buffer): Promise<string | undefined> {
+  const fileType = await fileTypeFromBuffer(buffer);
+  return fileType?.mime;
+}

@@ -44,7 +44,7 @@ body {
 }
 
 .button-highlighted {
-  @apply text-white bg-main-purple px-6 py-3 font-semibold rounded shadow-md;
+  @apply text-white bg-main-purple px-6 py-3 font-semibold rounded shadow-md disabled:bg-slate-400;
 }
 
 .content-box {

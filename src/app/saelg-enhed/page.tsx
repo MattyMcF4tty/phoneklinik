@@ -1,4 +1,4 @@
-
+import RequestValuationForm from '@/components/forms/RequestValuationForm';
 import SellDeviceForm from '@/components/SellDeviceForm';
 import DeviceClient from '@/lib/clients/deviceClient';
 
@@ -7,9 +7,6 @@ export default async function SellPhonePage() {
 
   return (
     <div className="bg-gray-50 min-h-screen items-center justify-center align-middle flex flex-col w-full relative overflow-x-hidden">
-
-     
-
       <section className="max-w-3xl mx-auto  px-6">
         <div className="bg-white rounded-2xl shadow-md px-8 py-12 flex flex-col md:flex-row gap-8 items-center">
           {/* text */}
@@ -22,11 +19,12 @@ export default async function SellPhonePage() {
               gamle iPhone ligger og samler støv i skuffen, så sælg den hellere
               til os og få en fair pris – uanset stand og alder på enheden.
             </p>
-            <p className='mt-4 text-gray-600'>Svar på nedenstående skema og så vender vi tilbage hurtigst muligt.</p>
-           
+            <p className="mt-4 text-gray-600">
+              Svar på nedenstående skema og så vender vi tilbage hurtigst
+              muligt.
+            </p>
           </div>
 
-          {/* simple icon */}
           <div className=" md:block">
             <svg
               width="80"
@@ -53,11 +51,11 @@ export default async function SellPhonePage() {
             </svg>
           </div>
         </div>
-      </section>   
+      </section>
 
-        {/*   <div className="p-6">
-            <SellDeviceForm brands={brands} Titel="Sælg din enhed" />
-          </div> */}
+      <div className="content-box">
+        <RequestValuationForm />
+      </div>
     </div>
   );
 }
