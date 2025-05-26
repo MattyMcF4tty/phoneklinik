@@ -9,11 +9,9 @@ const BrandSelectionPage: NextPage = async () => {
   const brands = await DeviceClient.getUniqueBrands();   // [{ name, imageUrl }]
   return (
     <div className="bg-gray-50 min-h-screen w-full">
-      {/* -------- hero banner ---------------------------------------- */}
-      <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
+           <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
         <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
-          Vælg din enhed
-        </h1>
+Vælg din enhed        </h1>
 
         {/* wave bottom */}
         <svg
@@ -28,8 +26,7 @@ const BrandSelectionPage: NextPage = async () => {
         </svg>
       </header>
 
-      {/* -------- brand grid ---------------------------------------- */}
-      <main className="max-w-6xl mx-auto px-6 pb-24 mt-12 justify-evenly grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-wrap justify-evenly gap-8 ">
         {brands.map((brand) => (
           <ItemCard
             key={brand.name}
@@ -38,7 +35,7 @@ const BrandSelectionPage: NextPage = async () => {
             href={`/reparation/${brand.name}`}
           />
         ))}
-      </main>
+      </div>
     </div>
   );
 };

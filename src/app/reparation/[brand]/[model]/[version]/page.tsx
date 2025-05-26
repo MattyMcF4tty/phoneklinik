@@ -25,10 +25,11 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
   const releaseDate = new Date(device.releaseDate);
 
   return (
-    <div className="flex w-full grow gap-4">
+    <div className="flex flex-col md:flex-row w-full grow gap-4">
       <div className="content-box w-full flex flex-col">
-        <div className="flex flex-row">
-          <div className="relative w-1/2 aspect-square">
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Image container - full width on mobile, half on desktop */}
+          <div className="relative w-full md:w-1/2 aspect-square">
             <Image
               className="object-contain"
               src={device.imageUrl || ''}
@@ -36,7 +37,9 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
               fill
             />
           </div>
-          <div className="flex flex-col">
+
+          {/* Device Info */}
+          <div className="flex flex-col justify-center px-2">
             <h1 className="text-xl font-medium">
               {device.brand} {device.model} {device.version}
             </h1>
@@ -45,6 +48,8 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
           </div>
         </div>
       </div>
+
+      {/* Part list – stacked under image/info on mobile */}
       <div className="content-box w-full h-full gap-4 flex flex-wrap">
         <PartList device={device} parts={deviceParts} />
       </div>

@@ -1,11 +1,9 @@
 
-import Navbar from '@/components/Navbar';
 import SellDeviceForm from '@/components/SellDeviceForm';
-import { getBrands } from '@/utils/supabase/brands';
+import DeviceClient from '@/lib/clients/deviceClient';
 
 export default async function SellPhonePage() {
-  const brands = await getBrands();
-  const brandsData = brands.map((b) => b.toPlainObject());
+  const brands = await DeviceClient.getUniqueBrands();
 
   return (
     <div className="bg-gray-50 min-h-screen items-center justify-center align-middle flex flex-col w-full relative overflow-x-hidden">
@@ -29,7 +27,7 @@ export default async function SellPhonePage() {
           </div>
 
           {/* simple icon */}
-          <div className="hidden md:block">
+          <div className=" md:block">
             <svg
               width="80"
               height="120"
@@ -55,14 +53,11 @@ export default async function SellPhonePage() {
             </svg>
           </div>
         </div>
-      </section>
+      </section>   
 
-      {/* ---- Form card -------------------------------------------------- */}
-   
-
-          <div className="p-6">
-            <SellDeviceForm brands={brandsData} Titel="Sælg din enhed" />
-          </div>
+        {/*   <div className="p-6">
+            <SellDeviceForm brands={brands} Titel="Sælg din enhed" />
+          </div> */}
     </div>
   );
 }

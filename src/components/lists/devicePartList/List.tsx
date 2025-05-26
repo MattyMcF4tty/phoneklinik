@@ -41,32 +41,40 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
   };
 
   return (
-    <div className="w-full flex flex-col">
-      <div className="w-full border-b flex flex-col gap-1 pb-2 mb-2">
-        {parts.map((part) => (
-          <PartListRow
-            key={part.id}
-            part={part}
-            selectedVariants={selectedPartVariants}
-            toggleVariant={(partVariant) => togglePart(partVariant)}
-          />
-        ))}
+  <div className="w-full flex flex-col gap-4">
+  {/* Part List */}
+  <div className="w-full flex flex-col gap-3">
+    {parts.map((part) => (
+      <div
+        key={part.id}
+        className="rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-4"
+      >
+        <PartListRow
+          part={part}
+          selectedVariants={selectedPartVariants}
+          toggleVariant={(partVariant) => togglePart(partVariant)}
+        />
       </div>
+    ))}
+  </div>
 
-      <div className="w-full flex justify-between mb-2">
-        <p className="">Pris</p>
-        <p className="">{combinedPartsPrice} kr.</p>
-      </div>
+  {/* Total Price */}
+  <div className="w-full flex justify-between items-center border-t pt-4 text-base font-medium">
+    <p className="text-gray-700">Pris i alt</p>
+    <p className="text-gray-900">{combinedPartsPrice} kr.</p>
+  </div>
 
-      {selectedPartVariants.length > 0 && (
-        <Link
-          href={`/reparation/${device.brand}/${device.model}/${device.version}/booking`}
-          className="button-highlighted"
-        >
-          Book reparation
-        </Link>
-      )}
-    </div>
+  {/* Book Repair Button */}
+  {selectedPartVariants.length > 0 && (
+    <Link
+      href={`/reparation/${device.brand}/${device.model}/${device.version}/booking`}
+      className="bg-blue-600 text-white font-semibold text-center px-6 py-3 rounded-md shadow hover:bg-primary-dark transition-colors"
+    >
+      Book reparation
+    </Link>
+  )}
+</div>
+
   );
 };
 

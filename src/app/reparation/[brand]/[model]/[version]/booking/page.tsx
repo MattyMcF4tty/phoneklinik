@@ -33,8 +33,8 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
         Reparation af {brand} {model} {version}
       </h1>
 
-      <div className="w-full flex flex-row gap-4">
-        <div className="content-box w-1/3 flex flex-col hover:cursor-default gap-4">
+      <div className="w-full md:flex md:flex-row gap-4">
+        <div className="content-box mb-4 md:w-1/3 flex flex-col hover:cursor-default gap-4">
           <h1 className="w-full text-xl font-medium text-center border-b h-10">
             Kvittering
           </h1>
@@ -70,7 +70,7 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
             <h1>{totalPrice + vatPrice} kr.</h1>
           </div>
         </div>
-        <div className="content-box w-2/3 overflow-y-scroll">
+        <div className="content-box md:w-2/3 overflow-y-scroll">
           <h1 className="w-full text-xl font-medium text-center h-10 mb-4">
             Kontaktoplysninger
           </h1>
