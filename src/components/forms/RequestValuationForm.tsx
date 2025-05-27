@@ -1,8 +1,6 @@
 'use client';
 
-import { valuationRequestAction } from '@/app/saelg-enhed/actions';
-import { ActionResponse } from '@/schemas/new/types';
-import React, { FC, useActionState, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 
 interface RequestValuationFormProps {}
