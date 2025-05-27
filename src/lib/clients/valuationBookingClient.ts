@@ -117,6 +117,7 @@ class ValuationRequestQueryBuilder {
   private _phoneNumber?: ValuationRequest['phoneNumber'];
   private _deviceName?: ValuationRequest['deviceName'];
   private _valuationStatus?: ValuationRequest['valutationStatus'];
+  private _valuationResponse?: ValuationRequest['valutationResponse'];
 
   public email(email: ValuationRequest['email']) {
     this._email = email;
@@ -140,6 +141,13 @@ class ValuationRequestQueryBuilder {
     return this;
   }
 
+  public valuationResponse(
+    valuationResponse: ValuationRequest['valutationResponse']
+  ) {
+    this._valuationResponse = valuationResponse;
+    return this;
+  }
+
   private async _fetchQuery(): Promise<ValuationRequest[]> {
     const supabase = await createClient();
 
@@ -156,6 +164,9 @@ class ValuationRequestQueryBuilder {
     }
     if (this._valuationStatus) {
       query = query.eq('valuation_status', this._valuationStatus);
+    }
+    if (this._valuationResponse) {
+      query = query.eq('valuation_response', this._valuationResponse);
     }
 
     const { data, error } = await query;

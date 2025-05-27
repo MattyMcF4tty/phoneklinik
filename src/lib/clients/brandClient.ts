@@ -6,6 +6,8 @@ import {
   Serialize,
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import { convertToAvif } from '@/utils/image';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 // Config
 const brandTable = 'brands';
@@ -15,7 +17,7 @@ export class BrandClient {
   public static query() {
     return new BrandQueryBuilder();
   }
-  public static async brandName(name: string) {
+  public static async brandName(name: Brand['name']) {
     return new BrandHandler(name);
   }
 
@@ -50,10 +52,11 @@ export class BrandClient {
     const deserializedBrand =
       deserializeFromDbFormat<Omit<Brand, 'imageUrl'>>(brandData);
 
+    const imageAvif = await convertToAvif(brandImage);
     const { error: imageError } = await supabase.storage
       .from(brandLogoBucket)
-      .upload(`${deserializedBrand.name}`, brandImage, {
-        contentType: 'image/png',
+      .upload(`${deserializedBrand.name}`, imageAvif, {
+        contentType: 'image/avif',
       });
 
     if (imageError) {
@@ -72,9 +75,9 @@ export class BrandClient {
 }
 
 class BrandQueryBuilder {
-  private _name?: string;
+  private _name?: Brand['name'];
 
-  public name(name: string) {
+  public name(name: Brand['name']) {
     this._name = name;
     return this;
   }
@@ -181,10 +184,11 @@ class BrandHandler {
       deserializeFromDbFormat<Omit<Brand, 'imageUrl'>>(brandData);
 
     if (updatedImage) {
+      const imageAvif = await convertToAvif(updatedImage);
       const { error } = await supabase.storage
         .from(brandLogoBucket)
-        .update(`${deserializedBrand.name}`, updatedImage, {
-          contentType: 'image/png',
+        .update(`${deserializedBrand.name}`, imageAvif, {
+          contentType: 'image/avif',
         });
 
       if (error) {
@@ -197,7 +201,7 @@ class BrandHandler {
 
     const imageUrl = supabase.storage
       .from(brandLogoBucket)
-      .getPublicUrl(`${deserializedBrand.name}.png`).data.publicUrl;
+      .getPublicUrl(`${deserializedBrand.name}`).data.publicUrl;
 
     return { ...deserializedBrand, imageUrl };
   }

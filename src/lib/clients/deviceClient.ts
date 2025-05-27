@@ -9,6 +9,7 @@ import DevicePartClient from './devicePartClient';
 import Brand from '@/schemas/new/brand';
 import Model from '@/schemas/new/model';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import { convertToAvif } from '@/utils/image';
 
 // Config
 const deviceTable = 'devices';
@@ -55,12 +56,14 @@ export default class DeviceClient {
     const deserializedDevice =
       deserializeFromDbFormat<Omit<Device, 'imageUrl'>>(deviceData);
 
+    const imageAvif = await convertToAvif(deviceImage);
+
     const { error: imageError } = await supabase.storage
       .from(deviceImageBucket)
       .upload(
         `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`,
-        deviceImage,
-        { contentType: 'image/png' }
+        imageAvif,
+        { contentType: 'image/avif' }
       );
 
     if (imageError) {
@@ -147,7 +150,7 @@ export default class DeviceClient {
     return brandNames.map((brandName: string) => {
       const imageUrl = supabase.storage
         .from(brandLogoBucket)
-        .getPublicUrl(`${brandName}.png`).data.publicUrl;
+        .getPublicUrl(`${brandName}`).data.publicUrl;
 
       return {
         name: brandName,
@@ -280,7 +283,7 @@ class DeviceQueryBuilder {
         const imageUrl = supabase.storage
           .from(deviceImageBucket)
           .getPublicUrl(
-            `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}.png`
+            `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`
           ).data.publicUrl;
 
         return { ...deserializedDevice, imageUrl };
@@ -362,12 +365,14 @@ class DeviceHandler {
       deserializeFromDbFormat<Omit<Device, 'imageUrl'>>(deviceData);
 
     if (updatedImage) {
+      const updatedImageAvif = await convertToAvif(updatedImage);
+
       const { error } = await supabase.storage
         .from(deviceImageBucket)
         .update(
           `${deserializedDevice.brand}/${deserializedDevice.model}/${deserializedDevice.version}`,
-          updatedImage,
-          { contentType: 'image/png' }
+          updatedImageAvif,
+          { contentType: 'image/avif' }
         );
 
       if (error) {

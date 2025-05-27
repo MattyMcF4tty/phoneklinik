@@ -6,6 +6,7 @@ import {
   serializeToDbFormat,
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import { convertToAvif } from '@/utils/image';
 
 // Config
 const accessoryTable = 'accessories';
@@ -41,7 +42,7 @@ export default class AccessoryClient {
       brandData.map((brandName: string) => {
         const imageUrl = supabase.storage
           .from(brandLogoBucket)
-          .getPublicUrl(`${brandName}.png`).data.publicUrl;
+          .getPublicUrl(`${brandName}`).data.publicUrl;
 
         return {
           name: brandName,
@@ -91,12 +92,13 @@ export default class AccessoryClient {
     const deserializedAccessory =
       deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
 
+    const accessoryImageAvif = await convertToAvif(accessoryImage);
     const { error: imageError } = await supabase.storage
       .from(accessoryImageBucket)
       .upload(
         `${deserializedAccessory.brand}/${deserializedAccessory.name}`,
-        accessoryImage,
-        { contentType: 'image/png' }
+        accessoryImageAvif,
+        { contentType: 'image/avif' }
       );
 
     if (imageError) {
@@ -264,12 +266,13 @@ class AccessoryHandler {
       deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
 
     if (updatedImage) {
+      const updatedImageAvif = await convertToAvif(updatedImage);
       const { error } = await supabase.storage
         .from(accessoryImageBucket)
         .update(
           `${deserializedAccessory.brand}/${deserializedAccessory.id}`,
-          updatedImage,
-          { contentType: 'image/png' }
+          updatedImageAvif,
+          { contentType: 'image/avif' }
         );
 
       if (error) {
