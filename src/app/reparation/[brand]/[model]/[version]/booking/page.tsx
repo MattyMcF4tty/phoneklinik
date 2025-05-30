@@ -19,8 +19,12 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
     throw new Error('Mangler brand, model eller version');
   }
 
+  const formattedBrand = decodeURIComponent(brand);
+  const formattedModel = decodeURIComponent(model);
+  const formattedVersion = decodeURIComponent(version);
+
   const [parts, setParts] = useSessionStorage<PartVariant[]>(
-    `${brand}_${model}_${version}_parts`,
+    `${formattedBrand}_${formattedModel}_${formattedVersion}_parts`,
     []
   );
 
@@ -30,7 +34,7 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
   return (
     <div className="w-full flex flex-col gap-4 grow">
       <h1 className="content-box text-2xl font-semibold text-center">
-        Reparation af {brand} {model} {version}
+        Reparation af {formattedBrand} {formattedModel} {formattedVersion}
       </h1>
 
       <div className="w-full md:flex md:flex-row gap-4">
@@ -76,9 +80,9 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
           </h1>
           <BookRepairForm
             deviceName={{
-              brand: brand,
-              model: model,
-              version: version,
+              brand: formattedBrand,
+              model: formattedModel,
+              version: formattedVersion,
             }}
           />
         </div>
