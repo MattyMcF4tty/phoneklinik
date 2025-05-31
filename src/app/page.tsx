@@ -24,7 +24,7 @@ export default function Home() {
         </div>
 
         {/* Video */}
-        <div className="w-full md:w-1/2 max-w-2xl aspect-video rounded-xl overflow-hidden shadow-lg">
+        <div className="w-full md:w-1/2 max-w-2xl aspect-video rounded-xl overflow-hidden">
           <VideoEmbed />
         </div>
       </div>
