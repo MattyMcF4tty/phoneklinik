@@ -116,7 +116,7 @@ class ValuationRequestQueryBuilder {
   private _email?: ValuationRequest['email'];
   private _phoneNumber?: ValuationRequest['phoneNumber'];
   private _deviceName?: ValuationRequest['deviceName'];
-  private _valuationStatus?: ValuationRequest['valutationStatus'];
+  private _valuationStatus?: ValuationRequest['valuationStatus'];
   private _valuationResponse?: ValuationRequest['valutationResponse'];
 
   public email(email: ValuationRequest['email']) {
@@ -134,9 +134,7 @@ class ValuationRequestQueryBuilder {
     return this;
   }
 
-  public valuationStatus(
-    valuationStatus: ValuationRequest['valutationStatus']
-  ) {
+  public valuationStatus(valuationStatus: ValuationRequest['valuationStatus']) {
     this._valuationStatus = valuationStatus;
     return this;
   }
@@ -169,7 +167,9 @@ class ValuationRequestQueryBuilder {
       query = query.eq('valuation_response', this._valuationResponse);
     }
 
-    const { data, error } = await query;
+    const { data, error } = await query.order('created_at', {
+      ascending: false,
+    });
 
     if (error) {
       throw new ErrorSupabase(

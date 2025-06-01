@@ -5,7 +5,7 @@ export default interface ValuationRequest {
   deviceName: string;
   customerNotes: string;
   internalNotes: string;
-  valutationStatus:
+  valuationStatus:
     | 'pending'
     | 'evaluating'
     | 'evaluated'
