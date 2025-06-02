@@ -1,7 +1,8 @@
-export type ActionResponse = {
+export type ActionResponse<T = undefined> = {
   success: boolean | undefined;
   loading?: boolean;
   message: string;
+  data?: T;
 };
 
 export type ApiResponse<T = undefined> = {

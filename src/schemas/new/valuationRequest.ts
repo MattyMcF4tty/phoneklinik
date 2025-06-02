@@ -2,6 +2,8 @@ export default interface ValuationRequest {
   id: number;
   email: string;
   phoneNumber: string | null;
+  firstName: string;
+  lastName: string;
   deviceName: string;
   customerNotes: string;
   internalNotes: string;

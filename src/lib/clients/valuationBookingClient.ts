@@ -10,9 +10,15 @@ const valuationRequestBucket = 'valuation-images';
 
 export default class ValuationRequestClient {
   public static async requestValuation(
-    request: Pick<
+    request: Omit<
       ValuationRequest,
-      'email' | 'phoneNumber' | 'deviceName' | 'customerNotes'
+      | 'id'
+      | 'images'
+      | 'createdAt'
+      | 'valuation'
+      | 'internalNotes'
+      | 'valutationResponse'
+      | 'valuationStatus'
     >,
     frontImage: Buffer | Blob,
     rearImage: Buffer | Blob,
@@ -268,7 +274,7 @@ class ValuationRequestHandler {
 
   public async updateValuationRequest(
     updatedRequest: Partial<Omit<ValuationRequest, 'id' | 'images'>>,
-    images: Partial<{
+    images?: Partial<{
       front: Buffer | Blob;
       rear: Buffer | Blob;
       battery: Buffer | Blob;
@@ -300,25 +306,27 @@ class ValuationRequestHandler {
     const deserializedRequest =
       deserializeFromDbFormat<Omit<ValuationRequest, 'images'>>(data);
 
-    await Promise.all(
-      Object.entries(images).map(async ([key, image]) => {
-        if (!image) return null;
+    if (images) {
+      await Promise.all(
+        Object.entries(images).map(async ([key, image]) => {
+          if (!image) return null;
 
-        const imageAvif = await convertToAvif(image);
+          const imageAvif = await convertToAvif(image);
 
-        const { error: uploadError } = await supabase.storage
-          .from(valuationRequestBucket)
-          .upload(`${this._id}/${key}`, imageAvif, {
-            contentType: 'image/avif',
-          });
-        if (uploadError) {
-          throw new ErrorSupabase(
-            'Noget gik galt under upload af billeder',
-            `Supabase error when trying to upload image ${key}: ${uploadError.message}`
-          );
-        }
-      })
-    );
+          const { error: uploadError } = await supabase.storage
+            .from(valuationRequestBucket)
+            .upload(`${this._id}/${key}`, imageAvif, {
+              contentType: 'image/avif',
+            });
+          if (uploadError) {
+            throw new ErrorSupabase(
+              'Noget gik galt under upload af billeder',
+              `Supabase error when trying to upload image ${key}: ${uploadError.message}`
+            );
+          }
+        })
+      );
+    }
 
     const frontUrl = supabase.storage
       .from(valuationRequestBucket)

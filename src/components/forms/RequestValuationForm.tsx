@@ -40,6 +40,30 @@ const RequestValuationForm: FC<RequestValuationFormProps> = ({}) => {
   return (
     <form onSubmit={handleFormSubmit}>
       <div>
+        <label className="label-default" htmlFor="firstName">
+          Fornavn
+        </label>
+        <input
+          id="firstName"
+          name="firstName"
+          type="text"
+          className="input-default"
+        />
+      </div>
+
+      <div>
+        <label className="label-default" htmlFor="lastName">
+          Efternavn
+        </label>
+        <input
+          id="lastName"
+          name="lastName"
+          type="text"
+          className="input-default"
+        />
+      </div>
+
+      <div>
         <label className="label-default" htmlFor="email">
           Email
         </label>
@@ -48,7 +72,7 @@ const RequestValuationForm: FC<RequestValuationFormProps> = ({}) => {
 
       <div>
         <label className="label-default" htmlFor="phoneNumber">
-          phoneNumber
+          Telefonnummer (valgfrit)
         </label>
         <input
           id="phoneNumber"

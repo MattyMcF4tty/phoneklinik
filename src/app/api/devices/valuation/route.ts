@@ -13,12 +13,27 @@ export async function POST(
   const customerNotes = String(data.customerNotes) || undefined;
   const email = String(data.email) || undefined;
   const phoneNumber = data.phoneNumber ? String(data.phoneNumber) : null;
+  const firstName = String(data.firstName) || undefined;
+  const lastName = String(data.lastName) || undefined;
 
   const frontImage = formData.get('frontImage') as Blob | undefined;
   const rearImage = formData.get('rearImage') as Blob | undefined;
   const batteryImage = formData.get('batteryImage') as Blob | undefined;
 
   // Validate required fields
+  if (!firstName) {
+    throw new ErrorBadRequest(
+      'Mangler fornavn.',
+      `Expected firstName in formData, got: ${firstName}`
+    );
+  }
+  if (!lastName) {
+    throw new ErrorBadRequest(
+      'Mangler efternavn.',
+      `Expected lastName in formData, got: ${lastName}`
+    );
+  }
+
   if (!deviceName) {
     throw new ErrorBadRequest(
       'Mangler navnet på enheden.',
@@ -59,6 +74,8 @@ export async function POST(
 
   const request = await ValuationRequestClient.requestValuation(
     {
+      firstName,
+      lastName,
       email,
       phoneNumber,
       deviceName,
