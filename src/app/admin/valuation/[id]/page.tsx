@@ -5,6 +5,8 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import InternalNotesField from '@/components/inputfields/vationRequest/InternalNotesField';
 import ValuationField from '@/components/inputfields/vationRequest/ValuationField';
+import SubmitValuationButton from './components/SubmitValuationButton';
+import RejectValuationButton from './components/RejectValuationButton';
 
 interface ValuationPageProps {
   params: Promise<{ id: string }>;
@@ -25,9 +27,11 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
   ).getValuationRequest();
 
   const disableUpdate =
-    valuationRequest.valuationStatus !== 'evaluating' &&
-    valuationRequest.valuationStatus !== 'pending' &&
-    valuationRequest.valutationResponse !== null;
+    (valuationRequest.valuationStatus !== 'evaluating' &&
+      valuationRequest.valuationStatus !== 'pending') ||
+    valuationRequest.valuationResponse !== null;
+
+  console.log(disableUpdate);
 
   return (
     <div className="w-full grow flex flex-col gap-8">
@@ -60,14 +64,14 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
           <div className="flex flex-row gap-4 w-full">
             <div className="flex flex-col w-full">
               <h3>Fornavn</h3>
-              <p className="bg-slate-100 p-1 rounded-sm">
+              <p className="bg-slate-100 p-1 rounded-sm h-8">
                 {valuationRequest.firstName}
               </p>
             </div>
 
             <div className="flex flex-col w-full">
               <h3>Efternavn</h3>
-              <p className="bg-slate-100 p-1 rounded-sm">
+              <p className="bg-slate-100 p-1 rounded-sm h-8">
                 {valuationRequest.lastName}
               </p>
             </div>
@@ -76,14 +80,14 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
           <div className="flex flex-row gap-4 w-full">
             <div className="flex flex-col w-full">
               <h3>Email</h3>
-              <p className="bg-slate-100 p-1 rounded-sm">
+              <p className="bg-slate-100 p-1 rounded-sm h-8">
                 {valuationRequest.email}
               </p>
             </div>
 
             <div className="flex flex-col w-full">
               <h3>Telefon</h3>
-              <p className="bg-slate-100 p-1 rounded-sm">
+              <p className="bg-slate-100 p-1 rounded-sm h-8">
                 {valuationRequest.phoneNumber}
               </p>
             </div>
@@ -171,29 +175,54 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
           </div>
         </div>
 
-        {/* Valuation details */}
-        <div className="flex flex-row gap-4 w-full justify-between items-center">
-          {/* valuation price */}
-          <div className="flex flex-col w-40">
-            <p>Vurdering af enhed:</p>
-            <div className="w-full flex flex-row items-center">
-              <ValuationField
-                disabled={disableUpdate}
-                valuationId={valuationRequest.id}
-                defaultValue={valuationRequest.valuation}
-              />
-              <p className="text-2xl ml-2">kr.</p>
+        {valuationRequest.valuationResponse ? (
+          <div className="flex flex-row gap-4 w-full justify-between items-center">
+            {/* Customer response */}
+            <div className="flex flex-col">
+              <p className="w-full text-end">Svar fra kunde</p>
+              <span className="w-full bg-slate-100 rounded-md p-1 h-full text-2xl">
+                {valuationRequest.valuationResponse ?? 'Ingen svar endnu'}
+              </span>
+            </div>
+
+            {/* valuation price */}
+            <div className="flex flex-col w-40">
+              <p>Vurdering af enhed:</p>
+              <div className="w-full flex flex-row items-center">
+                <ValuationField
+                  disabled={disableUpdate}
+                  valuationId={valuationRequest.id}
+                  defaultValue={valuationRequest.valuation}
+                />
+                <p className="text-2xl ml-2">kr.</p>
+              </div>
             </div>
           </div>
+        ) : (
+          <div className="w-full flex flex-col items-center justify-center gap-4">
+            {/* valuation price */}
+            <div className="flex flex-col w-40">
+              <p>Vurdering af enhed:</p>
+              <div className="w-full flex flex-row items-center">
+                <ValuationField
+                  disabled={disableUpdate}
+                  valuationId={valuationRequest.id}
+                  defaultValue={valuationRequest.valuation}
+                />
+                <p className="text-2xl ml-2">kr.</p>
+              </div>
+            </div>
+            {!disableUpdate && (
+              <div className="w-full flex flex-row gap-4">
+                <RejectValuationButton valuationId={valuationRequest.id} />
 
-          {/* Customer response */}
-          <div className="flex flex-col">
-            <p className="w-full text-end">Svar fra kunde</p>
-            <span className="w-full bg-slate-100 rounded-md p-1 h-full text-2xl">
-              {valuationRequest.valutationResponse ?? 'Ingen svar endnu'}
-            </span>
+                <SubmitValuationButton valuationId={valuationRequest.id} />
+              </div>
+            )}
           </div>
-        </div>
+        )}
+
+        {/* Submit Button */}
       </div>
     </div>
   );

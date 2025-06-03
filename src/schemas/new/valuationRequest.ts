@@ -13,7 +13,7 @@ export default interface ValuationRequest {
     | 'evaluated'
     | 'rejected'
     | 'bought';
-  valutationResponse: 'pending' | 'accepted' | 'rejected' | null;
+  valuationResponse: 'pending' | 'accepted' | 'rejected' | null;
   valuation: number | null;
   createdAt: string;
   images: {
