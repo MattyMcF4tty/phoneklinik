@@ -1,4 +1,3 @@
-import Brand from '@/schemas/new/brand';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
   deserializeFromDbFormat,
@@ -8,6 +7,7 @@ import {
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
 import { SupabaseClient } from '@supabase/supabase-js';
+import Brand from '@/schemas/brand';
 
 // Config
 const brandTable = 'brands';
@@ -24,13 +24,12 @@ export class BrandClient {
   static async createBrand(
     newBrand: Omit<Brand, 'imageUrl'>,
     brandImage: Buffer
-  ) {
+  ): Promise<Brand> {
     const supabase = await createClient();
 
     const serializedBrand = serializeToDbFormat(newBrand);
 
     console.log('Serialized brand to insert:', serializedBrand);
-
 
     const { data: brandData, error } = await supabase
       .from(brandTable)
@@ -38,16 +37,13 @@ export class BrandClient {
       .select('name')
       .single();
 
-      
-
-   if (error) {
-  console.error('Supabase insert error:', error.message);
-  throw new ErrorSupabase(
-    'Noget gik galt under oprettelsen af mærke.',
-    `Supabase error creating brand: ${error.message}`
-  );
-}
-
+    if (error) {
+      console.error('Supabase insert error:', error.message);
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelsen af mærke.',
+        `Supabase error creating brand: ${error.message}`
+      );
+    }
 
     if (!brandData) {
       throw new ErrorSupabase(
@@ -61,13 +57,10 @@ export class BrandClient {
 
     const imageAvif = await convertToAvif(brandImage);
     const { error: imageError } = await supabase.storage
-          .from(brandLogoBucket)
-          .upload(`${deserializedBrand.name}/battery`, imageAvif, {
-            contentType: 'image/avif',
-          })
-        
-
-       
+      .from(brandLogoBucket)
+      .upload(`${deserializedBrand.name}/battery`, imageAvif, {
+        contentType: 'image/avif',
+      });
 
     if (imageError) {
       throw new ErrorSupabase(
@@ -80,7 +73,7 @@ export class BrandClient {
       .from(brandLogoBucket)
       .getPublicUrl(`${deserializedBrand.name}`).data.publicUrl;
 
-    return { ...deserializedBrand, imageUrl };          
+    return { ...deserializedBrand, imageUrl };
   }
 }
 

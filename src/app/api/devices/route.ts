@@ -1,38 +1,12 @@
-import { handleSupabaseFunction } from '@/utils/config/supabase';
-import { decodeUrlSpaces } from '@/utils/misc';
 import { NextRequest, NextResponse } from 'next/server';
 import { convertToAvif } from '@/utils/image';
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
 import DeviceClient from '@/lib/clients/deviceClient';
-import { ApiResponse } from '@/schemas/new/types';
-import Device from '@/schemas/new/device';
+import { ApiResponse } from '@/schemas/types';
+import Device from '@/schemas/device';
 
-export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
-  const brand = searchParams.get('brand');
-  const model = searchParams.get('model');
-  const version = searchParams.get('version');
-  const type = searchParams.get('type');
-
-  try {
-    const devices = await handleSupabaseFunction('query_devices', {
-      device_brand: brand,
-      device_model: model,
-      device_version: version && decodeUrlSpaces(version),
-      device_type: type,
-    });
-
-    return NextResponse.json({ data: devices }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { error: 'Internal server error.' },
-      { status: 500 }
-    );
-  }
-}export async function POST(
+export async function POST(
   req: NextRequest
 ): Promise<NextResponse<ApiResponse<Device>>> {
   try {
@@ -63,13 +37,12 @@ export async function GET(req: NextRequest) {
     const releaseDate = new Date(releaseDateRaw);
 
     console.log('Creating device with:', {
-  brand,
-  model: modelName,
-  version: deviceName,
-  type,
-  releaseDate,
-});
-
+      brand,
+      model: modelName,
+      version: deviceName,
+      type,
+      releaseDate,
+    });
 
     const newDevice = await DeviceClient.createDevice(
       {
@@ -98,11 +71,10 @@ export async function GET(req: NextRequest) {
       );
     }
 
-console.error('Uventet fejl:', JSON.stringify(err, null, 2));
+    console.error('Uventet fejl:', JSON.stringify(err, null, 2));
     return NextResponse.json(
       { success: false, message: 'Intern serverfejl.' },
       { status: 500 }
     );
   }
 }
-
