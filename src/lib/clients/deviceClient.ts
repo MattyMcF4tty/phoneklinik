@@ -31,7 +31,12 @@ export default class DeviceClient {
   ): Promise<Device> {
     const supabase = await createClient();
 
-    const serializedDevice = serializeToDbFormat(newDevice);
+const serializedDevice = serializeToDbFormat({
+  ...newDevice,
+  releaseDate: newDevice.releaseDate.toISOString(),
+});
+
+console.log('Serialized device payload to insert:', serializedDevice);
 
     const { data: deviceData, error } = await supabase
       .from(deviceTable)
@@ -39,12 +44,16 @@ export default class DeviceClient {
       .select('*')
       .single();
 
-    if (error) {
-      throw new ErrorSupabase(
-        'Noget gik galt under oprettelse af enhed.',
-        `Supabase error when trying to create device: ${error.message}`
-      );
-    }
+  if (error) {
+  console.error('🧨 Supabase insert error:', error); // NEW LINE
+  console.error('🧾 Payload that caused it:', serializedDevice); // NEW LINE
+
+  throw new ErrorSupabase(
+    'Noget gik galt under oprettelse af enhed.',
+    `Supabase error when trying to create device: ${error.message}`
+  );
+}
+
 
     if (!deviceData) {
       throw new ErrorSupabase(

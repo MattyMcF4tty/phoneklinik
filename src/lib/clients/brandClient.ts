@@ -29,18 +29,25 @@ export class BrandClient {
 
     const serializedBrand = serializeToDbFormat(newBrand);
 
+    console.log('Serialized brand to insert:', serializedBrand);
+
+
     const { data: brandData, error } = await supabase
       .from(brandTable)
       .insert(serializedBrand)
       .select('name')
       .single();
 
-    if (error) {
-      throw new ErrorSupabase(
-        'Noget gik galt under oprettelsen af mærke.',
-        `Supabase error creating brand: ${error.message}`
-      );
-    }
+      
+
+   if (error) {
+  console.error('Supabase insert error:', error.message);
+  throw new ErrorSupabase(
+    'Noget gik galt under oprettelsen af mærke.',
+    `Supabase error creating brand: ${error.message}`
+  );
+}
+
 
     if (!brandData) {
       throw new ErrorSupabase(
@@ -54,10 +61,13 @@ export class BrandClient {
 
     const imageAvif = await convertToAvif(brandImage);
     const { error: imageError } = await supabase.storage
-      .from(brandLogoBucket)
-      .upload(`${deserializedBrand.name}`, imageAvif, {
-        contentType: 'image/avif',
-      });
+          .from(brandLogoBucket)
+          .upload(`${deserializedBrand.name}/battery`, imageAvif, {
+            contentType: 'image/avif',
+          })
+        
+
+       
 
     if (imageError) {
       throw new ErrorSupabase(
@@ -70,7 +80,7 @@ export class BrandClient {
       .from(brandLogoBucket)
       .getPublicUrl(`${deserializedBrand.name}`).data.publicUrl;
 
-    return { ...deserializedBrand, imageUrl };
+    return { ...deserializedBrand, imageUrl };          
   }
 }
 

@@ -17,7 +17,7 @@ export default class ValuationRequestClient {
       | 'createdAt'
       | 'valuation'
       | 'internalNotes'
-      | 'valutationResponse'
+      | 'valuationResponse'
       | 'valuationStatus'
     >,
     frontImage: Buffer | Blob,
@@ -123,7 +123,7 @@ class ValuationRequestQueryBuilder {
   private _phoneNumber?: ValuationRequest['phoneNumber'];
   private _deviceName?: ValuationRequest['deviceName'];
   private _valuationStatus?: ValuationRequest['valuationStatus'];
-  private _valuationResponse?: ValuationRequest['valutationResponse'];
+  private _valuationResponse?: ValuationRequest['valuationResponse'];
 
   public email(email: ValuationRequest['email']) {
     this._email = email;
@@ -146,7 +146,7 @@ class ValuationRequestQueryBuilder {
   }
 
   public valuationResponse(
-    valuationResponse: ValuationRequest['valutationResponse']
+    valuationResponse: ValuationRequest['valuationResponse']
   ) {
     this._valuationResponse = valuationResponse;
     return this;

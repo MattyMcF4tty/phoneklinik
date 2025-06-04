@@ -1,5 +1,12 @@
+import { BrandClient } from '@/lib/clients/brandClient';
 import { handleSupabaseFunction } from '@/utils/config/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
+import AppError from '@/schemas/errors/appError';
+import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
+import { ApiResponse } from '@/schemas/new/types';
+import { convertToAvif } from '@/utils/image';
+
 
 export async function GET() {
   try {
@@ -16,29 +23,46 @@ export async function GET() {
 }
 
 /* TODO: Missing function */
-export async function POST(req: NextRequest) {
-  const bodyData = await req.json();
-  const brandname = bodyData.brandName;
 
-  if (typeof brandname !== 'string') {
-    return NextResponse.json(
-      { error: 'Missing brandName in body' },
-      { status: 400 }
-    );
-  }
-
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<ApiResponse>> {
   try {
-    const brandsData = await handleSupabaseFunction('insert_brand', {
-      brand_name: brandname,
-    });
+    const formData = await req.formData();
 
-    const brandData = brandsData[0];
+    const brandName = formData.get('brandName') as string;
+    const brandImage = formData.get('brandImage') as Blob | undefined;
 
-    return NextResponse.json({ data: brandData }, { status: 200 });
-  } catch (error) {
-    console.error('Error occurred:', error);
+    if (!brandName || !brandImage) {
+      throw new ErrorBadRequest(
+        'Mangler brand navn eller billede.',
+        `brandName: ${brandName}, brandImage: ${brandImage}`
+      );
+    }
+
+    const brandAvif = await convertToAvif(brandImage);
+
+    const newBrand = await BrandClient.createBrand({ name: brandName }, brandAvif);
+
     return NextResponse.json(
-      { error: 'Internal server error.' },
+      {
+        success: true,
+        brand: newBrand,
+        message: 'Brand oprettet.',
+      },
+      { status: 200 }
+    );
+  } catch (err: unknown) {
+    if (err instanceof AppError) {
+      return NextResponse.json(
+        { success: false, message: err.message },
+        { status: err.httpCode }
+      );
+    }
+
+    console.error('Unexpected error creating brand:', err);
+    return NextResponse.json(
+      { success: false, message: 'En uventet fejl opstod.' },
       { status: 500 }
     );
   }
