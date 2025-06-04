@@ -1,7 +1,7 @@
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
-import { ApiResponse } from '@/schemas/new/types';
+import { ApiResponse } from '@/schemas/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(

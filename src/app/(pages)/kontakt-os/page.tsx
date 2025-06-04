@@ -1,26 +1,9 @@
-'use client';
-
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { sendMail } from '@/utils/misc';
-import { FormEvent } from 'react';
+import ContactForm from '@/components/forms/ContactForm';
 
 export default function ContactUs() {
-  async function handleContact(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    await sendMail(
-      `User Question from ${data.get('name')}`,
-      `Message: ${data.get('message')}
-
-Email: ${data.get('email')}
-Phone: ${data.get('tel')}`
-    );
-    alert('Tak for din besked! Vi vender tilbage så hurtigt som muligt.');
-    e.currentTarget.reset();
-  }
-
   return (
     <div className="bg-gray-50 min-h-screen w-full relative overflow-x-hidden">
       {/* ---------- Gradient hero with wave ---------- */}
@@ -94,41 +77,7 @@ Phone: ${data.get('tel')}`
       {/* ---------- Form card ---------- */}
       <section className="max-w-xl mx-auto mt-14 px-6 pb-24">
         <h2 className="text-center text-2xl font-bold mb-6">Skriv til os</h2>
-
-        <form
-          onSubmit={handleContact}
-          className="bg-white rounded-2xl shadow-lg p-8 space-y-5"
-        >
-          <input
-            type="text"
-            name="name"
-            placeholder="Navn"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1561c9]"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="E-mail"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1561c9]"
-          />
-          <input
-            type="tel"
-            name="tel"
-            placeholder="Telefon"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#1561c9]"
-          />
-          <textarea
-            name="message"
-            placeholder="Besked"
-            className="w-full h-32 border border-gray-300 rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#1561c9]"
-          />
-          <button
-            type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-[#12308b] via-[#1561c9] to-[#08a5f4] text-white font-medium hover:opacity-90 transition"
-          >
-            Send besked
-          </button>
-        </form>
+        <ContactForm />
       </section>
     </div>
   );

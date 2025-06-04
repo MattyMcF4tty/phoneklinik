@@ -97,9 +97,9 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
         {/* Device info */}
         <div className="flex flex-col gap-4 w-full">
           {/* Billeder */}
-          <div className="flex flex-row gap-4 w-full">
+          <div className="flex flex-row gap-4 w-full justify-center items-center">
             {/* Forside */}
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <ImageZoomWrapper
                 imageUrl={valuationRequest.images.frontUrl}
                 altText="Forside"
@@ -117,7 +117,7 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
             </div>
 
             {/* Bagside */}
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <ImageZoomWrapper
                 imageUrl={valuationRequest.images.rearUrl}
                 altText="Bagside"
@@ -135,7 +135,7 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
             </div>
 
             {/* Batteri status */}
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <ImageZoomWrapper
                 imageUrl={valuationRequest.images.batteryUrl}
                 altText="Batteri status"

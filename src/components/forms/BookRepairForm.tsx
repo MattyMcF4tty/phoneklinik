@@ -1,10 +1,11 @@
 'use client';
 
-import bookRepair from '@/app/reparation/[brand]/[model]/[version]/booking/actions';
+import bookRepair from '@/app/(pages)/reparation/[brand]/[model]/[version]/booking/actions';
 import useSessionStorage from '@/hooks/useSessionStorage';
-import Device from '@/schemas/new/device';
-import DevicePart from '@/schemas/new/devicePart';
-import { ActionResponse } from '@/schemas/new/types';
+import Device from '@/schemas/device';
+import DevicePart from '@/schemas/devicePart';
+import { ActionResponse } from '@/schemas/types';
+
 import React, { FC, useActionState, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 

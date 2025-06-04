@@ -1,10 +1,8 @@
-
-import LinkButton from '@/components/LinkButton';
+import Link from 'next/link';
 
 export default function AboutUs() {
   return (
     <div className="bg-white min-h-screen w-full shadow-md rounded-md">
-
       {/* --- Intro / Hero --------------------------------------------------- */}
       <section className="flex flex-col items-center text-center px-6 py-20 max-w-4xl mx-auto">
         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -12,15 +10,18 @@ export default function AboutUs() {
         </h1>
 
         <p className="text-base md:text-lg text-gray-600 mb-10">
-          Hos PhoneKlinik er vi specialister i at reparere alle typer smartphones og
-          tablets. Uanset om du skal have skiftet skærmen på din iPhone,
-          udskiftet batteriet på din Samsung eller repareret en ødelagt ladeport,
-          står vi klar til at hjælpe dig hurtigt og effektivt.
+          Hos PhoneKlinik er vi specialister i at reparere alle typer
+          smartphones og tablets. Uanset om du skal have skiftet skærmen på din
+          iPhone, udskiftet batteriet på din Samsung eller repareret en ødelagt
+          ladeport, står vi klar til at hjælpe dig hurtigt og effektivt.
         </p>
 
-        <LinkButton url="/kontakt-os" className="w-48 bg-gradient-to-r from-main-purple to-main-blue text-white">
+        <Link
+          href="/kontakt-os"
+          className="w-48 h-10 flex items-center justify-center rounded-md bg-gradient-to-r from-main-purple to-main-blue text-white"
+        >
           Kontakt os
-        </LinkButton>
+        </Link>
       </section>
 
       {/* --- Services ------------------------------------------------------- */}
@@ -34,7 +35,8 @@ export default function AboutUs() {
           <div>
             <h3 className="text-lg font-semibold mb-2">Skærmreparation</h3>
             <p className="text-sm text-gray-600">
-              Udskiftning af ødelagte skærme på både iPhone, Android og andre mærker.
+              Udskiftning af ødelagte skærme på både iPhone, Android og andre
+              mærker.
             </p>
           </div>
 
@@ -48,7 +50,8 @@ export default function AboutUs() {
           <div>
             <h3 className="text-lg font-semibold mb-2">Ladeproblemer</h3>
             <p className="text-sm text-gray-600">
-              Få din enhed til at oplade igen – uanset om det er porten eller noget andet, der driller.
+              Få din enhed til at oplade igen – uanset om det er porten eller
+              noget andet, der driller.
             </p>
           </div>
 
@@ -60,9 +63,12 @@ export default function AboutUs() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-2">Reparation af kamera &amp; højtaler</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Reparation af kamera &amp; højtaler
+            </h3>
             <p className="text-sm text-gray-600">
-              Udskiftning eller reparation af defekte komponenter – fuld funktionalitet tilbage.
+              Udskiftning eller reparation af defekte komponenter – fuld
+              funktionalitet tilbage.
             </p>
           </div>
         </div>
@@ -76,20 +82,22 @@ export default function AboutUs() {
 
         <ul className="max-w-4xl mx-auto grid gap-8 md:grid-cols-2 text-sm text-gray-700">
           <li>
-            <span className="font-semibold">Hurtig reparationstid:</span> De fleste
-            reparationer udføres på stedet og er færdige inden for få timer.
+            <span className="font-semibold">Hurtig reparationstid:</span> De
+            fleste reparationer udføres på stedet og er færdige inden for få
+            timer.
           </li>
           <li>
-            <span className="font-semibold">Kvalitet &amp; pålidelighed:</span> Vi
-            bruger kun dele af høj kvalitet og giver garanti på alle reparationer.
+            <span className="font-semibold">Kvalitet &amp; pålidelighed:</span>{' '}
+            Vi bruger kun dele af høj kvalitet og giver garanti på alle
+            reparationer.
           </li>
           <li>
-            <span className="font-semibold">Erfarne teknikere:</span> Vores team har
-            mange års erfaring og følger altid de nyeste teknikker.
+            <span className="font-semibold">Erfarne teknikere:</span> Vores team
+            har mange års erfaring og følger altid de nyeste teknikker.
           </li>
           <li>
-            <span className="font-semibold">Konkurrencedygtige priser:</span> Fair,
-            transparente priser – du ved præcis, hvad du betaler for.
+            <span className="font-semibold">Konkurrencedygtige priser:</span>{' '}
+            Fair, transparente priser – du ved præcis, hvad du betaler for.
           </li>
         </ul>
       </section>

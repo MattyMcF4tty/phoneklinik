@@ -3,9 +3,10 @@
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
-import { ActionResponse } from '@/schemas/new/types';
-import ValuationRequest from '@/schemas/new/valuationRequest';
-import sendMail from '@/utils/new/mail';
+import { ActionResponse } from '@/schemas/types';
+import ValuationRequest from '@/schemas/valuationRequest';
+
+import sendMail from '@/utils/mail';
 
 export async function updateInternalNotes(
   prevState: ActionResponse<ValuationRequest['internalNotes']>,
@@ -31,7 +32,10 @@ export async function updateInternalNotes(
   try {
     const valuationRequest = await ValuationRequestClient.id(
       parseInt(valuationId, 10)
-    ).updateValuationRequest({ internalNotes: internalNotes });
+    ).updateValuationRequest({
+      internalNotes: internalNotes,
+      valuationStatus: 'evaluating',
+    });
 
     return {
       success: true,
@@ -80,7 +84,10 @@ export async function updateValuation(
   try {
     const valuationRequest = await ValuationRequestClient.id(
       parseInt(valuationId, 10)
-    ).updateValuationRequest({ valuation: valuationNumber });
+    ).updateValuationRequest({
+      valuation: valuationNumber,
+      valuationStatus: 'evaluating',
+    });
 
     return {
       success: true,
@@ -122,6 +129,46 @@ export async function submitValuation(
       valuationResponse: 'pending',
     });
 
+    sendMail(
+      valuationRequest.email,
+      `Vurdering af enhed: ${valuationRequest.deviceName}`,
+      {
+        plainText: `Hej,
+
+        Vi har nu foretaget en vurdering af din enhed: ${valuationRequest.deviceName} (Sags-ID: ${valuationRequest.id}).
+        
+        Du kan se resultatet af vurderingen via følgende link:
+        https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}
+        
+        Har du spørgsmål eller brug for yderligere information, er du meget velkommen til at kontakte os på ${process.env.PHONEKLINIK_MAIL}. Husk at oplyse dit sagsnummer: ${valuationRequest.id}.
+        
+        Med venlig hilsen  
+        Phoneklinik`,
+
+        html: `
+            <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
+              <p>Hej,</p>
+              <p>
+                Vi har nu foretaget en vurdering af din enhed: 
+                <strong>${valuationRequest.deviceName}</strong> 
+                (Sags-ID: <strong>${valuationRequest.id}</strong>).
+              </p>
+              <p>
+                Du kan se resultatet af vurderingen via følgende link:<br/>
+                <a href="https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}">
+                  https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}
+                </a>
+              </p>
+              <p>
+                Har du spørgsmål eller brug for yderligere information, er du meget velkommen til at kontakte os på 
+                <a href="mailto:${process.env.PHONEKLINIK_MAIL}">${process.env.PHONEKLINIK_MAIL}</a>. Husk at oplyse dit sagsnummer: <strong>${valuationRequest.id}</strong>.
+              </p>
+              <p>Med venlig hilsen<br/>Phoneklinik</p>
+            </div>
+          `,
+      }
+    );
+
     return {
       success: true,
       message: 'Vurdering sendt succesfuldt.',
@@ -162,40 +209,39 @@ export async function rejectValuation(
     });
 
     sendMail(
-      process.env.NO_REPLY_MAIL!,
       valuationRequest.email,
       `Vurdering af enhed: ${valuationRequest.deviceName}`,
       {
         plainText: `Hej,
     
-    Tak for din henvendelse omkring vurdering af din enhed: ${valuationRequest.deviceName} (Ref. ID: ${valuationRequest.id}).
-    
-    Vi har gennemgået informationerne, men må desværre meddele, at vi ikke er interesserede i at købe denne enhed.
-    
-    Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på ${process.env.PHONEKLINIK_MAIL} og henvise til dit sagsnummer: ${valuationRequest.id}.
-    
-    Venlig hilsen  
-    Phoneklinik`,
+        Tak for din henvendelse omkring vurdering af din enhed: ${valuationRequest.deviceName} (Ref. ID: ${valuationRequest.id}).
+        
+        Vi har gennemgået informationerne, men må desværre meddele, at vi ikke er interesserede i at købe denne enhed.
+        
+        Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på ${process.env.PHONEKLINIK_MAIL} og henvise til dit sagsnummer: ${valuationRequest.id}.
+        
+        Venlig hilsen  
+        Phoneklinik`,
 
         html: `
-      <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
-        <p>Hej,</p>
-        <p>
-          Tak for din henvendelse omkring vurdering af din enhed: 
-          <strong>${valuationRequest.deviceName}</strong> 
-          (Ref. ID: <strong>${valuationRequest.id}</strong>).
-        </p>
-        <p>
-          Vi har gennemgået informationerne, men må desværre meddele, at vi ikke er interesserede i at købe denne enhed.
-        </p>
-        <p>
-          Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på 
-          <a href="mailto:${process.env.PHONEKLINIK_MAIL}">${process.env.PHONEKLINIK_MAIL}</a> 
-          og henvise til dit sagsnummer: <strong>${valuationRequest.id}</strong>.
-        </p>
-        <p>Venlig hilsen<br/>Phoneklinik</p>
-      </div>
-    `,
+        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
+          <p>Hej,</p>
+          <p>
+            Tak for din henvendelse omkring vurdering af din enhed: 
+            <strong>${valuationRequest.deviceName}</strong> 
+            (Ref. ID: <strong>${valuationRequest.id}</strong>).
+          </p>
+          <p>
+            Vi har gennemgået informationerne, men må desværre meddele, at vi ikke er interesserede i at købe denne enhed.
+          </p>
+          <p>
+            Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på 
+            <a href="mailto:${process.env.PHONEKLINIK_MAIL}">${process.env.PHONEKLINIK_MAIL}</a> 
+            og henvise til dit sagsnummer: <strong>${valuationRequest.id}</strong>.
+          </p>
+          <p>Venlig hilsen<br/>Phoneklinik</p>
+        </div>
+        `,
       }
     );
 

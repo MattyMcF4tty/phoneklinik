@@ -1,6 +1,6 @@
 'use client';
 
-import { updateInternalNotes } from '@/app/admin/valuation/[id]/actions';
+import { updateInternalNotes } from '@/app/(pages)/admin/valuation/[id]/actions';
 import { ActionResponse } from '@/schemas/new/types';
 import ValuationRequest from '@/schemas/new/valuationRequest';
 import React, { FC, useActionState, useRef, useEffect } from 'react';

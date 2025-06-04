@@ -1,4 +1,4 @@
-import { forgottenPassword } from '@/app/admin/auth/login/actions';
+import { forgottenPassword } from '@/app/(pages)/admin/auth/login/actions';
 import React, { FC } from 'react';
 
 interface ForgotPasswordFormProps {}

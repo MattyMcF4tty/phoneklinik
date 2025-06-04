@@ -1,4 +1,3 @@
-import DevicePart from '@/schemas/new/devicePart';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
   deserializeFromDbFormat,
@@ -7,6 +6,7 @@ import {
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import DevicePartVariantClient from './partVariantClient';
+import DevicePart from '@/schemas/devicePart';
 
 // Config
 const partsTable = 'parts';

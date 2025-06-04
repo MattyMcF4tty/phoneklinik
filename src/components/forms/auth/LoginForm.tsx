@@ -1,4 +1,7 @@
-import { forgottenPassword, login } from '@/app/admin/auth/login/actions';
+import {
+  forgottenPassword,
+  login,
+} from '@/app/(pages)/admin/auth/login/actions';
 import React, { FC } from 'react';
 
 interface LoginFormProps {
