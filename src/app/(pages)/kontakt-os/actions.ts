@@ -38,7 +38,7 @@ export async function contactPhoneKlinik(formData: FormData) {
 
   try {
     await sendMail(
-      process.env.PHONEKLINIK_MAIL!,
+      process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL!,
       'Kunde spørgsmål',
       {
         plainText: `

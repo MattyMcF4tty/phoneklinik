@@ -11,7 +11,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-white shadow-md fixed top-0 z-50">
+    <nav className="w-full bg-white shadow-md fixed top-0 z-[999]">
       {/* Top Navbar */}
       <div className="h-[var(--navbar-height)] flex justify-between items-center px-4">
         {/* Logo */}
@@ -72,23 +72,38 @@ const Navbar: FC<NavbarProps> = ({}) => {
 
       {/* Mobile Dropdown */}
       {isMenuOpen && (
-  <div className="md:hidden bg-white flex flex-col items-start p-4 space-y-4 shadow-md border-t">
-    <Link href="/reparation" className="button-navbar w-full" onClick={() => setIsMenuOpen(false)}>
-      Reparation
-    </Link>
-    <Link href="/saelg-enhed" className="button-navbar w-full" onClick={() => setIsMenuOpen(false)}>
-      Sælg din enhed
-    </Link>
-    <Link href="/om-os" className="button-navbar w-full" onClick={() => setIsMenuOpen(false)}>
-      Om os
-    </Link>
-    <Link href="/kontakt-os" className="button-navbar w-full" onClick={() => setIsMenuOpen(false)}>
-      Kontakt os
-    </Link>
-    <DeviceSearchField />
-  </div>
-)}
-
+        <div className="md:hidden bg-white flex flex-col items-start p-4 space-y-4 shadow-md border-t">
+          <Link
+            href="/reparation"
+            className="button-navbar w-full"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Reparation
+          </Link>
+          <Link
+            href="/saelg-enhed"
+            className="button-navbar w-full"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Sælg din enhed
+          </Link>
+          <Link
+            href="/om-os"
+            className="button-navbar w-full"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Om os
+          </Link>
+          <Link
+            href="/kontakt-os"
+            className="button-navbar w-full"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Kontakt os
+          </Link>
+          <DeviceSearchField />
+        </div>
+      )}
     </nav>
   );
 };

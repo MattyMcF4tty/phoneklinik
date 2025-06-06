@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from './lib/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
+  let middlewareResponse: NextResponse;
+
   if (request.nextUrl.pathname === '/admin') {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url));
   }
@@ -10,8 +12,19 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.includes('admin') &&
     !request.nextUrl.pathname.startsWith('/admin/auth')
   ) {
-    return await updateSession(request);
+    const SupabaseResponse = await updateSession(request);
+
+    middlewareResponse = SupabaseResponse;
+  } else {
+    middlewareResponse = NextResponse.next();
   }
+
+  middlewareResponse.headers.set(
+    'x-search-params',
+    request.nextUrl.searchParams.toString()
+  );
+
+  return middlewareResponse;
 }
 
 export const config = {

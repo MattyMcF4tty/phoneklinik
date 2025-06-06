@@ -22,3 +22,13 @@ export default interface ValuationRequest {
     batteryUrl: string;
   };
 }
+
+export type LimitedValuationRequest = Pick<
+  ValuationRequest,
+  | 'id'
+  | 'deviceName'
+  | 'email'
+  | 'valuationResponse'
+  | 'valuationStatus'
+  | 'valuation'
+>;
