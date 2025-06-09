@@ -1,7 +1,6 @@
 'use client';
 
 import { NextPage } from 'next';
-
 import { ActionResponse } from '@/schemas/types';
 import { startTransition, useActionState, useEffect } from 'react';
 import { answerValuation, validateValuationEmail } from './actions';
@@ -10,9 +9,7 @@ import { LimitedValuationRequest } from '@/schemas/valuationRequest';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
-interface ValuationPageProps {}
-
-const ValuationPage: NextPage<ValuationPageProps> = ({}) => {
+const ValuationPage: NextPage = () => {
   const searchParams = useSearchParams();
 
   const requestInitialState: ActionResponse<LimitedValuationRequest> = {
@@ -47,7 +44,7 @@ const ValuationPage: NextPage<ValuationPageProps> = ({}) => {
         requestFormAction(formData);
       });
     }
-  }, []);
+  }, [searchParams]);
 
   const responseInitialState: ActionResponse = {
     success: undefined,

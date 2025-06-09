@@ -1,9 +1,7 @@
 import { forgottenPassword } from '@/app/(pages)/admin/auth/login/actions';
 import React, { FC } from 'react';
 
-interface ForgotPasswordFormProps {}
-
-const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({}) => {
+const ForgotPasswordForm: FC = () => {
   return (
     <form>
       <input type="email" className="default-input" />

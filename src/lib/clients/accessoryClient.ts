@@ -1,4 +1,3 @@
-import Accessory from '@/schemas/new/accessory';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
   deserializeFromDbFormat,
@@ -7,6 +6,7 @@ import {
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
+import Accessory from '@/schemas/accessory';
 
 // Config
 const accessoryTable = 'accessories';
@@ -205,7 +205,7 @@ class AccessoryQueryBuilder {
     onfulfilled?:
       | ((value: Accessory[]) => TResult1 | PromiseLike<TResult1>)
       | null,
-    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
   ): Promise<TResult1 | TResult2> {
     return this._fetchQuery().then(onfulfilled, onrejected);
   }
@@ -219,8 +219,6 @@ class AccessoryHandler {
   }
 
   public async getAccessory(): Promise<Accessory> {
-    const supabase = await createClient();
-
     const accessories = await AccessoryClient.query().id(this._id);
 
     if (accessories.length <= 0) {

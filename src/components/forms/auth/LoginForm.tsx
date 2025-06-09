@@ -5,11 +5,10 @@ import {
 import React, { FC } from 'react';
 
 interface LoginFormProps {
-  defaultEmail?: string;
   error?: string;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ defaultEmail, error }) => {
+const LoginForm: FC<LoginFormProps> = ({ error }) => {
   return (
     <form className="flex flex-col gap-4">
       <div>

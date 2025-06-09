@@ -129,9 +129,9 @@ export async function answerValuation(
       );
     }
 
-    const valuationRequest = await ValuationRequestClient.id(
-      id
-    ).updateValuationRequest({ valuationResponse: response });
+    await ValuationRequestClient.id(id).updateValuationRequest({
+      valuationResponse: response,
+    });
 
     return {
       success: true,

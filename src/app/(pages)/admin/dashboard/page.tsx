@@ -2,11 +2,8 @@ import { NextPage } from 'next';
 import { signOut } from '../auth/login/actions';
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
-import RepairBookingClient from '@/lib/clients/repairBookingClient';
 
-interface AdminDashboardPageProps {}
-
-const AdminDashboardPage: NextPage<AdminDashboardPageProps> = async ({}) => {
+const AdminDashboardPage: NextPage = async () => {
   const valuations = await ValuationRequestClient.query();
 
   return (
@@ -31,7 +28,7 @@ const AdminDashboardPage: NextPage<AdminDashboardPageProps> = async ({}) => {
                   {valuation.deviceName}
                 </h2>
                 <span className="text-pretty max-h-12">
-                  "{valuation.customerNotes}"
+                  &quot;{valuation.customerNotes}&quot;
                 </span>
                 <p className="text-sm text-gray-500 italic">
                   Status: {valuation.valuationStatus}

@@ -1,15 +1,16 @@
-import Device from '@/schemas/new/device';
 import { createClient } from '@/lib/supabase/serverClient';
 import {
   deserializeFromDbFormat,
   Serialize,
   serializeToDbFormat,
 } from '@/utils/dbFormat';
-import DevicePartClient from './devicePartClient';
-import Brand from '@/schemas/new/brand';
-import Model from '@/schemas/new/model';
+
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
+import Device from '@/schemas/device';
+import Brand from '@/schemas/brand';
+import Model from '@/schemas/model';
+import DevicePartClient from './devicePartClient';
 
 // Config
 const deviceTable = 'devices';
@@ -31,12 +32,12 @@ export default class DeviceClient {
   ): Promise<Device> {
     const supabase = await createClient();
 
-const serializedDevice = serializeToDbFormat({
-  ...newDevice,
-  releaseDate: newDevice.releaseDate.toISOString(),
-});
+    const serializedDevice = serializeToDbFormat({
+      ...newDevice,
+      releaseDate: newDevice.releaseDate.toISOString(),
+    });
 
-console.log('Serialized device payload to insert:', serializedDevice);
+    console.log('Serialized device payload to insert:', serializedDevice);
 
     const { data: deviceData, error } = await supabase
       .from(deviceTable)
@@ -44,16 +45,15 @@ console.log('Serialized device payload to insert:', serializedDevice);
       .select('*')
       .single();
 
-  if (error) {
-  console.error('🧨 Supabase insert error:', error); // NEW LINE
-  console.error('🧾 Payload that caused it:', serializedDevice); // NEW LINE
+    if (error) {
+      console.error('🧨 Supabase insert error:', error); // NEW LINE
+      console.error('🧾 Payload that caused it:', serializedDevice); // NEW LINE
 
-  throw new ErrorSupabase(
-    'Noget gik galt under oprettelse af enhed.',
-    `Supabase error when trying to create device: ${error.message}`
-  );
-}
-
+      throw new ErrorSupabase(
+        'Noget gik galt under oprettelse af enhed.',
+        `Supabase error when trying to create device: ${error.message}`
+      );
+    }
 
     if (!deviceData) {
       throw new ErrorSupabase(
@@ -309,7 +309,7 @@ class DeviceQueryBuilder {
     onfulfilled?:
       | ((value: Device[]) => TResult1 | PromiseLike<TResult1>)
       | null,
-    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
   ): Promise<TResult1 | TResult2> {
     return this._fetchQuery().then(onfulfilled, onrejected);
   }

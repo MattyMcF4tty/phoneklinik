@@ -1,7 +1,7 @@
 'use server';
 
 import RepairBookingClient from '@/lib/clients/repairBookingClient';
-import { ActionResponse } from '@/schemas/new/types';
+import { ActionResponse } from '@/schemas/types';
 
 export default async function bookRepair(
   prevState: ActionResponse,

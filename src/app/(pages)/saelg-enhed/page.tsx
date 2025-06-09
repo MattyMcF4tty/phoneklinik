@@ -1,10 +1,6 @@
 import RequestValuationForm from '@/components/forms/RequestValuationForm';
-import SellDeviceForm from '@/components/SellDeviceForm';
-import DeviceClient from '@/lib/clients/deviceClient';
 
 export default async function SellPhonePage() {
-  const brands = await DeviceClient.getUniqueBrands();
-
   return (
     <div className="bg-gray-50 min-h-screen items-center justify-center align-middle flex flex-col w-full relative overflow-x-hidden">
       <section className="max-w-3xl mx-auto  px-6">

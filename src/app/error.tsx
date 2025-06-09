@@ -2,8 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
 
 interface ErrorProps {
   error: Error & { digest?: string };

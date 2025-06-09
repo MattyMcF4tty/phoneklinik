@@ -1,7 +1,7 @@
 'use client';
 
-import DevicePart from '@/schemas/new/devicePart';
-import PartVariant from '@/schemas/new/partVariant';
+import DevicePart from '@/schemas/devicePart';
+import PartVariant from '@/schemas/partVariant';
 import React, { FC, useEffect, useState } from 'react';
 
 interface PartListRowProps {
@@ -15,7 +15,9 @@ const PartListRow: FC<PartListRowProps> = ({
   selectedVariants,
   toggleVariant,
 }) => {
-  const [selectedPartVariant, setSelectedPartVariant] = useState<PartVariant | undefined>(undefined);
+  const [selectedPartVariant, setSelectedPartVariant] = useState<
+    PartVariant | undefined
+  >(undefined);
   const [showVariants, setShowVariants] = useState(false);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const PartListRow: FC<PartListRowProps> = ({
       (variant) => variant.partId === part.id
     );
     setSelectedPartVariant(selectedVariant);
-  }, [selectedVariants]);
+  }, [selectedVariants, part.id]);
 
   return (
     <div
@@ -32,9 +34,11 @@ const PartListRow: FC<PartListRowProps> = ({
     >
       <button
         onClick={() => {
-          selectedPartVariant
-            ? toggleVariant(selectedPartVariant)
-            : setShowVariants(!showVariants);
+          if (selectedPartVariant) {
+            toggleVariant(selectedPartVariant);
+          } else {
+            setShowVariants(!showVariants);
+          }
         }}
         type="button"
         className={`w-full flex flex-col items-start justify-center p-3 rounded-md border transition-colors duration-150 ${
@@ -53,7 +57,9 @@ const PartListRow: FC<PartListRowProps> = ({
             <span>{selectedPartVariant.price} kr.</span>
           </div>
         ) : (
-          <p className="text-sm text-left italic text-gray-500 mt-1">{part.description}</p>
+          <p className="text-sm text-left italic text-gray-500 mt-1">
+            {part.description}
+          </p>
         )}
       </button>
 
@@ -77,7 +83,9 @@ const PartListRow: FC<PartListRowProps> = ({
                 <p>{variant.name}</p>
                 <p>{variant.price} kr.</p>
               </div>
-              <p className="text-xs italic text-gray-500 mt-1">{variant.description}</p>
+              <p className="text-xs italic text-gray-500 mt-1">
+                {variant.description}
+              </p>
             </button>
           ))}
         </div>

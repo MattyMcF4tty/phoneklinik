@@ -1,4 +1,4 @@
-import VideoEmbed from '@/components/Video';
+import YoutubeVideo from '@/components/YoutubeVideo';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -25,7 +25,21 @@ export default function Home() {
 
         {/* Video */}
         <div className="w-full md:w-1/2 max-w-2xl aspect-video rounded-xl overflow-hidden">
-          <VideoEmbed />
+          <YoutubeVideo
+            videoId="9Vjfxn5soBs"
+            options={{
+              autoplay: '1',
+              mute: '1',
+              loop: '1',
+              playlist: '9Vjfxn5soBs',
+              controls: '0',
+              modestbranding: '1',
+              rel: '0',
+              fs: '0',
+              disablekb: '1',
+              playsinline: '1',
+            }}
+          />
         </div>
       </div>
 

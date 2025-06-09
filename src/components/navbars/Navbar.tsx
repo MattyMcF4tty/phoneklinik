@@ -5,9 +5,7 @@ import React, { FC, useState } from 'react';
 import DeviceSearchField from '../inputfields/DeviceSearchField';
 import Link from 'next/link';
 
-interface NavbarProps {}
-
-const Navbar: FC<NavbarProps> = ({}) => {
+const Navbar: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (

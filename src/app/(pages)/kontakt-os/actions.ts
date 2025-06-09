@@ -2,7 +2,6 @@
 
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
-import { ActionResponse } from '@/schemas/types';
 import sendMail from '@/utils/mail';
 
 export async function contactPhoneKlinik(formData: FormData) {
