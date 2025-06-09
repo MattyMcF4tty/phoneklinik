@@ -1,7 +1,7 @@
-import RepairBooking from '@/schemas/new/repairBooking';
 import { createClient } from '../supabase/serverClient';
 import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
 import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import RepairBooking from '@schemas/repairBooking';
 
 // Config
 const repairBookingTable = 'repair_bookings';

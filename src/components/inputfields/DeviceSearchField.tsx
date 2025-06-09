@@ -1,6 +1,6 @@
 'use client';
 
-import Device from '@/schemas/new/device';
+import Device from '@schemas/device';
 import Link from 'next/link';
 import React, { FC, useState, useEffect } from 'react';
 

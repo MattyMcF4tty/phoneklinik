@@ -23,7 +23,6 @@
     "react-icons": "^5.5.0",
     "sharp": "^0.34.2",
     "sonner": "^2.0.3",
-    "supabase": "^2.24.3",
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
