@@ -10,55 +10,32 @@ export default function AddDeviceForm({
   brand: string;
   onSuccess?: () => void;
 }) {
-const [models, setModels] = useState<{ id: number; name: string }[]>([]);
+  const [models, setModels] = useState<{ id: number; name: string }[]>([]);
   const [selectedModel, setSelectedModel] = useState('');
   const [newModelName, setNewModelName] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
+  // ✅ Dynamically import server function inside client-safe wrapper
   useEffect(() => {
-    fetch(`/api/models?brand=${encodeURIComponent(brand)}`)
-      .then((res) => res.json())
-.then((data) => setModels(data.data || [])) // ✅
-      .catch(() => setModels([]));
+    async function loadModels() {
+      try {
+        const { fetchModelsByBrand } = await import(
+          '@/app/(pages)/admin/reparation/[brand]/actions'
+        );
+        const fetchedModels = await fetchModelsByBrand(brand);
+        setModels(fetchedModels);
+      } catch (err) {
+        setError('Kunne ikke hente modeller.');
+        console.error(err);
+      }
+    }
+
+    loadModels();
   }, [brand]);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError('');
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    if (selectedModel === '__new') {
-      formData.set('modelName', newModelName);
-    } else {
-      formData.set('modelName', selectedModel);
-    }
-
-    formData.set('brand', brand);
-
-    try {
-      const response = await fetch('/api/devices', {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.json();
-
-      if (result.success) {
-        onSuccess?.();
-        router.refresh();
-      } else {
-        setError(result.message || 'Noget gik galt.');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Uventet fejl.');
-    }
-  }
-
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4">
       <label className="text-sm text-gray-600">Model</label>
       <select
         required
@@ -68,7 +45,7 @@ const [models, setModels] = useState<{ id: number; name: string }[]>([]);
       >
         <option value="">Vælg model</option>
         {models.map((model) => (
-          <option key={model.id} value={model.name}>
+          <option key={model.name} value={model.name}>
             {model.name}
           </option>
         ))}
@@ -88,20 +65,19 @@ const [models, setModels] = useState<{ id: number; name: string }[]>([]);
       )}
 
       <input
-  type="text"
-  name="type"
-  placeholder="Type (f.eks. tablet, telefon)"
-  className="border p-2 rounded"
-  required
-/>
+        type="text"
+        name="type"
+        placeholder="Type (f.eks. tablet, telefon)"
+        className="border p-2 rounded"
+        required
+      />
 
-<input
-  type="date"
-  name="releaseDate"
-  className="border p-2 rounded"
-  required
-/>
-
+      <input
+        type="date"
+        name="releaseDate"
+        className="border p-2 rounded"
+        required
+      />
 
       <input
         type="text"
@@ -110,6 +86,7 @@ const [models, setModels] = useState<{ id: number; name: string }[]>([]);
         className="border p-2 rounded"
         required
       />
+
       <input
         type="file"
         name="deviceImage"
@@ -117,6 +94,7 @@ const [models, setModels] = useState<{ id: number; name: string }[]>([]);
         className="border p-2 rounded"
         required
       />
+
       <button type="submit" className="bg-blue-600 text-white p-2 rounded">
         Opret enhed
       </button>

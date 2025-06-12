@@ -41,9 +41,10 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
 
   return (
     <div className="bg-gray-50 min-h-screen w-full">
-           <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
+      <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
         <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
-Vælg din model        </h1>
+          Vælg din model{' '}
+        </h1>
 
         {/* wave bottom */}
         <svg
@@ -66,8 +67,7 @@ Vælg din model        </h1>
             href={`/admin/reparation/${brand}/${model.name}`}
           />
         ))}
-  <AddDeviceModalWrapper brand={formattedBrand} />
-
+        <AddDeviceModalWrapper brand={formattedBrand} />
       </div>
     </div>
   );
