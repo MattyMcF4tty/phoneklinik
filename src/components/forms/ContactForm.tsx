@@ -1,9 +1,7 @@
 import { contactPhoneKlinik } from '@/app/(pages)/kontakt-os/actions';
 import React, { FC } from 'react';
 
-interface ContactFormProps {}
-
-const ContactForm: FC<ContactFormProps> = ({}) => {
+const ContactForm: FC = () => {
   return (
     <form
       action={contactPhoneKlinik}

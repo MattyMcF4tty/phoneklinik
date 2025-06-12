@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AddDeviceForm from '../forms/AddDeviceForm';
 import DeviceCard from '../cards/ItemCard';
 import PopUpWrapper from '../wrappers/PopUpWrapper';

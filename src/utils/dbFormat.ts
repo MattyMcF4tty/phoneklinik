@@ -44,28 +44,26 @@ function toCamelCase(str: string): string {
 // --- Runtime Object Converters ---
 
 // Serializes an object to database format (snake_case keys)
-export function serializeToDbFormat<T extends Record<string, any>>(
-  obj: T
-): Serialize<T> {
-  const result: any = {};
-
-  for (const [key, value] of Object.entries(obj)) {
-    const snakeKey = toSnakeCase(key);
-    result[snakeKey] = value instanceof Date ? value.toISOString() : value;
-  }
-
-  return result;
+export function serializeToDbFormat<T extends object>(obj: T): Serialize<T> {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    const snakeKey = toSnakeCase(key as string) as keyof Serialize<T>;
+    acc[snakeKey] =
+      value instanceof Date
+        ? (value.toISOString() as Serialize<T>[typeof snakeKey])
+        : (value as Serialize<T>[typeof snakeKey]);
+    return acc;
+  }, {} as Serialize<T>);
 }
 
 // Deserializes an object from database format (snake_case keys → camelCase keys)
-export function deserializeFromDbFormat<T extends Record<string, any>>(
-  obj: Record<string, any>
+export function deserializeFromDbFormat<T extends object>(
+  obj: Record<string, unknown>
 ): T {
-  const result: any = {};
+  const result: Partial<T> = {};
 
   for (const [key, value] of Object.entries(obj)) {
-    const camelKey = toCamelCase(key);
-    result[camelKey] = value;
+    const camelKey = toCamelCase(key) as keyof T;
+    result[camelKey] = value as T[typeof camelKey];
   }
 
   return result as T;

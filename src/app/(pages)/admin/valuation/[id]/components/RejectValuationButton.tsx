@@ -1,12 +1,12 @@
 'use client';
 
 import PopUpWrapper from '@/components/wrappers/PopUpWrapper';
-import { ActionResponse } from '@/schemas/new/types';
-import ValuationRequest from '@/schemas/new/valuationRequest';
 import React, { FC, useActionState, useEffect, useState } from 'react';
-import { rejectValuation, submitValuation } from '../actions';
+import { rejectValuation } from '../actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import ValuationRequest from '@/schemas/valuationRequest';
+import { ActionResponse } from '@/schemas/types';
 
 interface RejectValuationButtonProps {
   valuationId: ValuationRequest['id'];

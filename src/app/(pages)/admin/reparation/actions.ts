@@ -1,7 +1,5 @@
 'use server';
 
-import { BrandClient } from '@/lib/clients/brandClient';
-
 type BrandFormState =
   | {
       success: true;

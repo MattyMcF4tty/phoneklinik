@@ -2,7 +2,6 @@
 
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
-import { ActionResponse } from '@/schemas/types';
 import sendMail from '@/utils/mail';
 
 export async function contactPhoneKlinik(formData: FormData) {
@@ -38,7 +37,7 @@ export async function contactPhoneKlinik(formData: FormData) {
 
   try {
     await sendMail(
-      process.env.PHONEKLINIK_MAIL!,
+      process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL!,
       'Kunde spørgsmål',
       {
         plainText: `

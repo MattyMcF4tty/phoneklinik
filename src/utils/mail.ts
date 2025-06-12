@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import ReactDOMServer from 'react-dom/server'; // ✅ Add this import
 
 export default async function sendMail(
   toEmail: string,

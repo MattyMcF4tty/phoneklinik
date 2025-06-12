@@ -72,7 +72,7 @@ export async function POST(
     );
   }
 
-  const request = await ValuationRequestClient.requestValuation(
+  await ValuationRequestClient.requestValuation(
     {
       firstName,
       lastName,

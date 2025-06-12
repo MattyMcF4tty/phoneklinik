@@ -1,8 +1,8 @@
 'use client';
 
 import { updateValuation } from '@/app/(pages)/admin/valuation/[id]/actions';
-import { ActionResponse } from '@/schemas/new/types';
-import ValuationRequest from '@/schemas/new/valuationRequest';
+import { ActionResponse } from '@/schemas/types';
+import ValuationRequest from '@/schemas/valuationRequest';
 import React, { FC, useActionState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 

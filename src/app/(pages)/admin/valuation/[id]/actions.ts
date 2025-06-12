@@ -140,7 +140,7 @@ export async function submitValuation(
         Du kan se resultatet af vurderingen via følgende link:
         https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}
         
-        Har du spørgsmål eller brug for yderligere information, er du meget velkommen til at kontakte os på ${process.env.PHONEKLINIK_MAIL}. Husk at oplyse dit sagsnummer: ${valuationRequest.id}.
+        Har du spørgsmål eller brug for yderligere information, er du meget velkommen til at kontakte os på ${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL}. Husk at oplyse dit sagsnummer: ${valuationRequest.id}.
         
         Med venlig hilsen  
         Phoneklinik`,
@@ -161,7 +161,7 @@ export async function submitValuation(
               </p>
               <p>
                 Har du spørgsmål eller brug for yderligere information, er du meget velkommen til at kontakte os på 
-                <a href="mailto:${process.env.PHONEKLINIK_MAIL}">${process.env.PHONEKLINIK_MAIL}</a>. Husk at oplyse dit sagsnummer: <strong>${valuationRequest.id}</strong>.
+                <a href="mailto:${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL}">${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL}</a>. Husk at oplyse dit sagsnummer: <strong>${valuationRequest.id}</strong>.
               </p>
               <p>Med venlig hilsen<br/>Phoneklinik</p>
             </div>
@@ -218,7 +218,7 @@ export async function rejectValuation(
         
         Vi har gennemgået informationerne, men må desværre meddele, at vi ikke er interesserede i at købe denne enhed.
         
-        Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på ${process.env.PHONEKLINIK_MAIL} og henvise til dit sagsnummer: ${valuationRequest.id}.
+        Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på ${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL} og henvise til dit sagsnummer: ${valuationRequest.id}.
         
         Venlig hilsen  
         Phoneklinik`,
@@ -236,7 +236,7 @@ export async function rejectValuation(
           </p>
           <p>
             Hvis du har spørgsmål eller ønsker yderligere information, er du meget velkommen til at kontakte os på 
-            <a href="mailto:${process.env.PHONEKLINIK_MAIL}">${process.env.PHONEKLINIK_MAIL}</a> 
+            <a href="mailto:${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL}">${process.env.NEXT_PUBLIC_PHONEKLINIK_MAIL}</a> 
             og henvise til dit sagsnummer: <strong>${valuationRequest.id}</strong>.
           </p>
           <p>Venlig hilsen<br/>Phoneklinik</p>

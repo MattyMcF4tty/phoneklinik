@@ -2,13 +2,11 @@
 
 import BookRepairForm from '@/components/forms/BookRepairForm';
 import useSessionStorage from '@/hooks/useSessionStorage';
-import PartVariant from '@/schemas/new/partVariant';
+import PartVariant from '@/schemas/partVariant';
 import { NextPage } from 'next';
 import { useParams } from 'next/navigation';
 
-interface BookingPageProps {}
-
-const BookingPage: NextPage<BookingPageProps> = ({}) => {
+const BookingPage: NextPage = () => {
   const { brand, model, version } = useParams() as {
     brand?: string;
     model?: string;
@@ -23,7 +21,7 @@ const BookingPage: NextPage<BookingPageProps> = ({}) => {
   const formattedModel = decodeURIComponent(model);
   const formattedVersion = decodeURIComponent(version);
 
-  const [parts, setParts] = useSessionStorage<PartVariant[]>(
+  const [parts] = useSessionStorage<PartVariant[]>(
     `${formattedBrand}_${formattedModel}_${formattedVersion}_parts`,
     []
   );

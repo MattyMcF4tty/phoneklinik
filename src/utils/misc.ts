@@ -3,6 +3,7 @@ import { fileTypeFromBuffer } from 'file-type';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { emailRegex } from '@/schemas/types';
+import { headers } from 'next/headers';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -27,4 +28,14 @@ export const validateDate = (dateString: string) => {
 export async function getMimeType(buffer: Buffer): Promise<string | undefined> {
   const fileType = await fileTypeFromBuffer(buffer);
   return fileType?.mime;
+}
+
+export async function getSearchParamsFromHeaders(): Promise<URLSearchParams> {
+  const headersList = await headers();
+  const rawParams = headersList.get('x-search-params');
+
+  // Ensure it's in the format "?id=123"
+  const search = rawParams?.startsWith('?') ? rawParams : `?${rawParams || ''}`;
+
+  return new URLSearchParams(search);
 }

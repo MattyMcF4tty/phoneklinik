@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
 import { FaPlus } from 'react-icons/fa';
@@ -15,16 +14,12 @@ const BrandCard: FC<ItemCardProps> = ({ itemName, href, buttons }) => {
   const CardContent: FC<{ buttons?: ItemCardProps['buttons'] }> = ({
     buttons,
   }) => (
-    <div
-      className={`flex flex-col items-center h-full ${
-          'justify-center'
-      }`}
-    >
-        <div className="flex-grow flex items-center justify-center w-full">
-          <div className="relative w-full max-w-[80%] aspect-square items-center justify-center flex">
-           <FaPlus className='text-9xl items-center justify-center'/>
-          </div>
+    <div className={`flex flex-col items-center h-full ${'justify-center'}`}>
+      <div className="flex-grow flex items-center justify-center w-full">
+        <div className="relative w-full max-w-[80%] aspect-square items-center justify-center flex">
+          <FaPlus className="text-9xl items-center justify-center" />
         </div>
+      </div>
       <h1 className="font-medium text-xl text-center mb-4">{itemName}</h1>
       <div className="w-full flex justify-center gap-4">
         {Array.isArray(buttons)

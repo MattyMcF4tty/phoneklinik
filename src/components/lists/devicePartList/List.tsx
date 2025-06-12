@@ -1,12 +1,12 @@
 'use client';
 
-import DevicePart from '@/schemas/new/devicePart';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import PartListRow from './Row';
-import Device from '@/schemas/new/device';
 import useSessionStorage from '@/hooks/useSessionStorage';
 import Link from 'next/link';
-import PartVariant from '@/schemas/new/partVariant';
+import Device from '@/schemas/device';
+import DevicePart from '@/schemas/devicePart';
+import PartVariant from '@/schemas/partVariant';
 
 interface PartListProps {
   device: Device;
@@ -41,40 +41,39 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
   };
 
   return (
-  <div className="w-full flex flex-col gap-4">
-  {/* Part List */}
-  <div className="w-full flex flex-col gap-3">
-    {parts.map((part) => (
-      <div
-        key={part.id}
-        className="rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-4"
-      >
-        <PartListRow
-          part={part}
-          selectedVariants={selectedPartVariants}
-          toggleVariant={(partVariant) => togglePart(partVariant)}
-        />
+    <div className="w-full flex flex-col gap-4">
+      {/* Part List */}
+      <div className="w-full flex flex-col gap-3">
+        {parts.map((part) => (
+          <div
+            key={part.id}
+            className="rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-4"
+          >
+            <PartListRow
+              part={part}
+              selectedVariants={selectedPartVariants}
+              toggleVariant={(partVariant) => togglePart(partVariant)}
+            />
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
 
-  {/* Total Price */}
-  <div className="w-full flex justify-between items-center border-t pt-4 text-base font-medium">
-    <p className="text-gray-700">Pris i alt</p>
-    <p className="text-gray-900">{combinedPartsPrice} kr.</p>
-  </div>
+      {/* Total Price */}
+      <div className="w-full flex justify-between items-center border-t pt-4 text-base font-medium">
+        <p className="text-gray-700">Pris i alt</p>
+        <p className="text-gray-900">{combinedPartsPrice} kr.</p>
+      </div>
 
-  {/* Book Repair Button */}
-  {selectedPartVariants.length > 0 && (
-    <Link
-      href={`/reparation/${device.brand}/${device.model}/${device.version}/booking`}
-      className="bg-blue-600 text-white font-semibold text-center px-6 py-3 rounded-md shadow hover:bg-primary-dark transition-colors"
-    >
-      Book reparation
-    </Link>
-  )}
-</div>
-
+      {/* Book Repair Button */}
+      {selectedPartVariants.length > 0 && (
+        <Link
+          href={`/reparation/${device.brand}/${device.model}/${device.version}/booking`}
+          className="bg-blue-600 text-white font-semibold text-center px-6 py-3 rounded-md shadow hover:bg-primary-dark transition-colors"
+        >
+          Book reparation
+        </Link>
+      )}
+    </div>
   );
 };
 

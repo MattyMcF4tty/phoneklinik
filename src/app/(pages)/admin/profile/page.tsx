@@ -2,9 +2,7 @@ import { createClient } from '@/lib/supabase/serverClient';
 import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { NextPage } from 'next';
 
-interface ProfilePageProps {}
-
-const ProfilePage: NextPage<ProfilePageProps> = async ({}) => {
+const ProfilePage: NextPage = async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error) {

@@ -7,6 +7,7 @@ import InternalNotesField from '@/components/inputfields/vationRequest/InternalN
 import ValuationField from '@/components/inputfields/vationRequest/ValuationField';
 import SubmitValuationButton from './components/SubmitValuationButton';
 import RejectValuationButton from './components/RejectValuationButton';
+import { notFound } from 'next/navigation';
 
 interface ValuationPageProps {
   params: Promise<{ id: string }>;
@@ -26,16 +27,22 @@ const ValuationPage: NextPage<ValuationPageProps> = async ({ params }) => {
     validatedId
   ).getValuationRequest();
 
+  if (!valuationRequest) {
+    return notFound();
+  }
+
   const disableUpdate =
     (valuationRequest.valuationStatus !== 'evaluating' &&
       valuationRequest.valuationStatus !== 'pending') ||
     valuationRequest.valuationResponse !== null;
 
-  console.log(disableUpdate);
-
   return (
     <div className="w-full grow flex flex-col gap-8">
       <div className="content-box flex flex-col gap-10">
+        <div className="w-full flex justify-center items-center">
+          <h1 className="italic">#{valuationRequest.id}</h1>
+        </div>
+
         {/* Header */}
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col">

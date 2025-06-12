@@ -3,9 +3,7 @@
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
 
-interface RequestValuationFormProps {}
-
-const RequestValuationForm: FC<RequestValuationFormProps> = ({}) => {
+const RequestValuationForm: FC = () => {
   const [loading, setLoading] = useState(false);
 
   async function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +28,8 @@ const RequestValuationForm: FC<RequestValuationFormProps> = ({}) => {
 
       toast.success(result.message || 'Valuering sendt!');
       form.reset();
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error('Unexpected error sending valuation request:', err);
       toast.error('Fejl ved indsendelse.');
     } finally {
       setLoading(false);

@@ -6,7 +6,6 @@ import {
 } from '@/utils/dbFormat';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
-import { SupabaseClient } from '@supabase/supabase-js';
 import Brand from '@/schemas/brand';
 
 // Config
@@ -127,7 +126,7 @@ class BrandQueryBuilder {
 
   protected then<TResult1 = Brand[], TResult2 = never>(
     onfulfilled?: ((value: Brand[]) => TResult1 | PromiseLike<TResult1>) | null,
-    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
   ): Promise<TResult1 | TResult2> {
     return this._fetchQuery().then(onfulfilled, onrejected);
   }

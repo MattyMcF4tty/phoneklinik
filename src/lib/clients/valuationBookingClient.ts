@@ -2,7 +2,7 @@ import { createClient } from '../supabase/serverClient';
 import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
 import { convertToAvif } from '@/utils/image';
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
-import ValuationRequest from '@/schemas/new/valuationRequest';
+import ValuationRequest from '@/schemas/valuationRequest';
 
 // Config
 const valuationRequestTable = 'valuation_requests';
@@ -218,7 +218,7 @@ class ValuationRequestQueryBuilder {
     onfulfilled?:
       | ((value: ValuationRequest[]) => TResult1 | PromiseLike<TResult1>)
       | null,
-    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
   ): Promise<TResult1 | TResult2> {
     return this._fetchQuery().then(onfulfilled, onrejected);
   }
@@ -231,14 +231,13 @@ class ValuationRequestHandler {
     this._id = id;
   }
 
-  public async getValuationRequest(): Promise<ValuationRequest> {
+  public async getValuationRequest(): Promise<ValuationRequest | null> {
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .from(valuationRequestTable)
       .select('*')
-      .eq('id', this._id)
-      .single();
+      .eq('id', this._id);
 
     if (error) {
       throw new ErrorSupabase(
@@ -247,15 +246,13 @@ class ValuationRequestHandler {
       );
     }
 
-    if (!data) {
-      throw new ErrorNotFound(
-        'Ingen vurderingsanmodning fundet',
-        `No valuation request found with id: ${this._id}`
-      );
+    if (!data || data.length <= 0) {
+      return null;
     }
 
-    const deserializedRequest =
-      deserializeFromDbFormat<Omit<ValuationRequest, 'images'>>(data);
+    const deserializedRequest = deserializeFromDbFormat<
+      Omit<ValuationRequest, 'images'>
+    >(data[0]);
     const frontUrl = supabase.storage
       .from(valuationRequestBucket)
       .getPublicUrl(`${this._id}/front`).data.publicUrl;

@@ -1,8 +1,6 @@
 'use server';
 
-import DeviceCard from '@/components/cards/DeviceCard';
 import ItemCard from '@/components/cards/ItemCard';
-import AddDeviceForm from '@/components/forms/AddDeviceForm';
 import AddDeviceModalWrapper from '@/components/wrappers/AddDeviceModalWrapper';
 import DeviceClient from '@/lib/clients/deviceClient';
 import { ErrorNotFound } from '@/schemas/errors/appErrorTypes';
