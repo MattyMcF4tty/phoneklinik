@@ -9,7 +9,7 @@ export async function POST(
 ): Promise<NextResponse<ApiResponse>> {
   const formData = await req.formData();
   const data = Object.fromEntries(formData.entries());
-  const deviceName = String(data.deviceName) || undefined;
+  const deviceName = String(data.deviceLabel) || undefined;
   const customerNotes = String(data.customerNotes) || undefined;
   const email = String(data.email) || undefined;
   const phoneNumber = data.phoneNumber ? String(data.phoneNumber) : null;

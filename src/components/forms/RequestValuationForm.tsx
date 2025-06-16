@@ -37,7 +37,7 @@ const RequestValuationForm: FC = () => {
   }
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form className="gap-3 flex flex-col" onSubmit={handleFormSubmit}>
       <div>
         <label className="label-default" htmlFor="firstName">
           Fornavn
@@ -47,6 +47,7 @@ const RequestValuationForm: FC = () => {
           name="firstName"
           type="text"
           className="input-default"
+          required
         />
       </div>
 
@@ -59,6 +60,7 @@ const RequestValuationForm: FC = () => {
           name="lastName"
           type="text"
           className="input-default"
+          required
         />
       </div>
 
@@ -66,7 +68,13 @@ const RequestValuationForm: FC = () => {
         <label className="label-default" htmlFor="email">
           Email
         </label>
-        <input id="email" name="email" type="email" className="input-default" />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          className="input-default"
+          required
+        />
       </div>
 
       <div>
@@ -82,14 +90,18 @@ const RequestValuationForm: FC = () => {
       </div>
 
       <div>
-        <label className="label-default" htmlFor="deviceName">
-          Enhedens navn
+        {/* The deviceLabel is called so because Chrome autocomplete is annoying AF!!!!! 
+            Don't change it to name instead of label                                    */}
+        <label className="label-default" htmlFor="deviceLabel">
+          Enhed
         </label>
+
         <input
-          id="deviceName"
-          name="deviceName"
+          id="deviceLabel"
+          name="deviceLabel"
           type="text"
           className="input-default"
+          required
         />
       </div>
 
@@ -102,6 +114,7 @@ const RequestValuationForm: FC = () => {
           id="customerNotes"
           placeholder="Beskriv skaderne for at hjælpe vores teknikere..."
           className="input-default min-h-20"
+          required
         />
       </div>
 

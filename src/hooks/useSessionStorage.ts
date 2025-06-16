@@ -19,7 +19,7 @@ export default function useSessionStorage<T>(
     } catch (error) {
       console.error('Error reading sessionStorage:', error);
     }
-  }, [key, initialValue]);
+  }, [key]);
 
   const setValue = (value: T) => {
     try {

@@ -49,7 +49,7 @@ export default async function SellPhonePage() {
         </div>
       </section>
 
-      <div className="content-box">
+      <div className="content-box mt-8">
         <RequestValuationForm />
       </div>
     </div>

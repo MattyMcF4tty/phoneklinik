@@ -39,6 +39,7 @@ export async function POST(
     );
   } catch (err: unknown) {
     if (err instanceof AppError) {
+      console.error('Error creating brand:', err.details);
       return NextResponse.json(
         { success: false, message: err.message },
         { status: err.httpCode }

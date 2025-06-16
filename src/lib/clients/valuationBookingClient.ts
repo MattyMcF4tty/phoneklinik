@@ -185,10 +185,8 @@ class ValuationRequestQueryBuilder {
     }
 
     if (!data || data.length === 0) {
-      throw new ErrorNotFound(
-        'Ingen vurderingsanmodninger fundet',
-        'No valuation requests found with the given criteria'
-      );
+      console.warn('No valuation requests found');
+      return [];
     }
 
     const deserializedRequests = data.map((request) => {

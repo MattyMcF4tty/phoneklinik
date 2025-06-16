@@ -4,6 +4,7 @@ import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { emailRegex } from '@/schemas/types';
 import { headers } from 'next/headers';
+import { ErrorInternal } from '@schemas/errors/appErrorTypes';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -38,4 +39,18 @@ export async function getSearchParamsFromHeaders(): Promise<URLSearchParams> {
   const search = rawParams?.startsWith('?') ? rawParams : `?${rawParams || ''}`;
 
   return new URLSearchParams(search);
+}
+
+export async function getPathnameFromHeaders(): Promise<string> {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname');
+
+  if (!pathname) {
+    throw new ErrorInternal(
+      'Noget gik galt.',
+      `Expected header [x-pathname] to be string, got ${pathname}`
+    );
+  }
+
+  return pathname;
 }

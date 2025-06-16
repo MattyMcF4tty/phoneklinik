@@ -1,7 +1,7 @@
 import ItemCard from '@/components/cards/ItemCard';
 import DeviceClient from '@/lib/clients/deviceClient';
 import { ErrorNotFound } from '@/schemas/errors/appErrorTypes';
-import Device from '@/schemas/new/device';
+import Device from '@schemas/device';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -41,9 +41,10 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
 
   return (
     <div className="bg-gray-50 min-h-screen w-full">
-           <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
+      <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
         <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
-Vælg din telefon       </h1>
+          Vælg din telefon{' '}
+        </h1>
 
         {/* wave bottom */}
         <svg
@@ -56,21 +57,23 @@ Vælg din telefon       </h1>
             d="M0,224L60,213.3C120,203,240,181,360,165.3C480,149,600,139,720,149.3C840,160,960,192,1080,208C1200,224,1320,224,1380,224L1440,224V320H0Z"
           />
         </svg>
-      </header>      <div className="flex flex-wrap justify-evenly gap-8 ">
+      </header>{' '}
+      <div className="flex flex-wrap justify-evenly gap-8 ">
         {devices.map((device) => (
           <ItemCard
             key={device.id}
             itemName={`${device.model} ${device.version}`}
             imageUrl={device.imageUrl}
-            buttons={
+          >
+            <div className="w-full flex justify-center">
               <Link
                 href={`/reparation/${brand}/${model}/${device.version}`}
                 className="bg-blue-500 rounded-md text-white w-3/5 h-8 flex justify-center items-center"
               >
                 Fiks
               </Link>
-            }
-          />
+            </div>
+          </ItemCard>
         ))}
       </div>
     </div>

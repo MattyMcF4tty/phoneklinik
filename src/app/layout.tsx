@@ -3,6 +3,8 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import { Toaster } from 'sonner';
 import Navbar from '@/components/navbars/Navbar';
+import AdminNavbar from '@components/navbars/AdminNavbar';
+import { getPathnameFromHeaders } from '@utils/misc';
 
 export const metadata: Metadata = {
   title: 'PhoneKlinik',
@@ -13,16 +15,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = await getPathnameFromHeaders();
+
   return (
     <html lang="da" className="h-full">
       <body className="bg-slate-50 min-h-screen flex flex-col">
         <Toaster richColors={true} position="top-right" />
-        <Navbar />
+        {pathname.includes('admin') ? <AdminNavbar /> : <Navbar />}
         <main className="relative flex flex-col grow min-h-screen ">
           <div className="flex flex-col grow pt-[calc(var(--navbar-height)_+_2.5rem)] pb-[2.5rem] px-[12%]">
             {children}

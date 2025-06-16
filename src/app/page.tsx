@@ -49,23 +49,25 @@ export default function Home() {
           Hvad kan vi hjælpe med?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded shadow">
-            <Link href="/reparation">
-              <Image
-                src="/Reparation.png"
-                alt="Reparation"
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="h-20 md:h-32 w-auto mx-auto mb-4"
-              />
-              <h3 className="font-semibold mb-2">Reparation</h3>
-            </Link>
+          <Link href="/reparation" className="bg-white p-6 rounded shadow">
+            <Image
+              src="/Reparation.png"
+              alt="Reparation"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-20 md:h-32 w-auto mx-auto mb-4"
+            />
+            <h3 className="font-semibold mb-2">Reparation</h3>
             <p>
               Få din telefon eller MacBook repareret hurtigt og professionelt.
             </p>
-          </div>
-          <div className="bg-white p-6 rounded shadow">
+          </Link>
+
+          <Link
+            href="/tilbehoer?type=Cover"
+            className="bg-white p-6 rounded shadow"
+          >
             <Image
               src="/cover.jpg"
               alt="Covers"
@@ -76,8 +78,8 @@ export default function Home() {
             />
             <h3 className="font-semibold mb-2">Covers</h3>
             <p>Beskyt din enhed med vores stilfulde covers.</p>
-          </div>
-          <div className="bg-white p-6 rounded shadow">
+          </Link>
+          <Link href="/tilbehoer" className="bg-white p-6 rounded shadow">
             <Image
               src="/tilbehor.jpg"
               alt="Tilbehør"
@@ -88,7 +90,7 @@ export default function Home() {
             />
             <h3 className="font-semibold mb-2">Tilbehør</h3>
             <p>Find tilbehør, der passer til din enhed.</p>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

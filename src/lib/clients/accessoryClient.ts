@@ -7,6 +7,7 @@ import {
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
 import Accessory from '@/schemas/accessory';
+import Brand from '@schemas/brand';
 
 // Config
 const accessoryTable = 'accessories';
@@ -14,10 +15,7 @@ const accessoryImageBucket = 'accessory-images';
 const brandLogoBucket = 'brand-images';
 
 export default class AccessoryClient {
-  public static async getUniqueBrands(): Promise<{
-    name: string;
-    imageUrl: string;
-  }> {
+  public static async getUniqueBrands(): Promise<Brand[]> {
     const supabase = await createClient();
 
     const { data: brandData, error } = await supabase.rpc(
@@ -38,19 +36,42 @@ export default class AccessoryClient {
       );
     }
 
-    const deserializedBrands: { name: string; imageUrl: string } =
-      brandData.map((brandName: string) => {
-        const imageUrl = supabase.storage
-          .from(brandLogoBucket)
-          .getPublicUrl(`${brandName}`).data.publicUrl;
+    const deserializedBrands: Brand[] = brandData.map((brandName: string) => {
+      const imageUrl = supabase.storage
+        .from(brandLogoBucket)
+        .getPublicUrl(`${brandName}`).data.publicUrl;
 
-        return {
-          name: brandName,
-          imageUrl: imageUrl,
-        };
-      });
+      return {
+        name: brandName,
+        imageUrl: imageUrl,
+      };
+    });
 
     return deserializedBrands;
+  }
+
+  public static async getUniqueTypes(): Promise<string[]> {
+    const supabase = await createClient();
+
+    const { data: typeData, error } = await supabase.rpc(
+      'get_unique_accessory_types'
+    );
+
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehørs typer.',
+        `Supabase error fetching unique accessory types, ${error.message}`
+      );
+    }
+
+    if (!typeData) {
+      throw new ErrorSupabase(
+        'Noget gik galt med at hente tilbehørs typer.',
+        `Supabase returned null when fetching unique accessory types.`
+      );
+    }
+
+    return typeData;
   }
 
   public static query() {
@@ -63,7 +84,7 @@ export default class AccessoryClient {
 
   public static async createAccessory(
     newAccessory: Omit<Accessory, 'id' | 'imageUrl'>,
-    accessoryImage: Buffer
+    accessoryImage: Buffer | Blob
   ): Promise<Accessory> {
     const supabase = await createClient();
 
@@ -93,12 +114,15 @@ export default class AccessoryClient {
       deserializeFromDbFormat<Omit<Accessory, 'imageUrl'>>(accessoryData);
 
     const accessoryImageAvif = await convertToAvif(accessoryImage);
+
     const { error: imageError } = await supabase.storage
       .from(accessoryImageBucket)
       .upload(
-        `${deserializedAccessory.brand}/${deserializedAccessory.name}`,
+        `${deserializedAccessory.brand}/${deserializedAccessory.id}`,
         accessoryImageAvif,
-        { contentType: 'image/avif' }
+        {
+          contentType: 'image/avif',
+        }
       );
 
     if (imageError) {
@@ -119,27 +143,33 @@ export default class AccessoryClient {
 }
 
 class AccessoryQueryBuilder {
-  private _id?: number;
-  private _brand?: string;
-  private _name?: string;
-  private _supportedDevices?: number[];
+  private _id?: Accessory['id'];
+  private _brand?: Accessory['brand'];
+  private _name?: Accessory['name'];
+  private _supportedDevices?: Accessory['supportedDevices'];
+  private _type?: Accessory['type'];
 
-  public id(id: number) {
+  public id(id: Accessory['id']) {
     this._id = id;
     return this;
   }
 
-  public brand(brand: string) {
+  public brand(brand: Accessory['brand']) {
     this._brand = brand;
     return this;
   }
 
-  public name(name: string) {
+  public name(name: Accessory['name']) {
     this._name = name;
     return this;
   }
 
-  public supportedDevices(supportedDevices: number[]) {
+  public type(type: Accessory['type']) {
+    this._type = type;
+    return this;
+  }
+
+  public supportedDevices(supportedDevices: Accessory['supportedDevices']) {
     this._supportedDevices = supportedDevices;
     return this;
   }
@@ -161,8 +191,12 @@ class AccessoryQueryBuilder {
       query.eq('name', this._name);
     }
 
+    if (this._type) {
+      query.eq('type', this._type);
+    }
+
     if (this._supportedDevices) {
-      query.contains('reference_device_id', this._supportedDevices);
+      query.contains('supportedDevices', this._supportedDevices);
     }
 
     const { data: accessoryData, error } = await query;
@@ -191,7 +225,7 @@ class AccessoryQueryBuilder {
         const imageUrl = supabase.storage
           .from(accessoryImageBucket)
           .getPublicUrl(
-            `${deserializedAccessory.brand}/${deserializedAccessory.name}`
+            `${deserializedAccessory.brand}/${deserializedAccessory.id}`
           ).data.publicUrl;
 
         return { ...deserializedAccessory, imageUrl };
@@ -212,9 +246,9 @@ class AccessoryQueryBuilder {
 }
 
 class AccessoryHandler {
-  private _id: number;
+  private _id: Accessory['id'];
 
-  constructor(id: number) {
+  constructor(id: Accessory['id']) {
     this._id = id;
   }
 

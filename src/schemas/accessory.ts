@@ -3,8 +3,8 @@ export default interface Accessory {
   name: string;
   brand: string;
   description: string;
-  supportedDevices: number[];
-  imageUrl: string;
-  stock: number;
+  supportedDevices: string[];
   price: number;
+  type: string;
+  imageUrl: string;
 }

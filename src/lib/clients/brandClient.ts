@@ -16,19 +16,17 @@ export class BrandClient {
   public static query() {
     return new BrandQueryBuilder();
   }
-  public static async brandName(name: Brand['name']) {
+  public static brandName(name: Brand['name']) {
     return new BrandHandler(name);
   }
 
   static async createBrand(
     newBrand: Omit<Brand, 'imageUrl'>,
-    brandImage: Buffer
+    brandImage: Buffer | Blob
   ): Promise<Brand> {
     const supabase = await createClient();
 
     const serializedBrand = serializeToDbFormat(newBrand);
-
-    console.log('Serialized brand to insert:', serializedBrand);
 
     const { data: brandData, error } = await supabase
       .from(brandTable)
@@ -57,7 +55,7 @@ export class BrandClient {
     const imageAvif = await convertToAvif(brandImage);
     const { error: imageError } = await supabase.storage
       .from(brandLogoBucket)
-      .upload(`${deserializedBrand.name}/battery`, imageAvif, {
+      .upload(`${deserializedBrand.name}`, imageAvif, {
         contentType: 'image/avif',
       });
 
