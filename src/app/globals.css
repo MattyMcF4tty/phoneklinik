@@ -52,7 +52,7 @@ body {
 }
 
 .text-title {
-  @apply text-2xl font-semibold;
+  @apply text-2xl font-medium;
 }
 
 .text-subtitle {

@@ -9,7 +9,7 @@ import DevicePartVariantClient from './partVariantClient';
 import DevicePart from '@/schemas/devicePart';
 
 // Config
-const partsTable = 'parts';
+const partsTable = process.env.PARTS_TABLE as string;
 
 export default class DevicePartClient {
   public static query() {

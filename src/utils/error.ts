@@ -1,5 +1,7 @@
 import AppError from '@/schemas/errors/appError';
-import { ActionResponse } from '@/schemas/types';
+import { ActionResponse, ApiResponse } from '@/schemas/types';
+import { NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 export function handleActionError(
   err: unknown,

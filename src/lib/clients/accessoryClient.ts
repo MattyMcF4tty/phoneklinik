@@ -10,9 +10,9 @@ import Accessory from '@/schemas/accessory';
 import Brand from '@schemas/brand';
 
 // Config
-const accessoryTable = 'accessories';
-const accessoryImageBucket = 'accessory-images';
-const brandLogoBucket = 'brand-images';
+const accessoryTable = process.env.ACCESSORY_TABLE as string;
+const accessoryImageBucket = process.env.ACCESSORY_IMAGE_BUCKET as string;
+const brandLogoBucket = process.env.BRAND_LOGO_BUCKET as string;
 
 export default class AccessoryClient {
   public static async getUniqueBrands(): Promise<Brand[]> {
