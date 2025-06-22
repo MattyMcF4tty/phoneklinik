@@ -10,15 +10,15 @@ interface ImageFieldProps
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >,
-    'type' | 'accept' | 'className' | 'style'
+    'type' | 'accept' | 'className' | 'style' | 'placeholder'
   > {
-  defaultImage?: { src: string | StaticImport; alt: string };
+  placeholder?: { src: string | StaticImport; alt: string };
   labelText: string;
 }
 
 const ImageField: FC<ImageFieldProps> = ({
   labelText,
-  defaultImage,
+  placeholder,
   ...rest
 }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -32,7 +32,7 @@ const ImageField: FC<ImageFieldProps> = ({
   };
 
   const imageToShow =
-    previewUrl || (defaultImage ? String(defaultImage.src) : null);
+    previewUrl || (placeholder ? String(placeholder.src) : null);
 
   return (
     <label
@@ -44,7 +44,7 @@ const ImageField: FC<ImageFieldProps> = ({
         <div className="relative w-fit h-fit group">
           <Image
             src={imageToShow}
-            alt={defaultImage?.alt || 'Valgt billede'}
+            alt={placeholder?.alt || 'Valgt billede'}
             width={160}
             height={160}
             className="object-contain w-full h-full"
@@ -57,7 +57,6 @@ const ImageField: FC<ImageFieldProps> = ({
         </span>
       )}
       <input
-        name=""
         type="file"
         accept="image/*"
         onChange={handleFileChange}

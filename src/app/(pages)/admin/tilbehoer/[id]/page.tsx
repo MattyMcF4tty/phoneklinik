@@ -3,8 +3,9 @@ import { BrandClient } from '@lib/clients/brandClient';
 import { ErrorBadRequest } from '@schemas/errors/appErrorTypes';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import UpdateAccessoryForm from '@components/forms/UpdateAccessoryForm';
 import { deleteAccessory } from './actions';
+import UpdateAccessoryButton from './components/UpdateAccessoryButton';
+import DeleteAccessoryButton from './components/DeleteAccessoryButton';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -45,27 +46,44 @@ const Page: NextPage<PageProps> = async ({ params }) => {
           className="absolute h-full w-full z-10"
         />
       </div>
+      <div className="w-full grow flex flex-col gap-8">
+        <div className=" w-full content-box flex items-center flex-col gap-8">
+          <div className="flex flex-col gap-2 w-full">
+            <h1 className="text-title place-self-center">{accessory.name}</h1>
+            <span>{accessory.description}</span>
 
-      <div className="flex flex-col">
-        <UpdateAccessoryForm
-          types={types}
-          brands={brands}
-          accessory={accessory}
-        />
-        <form
-          action={deleteAccessory}
-          className="w-full flex mt-8 justify-center"
-        >
-          <input
-            type="hidden"
-            name="accessoryId"
-            id="accessoryId"
-            defaultValue={accessory.id}
+            <p className="place-self-start font-medium mt-2">
+              Lavet af {accessory.brand}
+            </p>
+          </div>
+
+          <p className="place-self-start font-semibold text-lg ">
+            Pris: {accessory.price} kr
+          </p>
+        </div>
+        <div className="w-full content-box">
+          <h2 className="text-subtitle">Understøttede enheder</h2>
+
+          <div className="flex flex-wrap">
+            {accessory.supportedDevices.map((deviceName, index) => (
+              <span key={index} className="text-subtle mr-2">
+                {deviceName}
+                {index < accessory.supportedDevices.length - 1 ? ',' : '.'}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-row w-full gap-4">
+          <UpdateAccessoryButton
+            accessory={accessory}
+            brands={brands}
+            types={types}
           />
-          <button className="bg-red-600 text-white px-2 rounded-md">
-            Slet
-          </button>
-        </form>
+          <DeleteAccessoryButton
+            accessoryId={accessory.id}
+            accessoryName={accessory.name}
+          />
+        </div>
       </div>
     </div>
   );

@@ -2,19 +2,37 @@ import sharp from 'sharp';
 import { getMimeType } from './misc';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
 
-export async function convertToAvif(input: Blob | Buffer): Promise<Buffer> {
-  const buffer =
-    input instanceof Blob ? Buffer.from(await input.arrayBuffer()) : input;
+export async function convertToAvif(
+  input: Blob | Buffer | File
+): Promise<Buffer> {
+  // convert input to Buffer
+  let buffer: Buffer<ArrayBufferLike>;
 
-  const mimetype = await getMimeType(buffer);
-
-  if (!mimetype || !mimetype.includes('image/')) {
+  if (Buffer.isBuffer(input)) {
+    buffer = input;
+  } else if (input instanceof File) {
+    buffer = Buffer.from(await input.arrayBuffer());
+  } else if (input instanceof Blob) {
+    buffer = Buffer.from(await input.arrayBuffer());
+  } else {
     throw new ErrorBadRequest(
-      'Invalid image file type',
-      `Expected an image file, but received: ${mimetype}`
+      'Invalid input type',
+      `Expected Blob, File, or Buffer. Got: ${typeof input}`
     );
   }
 
+  // get the MIME type of the image
+  const mimetype = await getMimeType(buffer);
+
+  // check if the MIME type is an image
+  if (!mimetype || !mimetype.includes('image/')) {
+    throw new ErrorBadRequest(
+      'Invalid image file type',
+      `Invalid file MIME type. Expected image/* MIME type. Got: ${mimetype}`
+    );
+  }
+
+  // convert to AVIF format if not already in AVIF
   let avifBuffer: Buffer;
   if (mimetype !== 'image/avif') {
     avifBuffer = await sharp(buffer)

@@ -267,7 +267,7 @@ class AccessoryHandler {
 
   public async updateAccessory(
     updatedAccessory: Partial<Omit<Accessory, 'id' | 'imageUrl'>>,
-    updatedImage?: Buffer
+    updatedImage?: Buffer | Blob
   ): Promise<Accessory> {
     const supabase = await createClient();
 

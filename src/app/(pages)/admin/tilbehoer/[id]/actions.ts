@@ -63,27 +63,35 @@ export async function updateAccessory(
   }
 }
 
-// TODO: Improve this function
-export async function deleteAccessory(formData: FormData) {
-  const idRaw = formData.get('accessoryId')?.toString();
+export async function deleteAccessory(
+  prevState: ActionResponse,
+  formData: FormData
+): Promise<ActionResponse> {
+  try {
+    const idRaw = formData.get('accessoryId')?.toString();
 
-  if (!idRaw) {
-    console.error(
-      'Missing accessory id in formdata when trying to delete accessory. Formdata:',
-      formData.entries()
-    );
-    return;
+    if (!idRaw) {
+      throw new ErrorBadRequest(
+        'Manglende tilbehør id',
+        'Expected accessoryId in formdata when trying to delete accessory'
+      );
+    }
+
+    const id = parseInt(idRaw);
+    if (isNaN(id) || id <= 0) {
+      throw new ErrorBadRequest(
+        'Ugyldig tilbehør id',
+        `Expected accessoryId to be postive integer. Got ${id}`
+      );
+    }
+
+    await AccessoryClient.id(id).deleteAccessory();
+
+    return {
+      success: true,
+      message: 'Tilbehør slettet',
+    };
+  } catch (err: unknown) {
+    return handleActionError(err, 'Fejl i sletning af tilbehør');
   }
-
-  const id = parseInt(idRaw);
-  if (isNaN(id) || id <= 0) {
-    console.error(
-      `Invalid accessory id in formdata when trying to delete accessory. Expected postive integer. Got ${id}`
-    );
-    return;
-  }
-
-  await AccessoryClient.id(id).deleteAccessory();
-
-  return;
 }
