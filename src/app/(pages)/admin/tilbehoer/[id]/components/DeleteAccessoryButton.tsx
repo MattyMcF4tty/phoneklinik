@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { RxCross1 } from 'react-icons/rx';
 import { deleteAccessory } from '../actions';
 import Accessory from '@schemas/accessory';
+
 interface DeleteAccessoryButtonProps {
   accessoryId: Accessory['id'];
   accessoryName: Accessory['name'];

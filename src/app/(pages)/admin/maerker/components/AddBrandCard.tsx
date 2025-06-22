@@ -56,7 +56,9 @@ const AddBrandCard: FC = () => {
   return (
     <ItemCard itemName="Tilføj nyt mærke">
       <div className="w-full h-full flex justify-center flex-col">
-        <IoIosAdd className="w-full h-full" />
+        <div className="h-full w-full flex items-center justify-center">
+          <IoIosAdd className="w-full h-1/3" />
+        </div>
 
         <button
           onClick={() => {
