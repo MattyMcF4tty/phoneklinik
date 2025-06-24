@@ -71,14 +71,8 @@ Vælg din telefon       </h1>
             key={device.id}
             itemName={`${device.model} ${device.version}`}
             imageUrl={device.imageUrl}
-            buttons={
-              <Link
-                href={`/admin/reparation/${brand}/${model}/${device.version}`}
-                className="bg-blue-500 rounded-md text-white w-3/5 h-8 flex justify-center items-center"
-              >
-                Fiks
-              </Link>
-            }
+            href={`/admin/reparation/${brand}/${model}/${device.version}`}
+         
           />
         ))}
       </div>

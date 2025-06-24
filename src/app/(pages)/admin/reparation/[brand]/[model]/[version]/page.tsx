@@ -29,7 +29,7 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
     <div className="flex flex-col md:flex-row w-full grow gap-4">
       {/* LEFT: Image + Device Info + Editable form */}
       <div className="content-box w-full md:w-1/2 flex flex-col gap-4">
-        <div className="relative w-full aspect-square">
+        <div className="relative w-1/2 h-1/2 aspect-square">
           <Image
             className="object-contain"
             src={device.imageUrl || ''}

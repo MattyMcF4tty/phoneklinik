@@ -77,12 +77,14 @@ export async function PATCH(
       brandAvif = await convertToAvif(brandImage);
     }
 
-    const brand = await BrandClient.brandName(brandName).updateBrand(
-      {
-        name: newBrandName,
-      },
-      brandAvif
-    );
+  const brandHandler = await BrandClient.brandName(brandName);
+
+const brand = await brandHandler.updateBrand(
+  {
+    name: newBrandName,
+  },
+  brandAvif
+);
 
     return NextResponse.json({
       message: `Mærke ${newBrandName && 'navn'} ${
