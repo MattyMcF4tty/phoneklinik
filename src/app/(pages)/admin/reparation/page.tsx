@@ -30,6 +30,8 @@ Vælg din enhed        </h1>
       </header>
 
       <div className="flex flex-wrap justify-evenly gap-8 ">
+        <AddBrandModalWrapper />
+
         {brands.map((brand) => (
           <ItemCard
             key={brand.name}
@@ -39,7 +41,6 @@ Vælg din enhed        </h1>
           />
           
         ))}
-<AddBrandModalWrapper />
 
 
       </div>

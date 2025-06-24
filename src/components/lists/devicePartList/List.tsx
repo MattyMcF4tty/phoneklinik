@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import PartListRow from './Row';
 import useSessionStorage from '@/hooks/useSessionStorage';
 import Link from 'next/link';
@@ -14,14 +14,18 @@ interface PartListProps {
 }
 
 const PartList: FC<PartListProps> = ({ device, parts }) => {
-  const [selectedPartVariants, setSelectedPartVariants] = useSessionStorage<
-    PartVariant[]
-  >(`${device.brand}_${device.model}_${device.version}_parts`, []);
-  useSessionStorage<number>(
-    `${device.brand}_${device.model}_${device.version}_id`,
-    device.id
+  const [selectedPartVariants, setSelectedPartVariants] = useSessionStorage<PartVariant[]>(
+    `${device.brand}_${device.model}_${device.version}_parts`,
+    []
   );
 
+  // ✅ Save device.id once in sessionStorage (no hook needed)
+  useEffect(() => {
+    sessionStorage.setItem(
+      `${device.brand}_${device.model}_${device.version}_id`,
+      JSON.stringify(device.id)
+    );
+  }, [device.brand, device.model, device.version, device.id]);
   const combinedPartsPrice = selectedPartVariants.reduce(
     (sum, part) => sum + part.price,
     0

@@ -57,6 +57,8 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
         </svg>
       </header>
       <div className="flex flex-wrap justify-evenly gap-8 ">
+                <AddDeviceModalWrapper brand={formattedBrand} />
+
         {models.map((model) => (
           <ItemCard
             key={model.name}
@@ -65,7 +67,6 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
             href={`/admin/reparation/${brand}/${model.name}`}
           />
         ))}
-        <AddDeviceModalWrapper brand={formattedBrand} />
       </div>
     </div>
   );

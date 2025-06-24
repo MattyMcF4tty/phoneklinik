@@ -1,14 +1,15 @@
-import PartList from '@/components/lists/devicePartList/List';
-import DeviceClient from '@/lib/clients/deviceClient';
 import { NextPage } from 'next';
 import Image from 'next/image';
+import DeviceClient from '@/lib/clients/deviceClient';
+import EditableDeviceForm from '@/components/forms/EditableDeviceForm';
+import EditablePartList from '@/components/lists/devicePartList/EditablePartList';
 
 interface DevicePageProps {
-  params: Promise<{ brand: string; model: string; version: string }>;
+  params: { brand: string; model: string; version: string };
 }
 
 const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
-  const { brand, model, version } = await params;
+  const { brand, model, version } = params;
 
   const formattedBrand = decodeURIComponent(brand);
   const formattedModel = decodeURIComponent(model);
@@ -26,32 +27,32 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
 
   return (
     <div className="flex flex-col md:flex-row w-full grow gap-4">
-      <div className="content-box w-full flex flex-col">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Image container - full width on mobile, half on desktop */}
-          <div className="relative w-full md:w-1/2 aspect-square">
-            <Image
-              className="object-contain"
-              src={device.imageUrl || ''}
-              alt={`${device.version} image`}
-              fill
-            />
-          </div>
-
-          {/* Device Info */}
-          <div className="flex flex-col justify-center px-2">
-            <h1 className="text-xl font-medium">
-              {device.brand} {device.model} {device.version}
-            </h1>
-            <h2>Type: {device.type}</h2>
-            <h2>Udgivelsesdato: {releaseDate.toLocaleDateString()}</h2>
-          </div>
+      {/* LEFT: Image + Device Info + Editable form */}
+      <div className="content-box w-full md:w-1/2 flex flex-col gap-4">
+        <div className="relative w-full aspect-square">
+          <Image
+            className="object-contain"
+            src={device.imageUrl || ''}
+            alt={`${device.version} image`}
+            fill
+          />
         </div>
+
+        <div className="flex flex-col justify-center px-2">
+          <h1 className="text-xl font-medium">
+            {device.brand} {device.model} {device.version}
+          </h1>
+          <h2>Type: {device.type}</h2>
+          <h2>Udgivelsesdato: {releaseDate.toLocaleDateString()}</h2>
+        </div>
+
+        {/* Editable Device Info Form */}
+        <EditableDeviceForm device={device} />
       </div>
 
-      {/* Part list – stacked under image/info on mobile */}
-      <div className="content-box w-full h-full gap-4 flex flex-wrap">
-        <PartList device={device} parts={deviceParts} />
+      {/* RIGHT: Editable Parts */}
+      <div className="content-box w-full md:w-1/2 flex flex-col gap-4">
+        <EditablePartList deviceId={device.id} parts={deviceParts} />
       </div>
     </div>
   );

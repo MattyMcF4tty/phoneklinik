@@ -1,3 +1,4 @@
+// components/popUps/AddDevicePopUp.tsx
 'use client';
 
 import { useState } from 'react';
@@ -5,8 +6,15 @@ import AddDeviceForm from '../forms/AddDeviceForm';
 import DeviceCard from '../cards/ItemCard';
 import PopUpWrapper from '../wrappers/PopUpWrapper';
 
-export default function AddDeviceModal({ brand }: { brand: string }) {
+export default function AddDeviceModal({
+  brand,
+  model,
+}: {
+  brand: string;
+  model?: string;
+}) {
   const [open, setOpen] = useState(false);
+  console.log('📦 AddDeviceModal received model:', model); // <--- add this
 
   return (
     <>
@@ -25,7 +33,11 @@ export default function AddDeviceModal({ brand }: { brand: string }) {
                 &times;
               </button>
               <h2 className="text-xl font-bold mb-4">Tilføj ny enhed</h2>
-              <AddDeviceForm brand={brand} onSuccess={() => setOpen(false)} />
+              <AddDeviceForm
+                brand={brand}
+                model={model} // ✅ pass it down
+                onSuccess={() => setOpen(false)}
+              />
             </div>
           </div>
         </PopUpWrapper>

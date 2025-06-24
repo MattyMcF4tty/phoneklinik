@@ -1,7 +1,8 @@
 import ItemCard from '@/components/cards/ItemCard';
 import DeviceClient from '@/lib/clients/deviceClient';
 import { ErrorNotFound } from '@/schemas/errors/appErrorTypes';
-import Device from '@/schemas/new/device';
+import AddDeviceModalWrapper from '@components/wrappers/AddDeviceModalWrapper';
+import Device from '@schemas/device';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,10 +17,16 @@ interface VersionSelectionPageProps {
 const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
   params,
 }) => {
-  const { brand, model } = await params;
+const { brand, model } = await params;
 
-  const formattedBrand = decodeURIComponent(brand);
-  const formattedModel = decodeURIComponent(model);
+console.log('🧪 raw brand:', brand);
+console.log('🧪 raw model:', model);
+
+const formattedBrand = decodeURIComponent(brand);
+const formattedModel = decodeURIComponent(model);
+
+console.log('🧪 formattedBrand:', formattedBrand);
+console.log('🧪 formattedModel:', formattedModel);
 
   let devices: Device[];
 
@@ -57,6 +64,8 @@ Vælg din telefon       </h1>
           />
         </svg>
       </header>      <div className="flex flex-wrap justify-evenly gap-8 ">
+                        <AddDeviceModalWrapper brand={formattedBrand} model={formattedModel}/>
+        
         {devices.map((device) => (
           <ItemCard
             key={device.id}
