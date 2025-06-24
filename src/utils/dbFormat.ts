@@ -25,7 +25,7 @@ export type Deserialize<T> = {
 // --- Runtime String Conversion Helpers ---
 
 // Converts "FirstName" → "first_name"
-function toSnakeCase(str: string): string {
+export function toSnakeCase(str: string): string {
   return str
     .replace(/([A-Z])/g, '_$1')
     .toLowerCase()
@@ -33,7 +33,7 @@ function toSnakeCase(str: string): string {
 }
 
 // Converts "first_name" → "firstName"
-function toCamelCase(str: string): string {
+export function toCamelCase(str: string): string {
   const [first, ...rest] = str.split('_');
   return (
     first.toLowerCase() +

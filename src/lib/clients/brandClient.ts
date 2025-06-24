@@ -7,28 +7,34 @@ import {
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { convertToAvif } from '@/utils/image';
 import Brand from '@/schemas/brand';
+import DeviceClient from './deviceClient';
+import AccessoryClient from './accessoryClient';
 
 // Config
-const brandTable = 'brands';
-const brandLogoBucket = 'brand-images';
+const brandTable = process.env.BRAND_TABLE_NAME as string;
+const brandLogoBucket = process.env.BRAND_LOGO_BUCKET as string;
+
+const deviceTable = process.env.DEVICE_TABLE as string;
+const deviceImageBucket = process.env.DEVICE_IMAGE_BUCKET as string;
+
+const accessoryTable = process.env.ACCESSORY_TABLE as string;
+const accessoryImageBucket = process.env.ACCESSORY_IMAGE_BUCKET as string;
 
 export class BrandClient {
   public static query() {
     return new BrandQueryBuilder();
   }
-  public static async brandName(name: Brand['name']) {
+  public static brandName(name: Brand['name']) {
     return new BrandHandler(name);
   }
 
   static async createBrand(
     newBrand: Omit<Brand, 'imageUrl'>,
-    brandImage: Buffer
+    brandImage: Buffer | Blob
   ): Promise<Brand> {
     const supabase = await createClient();
 
     const serializedBrand = serializeToDbFormat(newBrand);
-
-    console.log('Serialized brand to insert:', serializedBrand);
 
     const { data: brandData, error } = await supabase
       .from(brandTable)
@@ -57,7 +63,7 @@ export class BrandClient {
     const imageAvif = await convertToAvif(brandImage);
     const { error: imageError } = await supabase.storage
       .from(brandLogoBucket)
-      .upload(`${deserializedBrand.name}/battery`, imageAvif, {
+      .upload(`${deserializedBrand.name}`, imageAvif, {
         contentType: 'image/avif',
       });
 
@@ -154,7 +160,7 @@ class BrandHandler {
 
   public async updateBrand(
     updatedBrand: Partial<Omit<Brand, 'id' | 'imageUrl'>>,
-    updatedImage?: Buffer
+    updatedImage?: Buffer | Blob
   ): Promise<Brand> {
     const supabase = await createClient();
 
@@ -211,24 +217,85 @@ class BrandHandler {
   public async deleteBrand(): Promise<boolean> {
     const supabase = await createClient();
 
-    const { data: brandData, error } = await supabase
-      .from(brandTable)
-      .delete()
-      .eq('name', this._name);
+    // Delete brand data and its image
+    const [{ error: deleteBrandError }, { error: deleteBrandImageError }] =
+      await Promise.all([
+        supabase.from(brandTable).delete().eq('name', this._name),
+        supabase.storage.from(brandLogoBucket).remove([this._name]),
+      ]);
 
-    // Image, Accessories and devices are deleted on the database
-
-    if (error) {
+    if (deleteBrandError) {
       throw new ErrorSupabase(
         'Noget gik galt under sletning af mærke.',
-        `Supabase error deleting brand [${this._name}]: ${error.message}`
+        `Supabase error deleting brand [${this._name}]: ${deleteBrandError.message}`
+      );
+    }
+    if (deleteBrandImageError) {
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase error deleting brand [${this._name}] image: ${deleteBrandImageError.message}`
       );
     }
 
-    if (!brandData) {
+    // Delete all devices from this brand.
+    const devices = await DeviceClient.query().brand(this._name);
+    const deviceImagePaths = devices
+      .map((device) => device.imageUrl.split(`${deviceImageBucket}/`)[1])
+      .filter((path) => !!path);
+
+    const [{ error: deleteDeviceError }, { error: deleteDeviceImageError }] =
+      await Promise.all([
+        supabase.from(deviceTable).delete().eq('brand', this._name),
+        deviceImagePaths.length > 0
+          ? supabase.storage.from(deviceImageBucket).remove(deviceImagePaths)
+          : Promise.resolve({ error: null }),
+      ]);
+
+    if (deleteDeviceError) {
       throw new ErrorSupabase(
         'Noget gik galt under sletning af mærke.',
-        `Supabase returned null when deleting brand [${this._name}].`
+        `Supabase error deleting all devices from brand [${this._name}]: ${deleteDeviceError.message}`
+      );
+    }
+
+    if (deleteDeviceImageError) {
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase error deleting all images of devices from brand [${this._name}]: ${deleteDeviceImageError.message}`
+      );
+    }
+
+    // Delete all accessories from this brand.
+    const accessories = await AccessoryClient.query().brand(this._name);
+    const accessoryImagePaths = accessories
+      .map(
+        (accessory) => accessory.imageUrl.split(`${accessoryImageBucket}/`)[1]
+      )
+      .filter((path) => !!path);
+
+    const [
+      { error: deleteAccessoryError },
+      { error: deleteAccessoryImageError },
+    ] = await Promise.all([
+      supabase.from(accessoryTable).delete().eq('brand', this._name),
+      accessoryImagePaths.length > 0
+        ? supabase.storage
+            .from(accessoryImageBucket)
+            .remove(accessoryImagePaths)
+        : Promise.resolve({ error: null }),
+    ]);
+
+    if (deleteAccessoryError) {
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase error deleting all accessories from brand [${this._name}]: ${deleteAccessoryError.message}`
+      );
+    }
+
+    if (deleteAccessoryImageError) {
+      throw new ErrorSupabase(
+        'Noget gik galt under sletning af mærke.',
+        `Supabase error deleting all images of accessories from brand [${this._name}]: ${deleteAccessoryImageError.message}`
       );
     }
 

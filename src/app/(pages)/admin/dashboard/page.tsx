@@ -21,7 +21,7 @@ const AdminDashboardPage: NextPage = async () => {
             >
               {index > 0 && <hr className="my-1 w-[95%]" />}
               <Link
-                href={`/admin/valuation/${valuation.id}`}
+                href={`/admin/brugtsalg/${valuation.id}`}
                 className={`flex flex-col w-full border border-transparent bg-transparent hover:bg-blue-50 hover:border-blue-300 rounded-md p-2`}
               >
                 <h2 className="font-semibold text-lg">
@@ -44,10 +44,6 @@ const AdminDashboardPage: NextPage = async () => {
       <div className="content-box row-start-2 col-start-1 row-span-1 col-span-2">
         test
       </div>
-
-      <form>
-        <button formAction={signOut}>Sign out</button>
-      </form>
     </div>
   );
 };

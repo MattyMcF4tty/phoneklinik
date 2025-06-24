@@ -4,7 +4,7 @@ import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import RepairBooking from '@schemas/repairBooking';
 
 // Config
-const repairBookingTable = 'repair_bookings';
+const repairBookingsTable = process.env.REPAIR_BOOKINGS_TABLE as string;
 
 export default class RepairBookingClient {
   static async getAvailableSlots(date: Date): Promise<string[]> {
@@ -51,7 +51,7 @@ export default class RepairBookingClient {
     const serializedBooking = serializeToDbFormat(newBooking);
 
     const { data: bookingData, error } = await supabase
-      .from(repairBookingTable)
+      .from(repairBookingsTable)
       .insert(serializedBooking)
       .select('*')
       .single();

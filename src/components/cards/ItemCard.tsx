@@ -1,20 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 interface ItemCardProps {
   itemName: string;
   href?: string;
   imageUrl?: string;
-  buttons?:
-    | React.ReactElement<HTMLButtonElement>
-    | React.ReactElement<HTMLButtonElement>[];
+  children?: ReactNode;
 }
 
-const ItemCard: FC<ItemCardProps> = ({ itemName, href, imageUrl, buttons }) => {
-  const CardContent: FC<{ buttons?: ItemCardProps['buttons'] }> = ({
-    buttons,
-  }) => (
+const ItemCard: FC<ItemCardProps> = ({
+  itemName,
+  href,
+  imageUrl,
+  children,
+}) => {
+  const CardContent = (
     <div
       className={`flex flex-col items-center h-full ${
         imageUrl && 'justify-center'
@@ -33,30 +34,22 @@ const ItemCard: FC<ItemCardProps> = ({ itemName, href, imageUrl, buttons }) => {
         </div>
       )}
       <h1 className="font-medium text-xl text-center mb-4">{itemName}</h1>
-      <div className="w-full flex justify-center gap-4">
-        {Array.isArray(buttons)
-          ? buttons.map((button, index) =>
-              React.cloneElement(button, {
-                key: button.key ?? `${itemName}-${index}`,
-              })
-            )
-          : buttons}
-      </div>
+      <div className="w-full h-fit">{children}</div>
     </div>
   );
 
   return (
     <div
-      className={`flex flex-col bg-white rounded-xl shadow-lg hover:shadow-xl duration-150 p-4 w-72 min-h-80 ${
+      className={`content-box hover flex flex-col hover:shadow-xl duration-150 p-4 w-72 min-h-80 ${
         href && 'hover:scale-[1.02]'
       }`}
     >
       {href ? (
         <Link href={href} className="h-full w-full">
-          <CardContent buttons={buttons} />
+          {CardContent}
         </Link>
       ) : (
-        <CardContent buttons={buttons} />
+        <div className="w-full h-full">{CardContent}</div>
       )}
     </div>
   );

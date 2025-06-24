@@ -1,6 +1,6 @@
 'use client';
 
-import { updateValuation } from '@/app/(pages)/admin/valuation/[id]/actions';
+import { updateValuation } from '@/app/(pages)/admin/brugtsalg/[id]/actions';
 import { ActionResponse } from '@/schemas/types';
 import ValuationRequest from '@/schemas/valuationRequest';
 import React, { FC, useActionState, useRef, useEffect } from 'react';

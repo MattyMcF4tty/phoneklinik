@@ -13,9 +13,9 @@ import Model from '@/schemas/model';
 import DevicePartClient from './devicePartClient';
 
 // Config
-const deviceTable = 'devices';
-const deviceImageBucket = 'device-images';
-const brandLogoBucket = 'brand-images';
+const deviceTable = process.env.DEVICE_TABLE as string;
+const deviceImageBucket = process.env.DEVICE_IMAGE_BUCKET as string;
+const brandLogoBucket = process.env.BRAND_LOGO_BUCKET as string;
 
 export default class DeviceClient {
   public static id(id: number) {

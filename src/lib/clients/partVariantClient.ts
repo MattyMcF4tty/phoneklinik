@@ -1,10 +1,10 @@
 import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { createClient } from '../supabase/serverClient';
 import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
-import PartVariant from '@/schemas/new/partVariant';
+import PartVariant from '@schemas/partVariant';
 
 // Config
-const partVartiansTable = 'part_variants';
+const partVariantsTable = process.env.PART_VARIANTS_TABLE as string;
 
 export default class DevicePartVariantClient {
   public static id(partId: number, variantId: number) {
@@ -15,7 +15,7 @@ export default class DevicePartVariantClient {
     const supabase = await createClient();
 
     const { data: variantsData, error } = await supabase
-      .from(partVartiansTable)
+      .from(partVariantsTable)
       .select('*')
       .eq('part_id', partId)
       .order('grade_level', { ascending: true });
@@ -57,7 +57,7 @@ class DevicePartVariantHandler {
     const supabase = await createClient();
 
     const { data: variantData, error } = await supabase
-      .from(partVartiansTable)
+      .from(partVariantsTable)
       .select('*')
       .eq('id', this._variantId)
       .eq('part_id', this._partId)
@@ -88,7 +88,7 @@ class DevicePartVariantHandler {
     const serializedVariant = serializeToDbFormat(updatedVariant);
 
     const { data: variantData, error } = await supabase
-      .from(partVartiansTable)
+      .from(partVariantsTable)
       .update(serializedVariant)
       .eq('id', this._variantId)
       .eq('part_id', this._partId)
@@ -119,7 +119,7 @@ class DevicePartVariantHandler {
     const supabase = await createClient();
 
     const { error } = await supabase
-      .from(partVartiansTable)
+      .from(partVariantsTable)
       .delete()
       .eq('id', this._variantId)
       .eq('part_id', this._partId);

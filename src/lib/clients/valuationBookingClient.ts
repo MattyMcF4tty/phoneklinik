@@ -1,12 +1,12 @@
 import { createClient } from '../supabase/serverClient';
 import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
 import { convertToAvif } from '@/utils/image';
-import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import ValuationRequest from '@/schemas/valuationRequest';
 
 // Config
-const valuationRequestTable = 'valuation_requests';
-const valuationRequestBucket = 'valuation-images';
+const valuationRequestTable = process.env.VALUATION_REQUESTS_TABLE as string;
+const valuationRequestBucket = process.env.VALUATION_REQUESTS_BUCKET as string;
 
 export default class ValuationRequestClient {
   public static async requestValuation(
@@ -185,10 +185,8 @@ class ValuationRequestQueryBuilder {
     }
 
     if (!data || data.length === 0) {
-      throw new ErrorNotFound(
-        'Ingen vurderingsanmodninger fundet',
-        'No valuation requests found with the given criteria'
-      );
+      console.warn('No valuation requests found');
+      return [];
     }
 
     const deserializedRequests = data.map((request) => {

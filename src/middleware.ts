@@ -19,9 +19,14 @@ export async function middleware(request: NextRequest) {
     middlewareResponse = NextResponse.next();
   }
 
+  // Custom headers
   middlewareResponse.headers.set(
     'x-search-params',
     request.nextUrl.searchParams.toString()
+  );
+  middlewareResponse.headers.set(
+    'x-pathname',
+    request.nextUrl.pathname.toString()
   );
 
   return middlewareResponse;

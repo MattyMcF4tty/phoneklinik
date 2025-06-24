@@ -6,7 +6,7 @@ export type ActionResponse<T = undefined> = {
 };
 
 export type ApiResponse<T = undefined> = {
-  success: boolean | undefined;
+  success?: boolean;
   message: string;
   data?: T;
 };
