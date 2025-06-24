@@ -1,11 +1,11 @@
 'use server';
 
 import ItemCard from '@/components/cards/ItemCard';
-import AddDeviceModalWrapper from '@/components/wrappers/AddDeviceModalWrapper';
 import DeviceClient from '@/lib/clients/deviceClient';
-import { ErrorNotFound } from '@/schemas/errors/appErrorTypes';
 import { NextPage } from 'next';
 import { notFound } from 'next/navigation';
+import AddDeviceCard from '../components/AddDeviceCard';
+import { BrandClient } from '@lib/clients/brandClient';
 
 interface ModelSelectionPageProps {
   params: Promise<{
@@ -19,29 +19,20 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
   const { brand } = await params;
   const formattedBrand = decodeURIComponent(brand);
 
-  let models: {
-    name: string;
-    imageUrl: string;
-  }[];
+  const [models, allBrands] = await Promise.all([
+    DeviceClient.getUniqueModels(formattedBrand),
+    await BrandClient.query(),
+  ]);
 
-  try {
-    models = await DeviceClient.getUniqueModels(formattedBrand);
-    if (models.length <= 0) {
-      notFound();
-    }
-  } catch (err) {
-    if (err instanceof ErrorNotFound) {
-      notFound();
-    }
-
-    throw err;
+  if (models.length <= 0) {
+    notFound();
   }
 
   return (
     <div className="bg-gray-50 min-h-screen w-full">
       <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
         <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
-          Vælg din model{' '}
+          Vælg din model
         </h1>
 
         {/* wave bottom */}
@@ -57,6 +48,7 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
         </svg>
       </header>
       <div className="flex flex-wrap justify-evenly gap-8 ">
+        <AddDeviceCard defaultDevice={{ brand: brand }} brands={allBrands} />
         {models.map((model) => (
           <ItemCard
             key={model.name}
@@ -65,7 +57,6 @@ const ModelSelectionPage: NextPage<ModelSelectionPageProps> = async ({
             href={`/admin/reparation/${brand}/${model.name}`}
           />
         ))}
-        <AddDeviceModalWrapper brand={formattedBrand} />
       </div>
     </div>
   );

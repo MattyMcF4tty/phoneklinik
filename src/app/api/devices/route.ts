@@ -12,45 +12,62 @@ export async function POST(
   try {
     const formData = await req.formData();
 
-    const brand = formData.get('brand') as string;
-    const modelName = formData.get('modelName') as string;
-    const deviceName = formData.get('deviceName') as string;
-    const type = formData.get('type') as string;
-    const releaseDateRaw = formData.get('releaseDate') as string;
+    const brand = formData.get('deviceBrand')?.toString();
+    const model = formData.get('deviceModel')?.toString();
+    const version = formData.get('deviceVersion')?.toString();
+    const type = formData.get('deviceType')?.toString();
+    const releaseDateRaw = formData.get('deviceReleaseDate')?.toString();
     const deviceImage = formData.get('deviceImage') as Blob | null;
 
-    if (
-      !brand ||
-      !modelName ||
-      !deviceName ||
-      !deviceImage ||
-      !type ||
-      !releaseDateRaw
-    ) {
+    if (!brand) {
       throw new ErrorBadRequest(
-        'Mangler påkrævede felter.',
-        `brand=${brand}, modelName=${modelName}, deviceName=${deviceName}, type=${type}, releaseDate=${releaseDateRaw}, deviceImage=${deviceImage}`
+        'Enhedens mærke mangler.',
+        `Missing deviceBrand in formData. Expected string, got ${brand}`
+      );
+    }
+    if (!model) {
+      throw new ErrorBadRequest(
+        'Enhedens model mangler.',
+        `Missing deviceModel in formData. Expected string, got ${model}`
+      );
+    }
+    if (!version) {
+      throw new ErrorBadRequest(
+        'Enhedens version mangler.',
+        `Missing deviceVersion in formData. Expected string, got ${version}`
+      );
+    }
+    if (!type) {
+      throw new ErrorBadRequest(
+        'Enhedens type mangler.',
+        `Missing deviceType in formData. Expected string, got ${type}`
+      );
+    }
+
+    const releaseDate = releaseDateRaw ? new Date(releaseDateRaw) : null;
+    if (!releaseDate || isNaN(releaseDate.getTime())) {
+      throw new ErrorBadRequest(
+        'Enhedens udgivelses dato mangler.',
+        `Missing deviceReleaseDate in formData. Expected ISO-string, got ${releaseDateRaw}`
+      );
+    }
+
+    if (!deviceImage) {
+      throw new ErrorBadRequest(
+        'Enhedens billede mangler.',
+        `Missing deviceImage in formData. Expected File, got ${typeof deviceImage}`
       );
     }
 
     const deviceAvif = await convertToAvif(deviceImage);
-    const releaseDate = new Date(releaseDateRaw);
-
-    console.log('Creating device with:', {
-      brand,
-      model: modelName,
-      version: deviceName,
-      type,
-      releaseDate,
-    });
 
     const newDevice = await DeviceClient.createDevice(
       {
-        brand,
-        model: modelName,
-        version: deviceName,
-        type,
-        releaseDate,
+        brand: brand,
+        model: model,
+        version: version,
+        type: type,
+        releaseDate: releaseDate,
       },
       deviceAvif
     );
@@ -59,21 +76,22 @@ export async function POST(
       {
         success: true,
         data: newDevice,
-        message: 'Device oprettet.',
+        message: `Enhed "${newDevice.brand} ${newDevice.model} ${newDevice.version}" oprettet.`,
       },
       { status: 200 }
     );
   } catch (err) {
     if (err instanceof AppError) {
+      console.error('AppError:', err.details);
       return NextResponse.json(
         { success: false, message: err.message },
         { status: err.httpCode }
       );
     }
 
-    console.error('Uventet fejl:', JSON.stringify(err, null, 2));
+    console.error('Unexpected error:', err);
     return NextResponse.json(
-      { success: false, message: 'Intern serverfejl.' },
+      { success: false, message: 'Noget gik galt.' },
       { status: 500 }
     );
   }

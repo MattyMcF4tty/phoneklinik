@@ -1,3 +1,5 @@
+'use client';
+
 import ImageField from '@components/inputfields/ImageField';
 import Accessory from '@schemas/accessory';
 import Brand from '@schemas/brand';

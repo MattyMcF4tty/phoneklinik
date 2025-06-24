@@ -4,17 +4,22 @@
 import { NextPage } from 'next';
 import ItemCard from '@/components/cards/ItemCard';
 import DeviceClient from '@/lib/clients/deviceClient';
-import AddBrandModalWrapper from '@/components/wrappers/AddBrandModalWrapper';
-
-
+import AddDeviceCard from './components/AddDeviceCard';
+import { BrandClient } from '@lib/clients/brandClient';
+import { brands } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 const BrandSelectionPage: NextPage = async () => {
-  const brands = await DeviceClient.getUniqueBrands();   // [{ name, imageUrl }]
+  const [deviceBrands, allBrands] = await Promise.all([
+    DeviceClient.getUniqueBrands(),
+    await BrandClient.query(),
+  ]);
+
   return (
     <div className="bg-gray-50 min-h-screen w-full">
-           <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
+      <header className="relative h-[26vh] bg-gradient-to-r from-[#0d2d8b] via-[#1661c9] to-[#08a5f4] flex items-center justify-center">
         <h1 className="text-white text-3xl md:text-5xl font-bold drop-shadow-sm">
-Vælg din enhed        </h1>
+          Vælg dit mærke
+        </h1>
 
         {/* wave bottom */}
         <svg
@@ -30,18 +35,15 @@ Vælg din enhed        </h1>
       </header>
 
       <div className="flex flex-wrap justify-evenly gap-8 ">
-        {brands.map((brand) => (
+        <AddDeviceCard brands={allBrands} />
+        {deviceBrands.map((brand) => (
           <ItemCard
             key={brand.name}
             itemName={brand.name}
             imageUrl={brand.imageUrl}
             href={`/admin/reparation/${brand.name}`}
           />
-          
         ))}
-<AddBrandModalWrapper />
-
-
       </div>
     </div>
   );
