@@ -19,8 +19,14 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
 }) => {
   const { brand, model } = await params;
 
+  console.log('🧪 raw brand:', brand);
+  console.log('🧪 raw model:', model);
+
   const formattedBrand = decodeURIComponent(brand);
   const formattedModel = decodeURIComponent(model);
+
+  console.log('🧪 formattedBrand:', formattedBrand);
+  console.log('🧪 formattedModel:', formattedModel);
 
   const [devices, allBrands] = await Promise.all([
     await DeviceClient.query().brand(formattedBrand).model(formattedModel),
@@ -51,10 +57,6 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
         </svg>
       </header>{' '}
       <div className="flex flex-wrap justify-evenly gap-8 ">
-        <AddDeviceCard
-          defaultDevice={{ brand: brand, model: model }}
-          brands={allBrands}
-        />
         {devices.map((device) => (
           <ItemCard
             key={device.id}

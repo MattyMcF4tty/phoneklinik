@@ -2,22 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Model from '@schemas/model';
 
 export default function AddDeviceForm({
   brand,
+  model,
   onSuccess,
 }: {
   brand: string;
+  model?: string;
   onSuccess?: () => void;
 }) {
-  const [models, setModels] = useState<{ id: number; name: string }[]>([]);
-  const [selectedModel, setSelectedModel] = useState('');
+  const [models, setModels] = useState<Model[]>([]);
+const [selectedModel, setSelectedModel] = useState(() => model || '');
   const [newModelName, setNewModelName] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // ✅ Dynamically import server function inside client-safe wrapper
   useEffect(() => {
+    // Only fetch models if model is not fixed
+    if (model) return;
+
     async function loadModels() {
       try {
         const { fetchModelsByBrand } = await import(
@@ -32,38 +37,52 @@ export default function AddDeviceForm({
     }
 
     loadModels();
-  }, [brand]);
+  }, [brand, model]);
+
 
   return (
     <form className="flex flex-col gap-4">
       <label className="text-sm text-gray-600">Model</label>
-      <select
-        required
-        className="border p-2 rounded"
-        value={selectedModel}
-        onChange={(e) => setSelectedModel(e.target.value)}
-      >
-        <option value="">Vælg model</option>
-        {models.map((model) => (
-          <option key={model.name} value={model.name}>
-            {model.name}
-          </option>
-        ))}
-        <option value="__new">➕ Tilføj ny model</option>
-      </select>
 
-      {selectedModel === '__new' && (
+      {model ? (
         <input
-          required
           type="text"
-          name="newModelName"
-          placeholder="Nyt modelnavn"
-          value={newModelName}
-          onChange={(e) => setNewModelName(e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-gray-100 text-gray-700 cursor-not-allowed"
+          value={model}
+          readOnly
         />
+      ) : (
+        <>
+          <select
+            required
+            className="border p-2 rounded"
+            value={selectedModel}
+            onChange={(e) => setSelectedModel(e.target.value)}
+          >
+            <option value="">Vælg model</option>
+            {models.map((model) => (
+              <option key={model.name} value={model.name}>
+                {model.name}
+              </option>
+            ))}
+            <option value="__new">➕ Tilføj ny model</option>
+          </select>
+
+          {selectedModel === '__new' && (
+            <input
+              required
+              type="text"
+              name="newModelName"
+              placeholder="Nyt modelnavn"
+              value={newModelName}
+              onChange={(e) => setNewModelName(e.target.value)}
+              className="border p-2 rounded"
+            />
+          )}
+        </>
       )}
 
+      {/* Other inputs */}
       <input
         type="text"
         name="type"
@@ -71,14 +90,12 @@ export default function AddDeviceForm({
         className="border p-2 rounded"
         required
       />
-
       <input
         type="date"
         name="releaseDate"
         className="border p-2 rounded"
         required
       />
-
       <input
         type="text"
         name="deviceName"
@@ -86,7 +103,6 @@ export default function AddDeviceForm({
         className="border p-2 rounded"
         required
       />
-
       <input
         type="file"
         name="deviceImage"
