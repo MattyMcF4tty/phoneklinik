@@ -2,6 +2,7 @@ import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import { createClient } from '../supabase/serverClient';
 import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
 import PartVariant from '@schemas/partVariant';
+import DevicePart from '@schemas/devicePart';
 
 // Config
 const partVariantsTable = process.env.PART_VARIANTS_TABLE as string;
@@ -9,6 +10,36 @@ const partVariantsTable = process.env.PART_VARIANTS_TABLE as string;
 export default class DevicePartVariantClient {
   public static id(partId: number, variantId: number) {
     return new DevicePartVariantHandler(partId, variantId);
+  }
+
+  public static async addPartVariant(
+    partId: DevicePart['id'],
+    newVariant: Omit<PartVariant, 'id' | 'partId'>
+  ) {
+    const supabase = await createClient();
+
+    const serializedVariant = serializeToDbFormat(newVariant);
+    const { data: variantData, error } = await supabase
+      .from(partVariantsTable)
+      .insert(serializedVariant)
+      .select('*')
+      .single();
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt under opretning af del variant',
+        `Supabase error inserting part variant part [${partId}]: ${error.message}`
+      );
+    }
+
+    if (!variantData) {
+      throw new ErrorNotFound(
+        'Ingen del varianter fundet',
+        `No part variant found for new variant`
+      );
+    }
+
+    const variant = deserializeFromDbFormat<PartVariant>(variantData);
+    return variant;
   }
 
   public static async getPartVariants(partId: number): Promise<PartVariant[]> {

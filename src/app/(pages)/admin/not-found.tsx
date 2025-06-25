@@ -2,9 +2,7 @@
 
 import { NextPage } from 'next';
 
-interface PageProps {}
-
-const Page: NextPage<PageProps> = async ({}) => {
+const Page: NextPage = () => {
   return <div>Siden findes ikke</div>;
 };
 

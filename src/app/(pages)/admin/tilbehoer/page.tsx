@@ -3,7 +3,6 @@ import AccessoryClient from '@lib/clients/accessoryClient';
 import { NextPage } from 'next';
 import AddAccessoryCard from './components/AddAccessoryCard';
 import { BrandClient } from '@lib/clients/brandClient';
-import { deleteAccessory } from './[id]/actions';
 
 interface PageProps {
   searchParams: Promise<{ type: string }>;

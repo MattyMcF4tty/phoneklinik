@@ -5,7 +5,6 @@ import PopUpWrapper from '@components/wrappers/PopUpWrapper';
 import Brand from '@schemas/brand';
 import AppError from '@schemas/errors/appError';
 import handleInternalApi from '@utils/api';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
@@ -69,13 +68,15 @@ const UpdateBrandButton: FC<UpdateBrandButtonProps> = ({ brand }) => {
               >
                 <RxCross1 />
               </button>
-              <h1 className="text-title">Redigér mærke '{brand.name}'</h1>
+              <h1 className="text-title">
+                Redigér mærke &apos;{brand.name}&apos;
+              </h1>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <ImageField
                 id="brandImage"
                 name="brandImage"
-                defaultImage={{
+                placeholder={{
                   src: brand.imageUrl,
                   alt: `${brand.name} - Billede`,
                 }}

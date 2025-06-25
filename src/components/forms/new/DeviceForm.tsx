@@ -6,11 +6,15 @@ import React, { FC } from 'react';
 interface DeviceFormProps extends React.HTMLAttributes<HTMLFormElement> {
   defaultDevice?: Partial<Device>;
   brands: Brand[];
+  buttonText?: string;
+  loading?: boolean;
 }
 
 const DeviceForm: FC<DeviceFormProps> = ({
   defaultDevice,
   brands,
+  buttonText = 'Submit',
+  loading = false,
   ...rest
 }) => {
   return (
@@ -89,13 +93,16 @@ const DeviceForm: FC<DeviceFormProps> = ({
           className="input-default"
           defaultValue={
             defaultDevice?.releaseDate
-              ? new Date(defaultDevice?.releaseDate).toISOString()
+              ? new Date(defaultDevice?.releaseDate).toISOString().split('T')[0]
               : ''
           }
         />
       </label>
-      <button className="bg-blue-500 py-2 rounded-md text-white">
-        Tilføj enhed
+      <button
+        disabled={loading}
+        className="bg-blue-500 py-2 rounded-md text-white"
+      >
+        {buttonText}
       </button>
     </form>
   );

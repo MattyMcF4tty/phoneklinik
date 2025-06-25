@@ -22,17 +22,22 @@ export default async function RootLayout({
 }>) {
   const pathname = await getPathnameFromHeaders();
 
+  const underMaintenance = pathname.includes('maintenance');
   return (
     <html lang="da" className="h-full">
       <body className="bg-slate-50 min-h-screen flex flex-col">
         <Toaster richColors={true} position="top-right" />
-        {pathname.includes('admin') ? <AdminNavbar /> : <Navbar />}
+        {pathname.includes('admin') ? (
+          <AdminNavbar />
+        ) : !underMaintenance ? (
+          <Navbar />
+        ) : null}
         <main className="relative flex flex-col grow min-h-screen ">
           <div className="flex flex-col grow pt-[calc(var(--navbar-height)_+_2.5rem)] pb-[2.5rem] px-[12%]">
             {children}
           </div>
         </main>
-        <Footer />
+        {!underMaintenance ? <Footer /> : null}
       </body>
     </html>
   );

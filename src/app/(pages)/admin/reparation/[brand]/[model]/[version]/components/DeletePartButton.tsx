@@ -1,20 +1,20 @@
 'use client';
 
-import Brand from '@schemas/brand';
 import React, { FC, useActionState, useEffect, useState } from 'react';
-import { deleteBrand } from '../actions';
 import { ActionResponse } from '@schemas/types';
 import { toast } from 'sonner';
 import PopUpWrapper from '@components/wrappers/PopUpWrapper';
 import { useRouter } from 'next/navigation';
 import { RxCross1 } from 'react-icons/rx';
-interface DeleteBrandButtonProps {
-  brandName: Brand['name'];
+import { deletePart } from '../actions';
+import DevicePart from '@schemas/devicePart';
+
+interface DeletePartButtonProps {
+  part: DevicePart;
 }
 
-const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
+const DeletePartButton: FC<DeletePartButtonProps> = ({ part }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [confirmationString, setConfirmationString] = useState('');
 
@@ -22,25 +22,23 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
     success: undefined,
     message: '',
   };
-  const [state, formAction] = useActionState(deleteBrand, initialState);
+
+  const [state, formAction, pending] = useActionState(deletePart, initialState);
 
   useEffect(() => {
-    const loadingToastId = 'delete-brand-toast';
+    if (pending === true) {
+      toast.loading('Sletter del...', { id: 'delete-part' });
+    } else {
+      toast.dismiss('delete-part');
 
-    if (state.success !== undefined) {
-      setLoading(false);
-      toast.dismiss(loadingToastId);
-
-      if (state.success) {
-        toast.success(state.message);
+      if (state.success === true) {
+        toast.success(state.message || 'Del slettet');
         router.refresh();
-      } else {
-        toast.error(state.message);
+      } else if (state.success === false) {
+        toast.error(state.message || 'Noget gik galt');
       }
-    } else if (loading) {
-      toast.loading(`Sletter mærket '${brandName}'...`, { id: loadingToastId });
     }
-  }, [state, loading, router, brandName]);
+  }, [pending, state, router]);
 
   return (
     <div className="w-full">
@@ -48,9 +46,9 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
         onClick={() => {
           setShowPopUp(true);
         }}
-        className="bg-red-500 text-white w-full py-1 rounded-md"
+        className="bg-red-500 text-white w-full py-2 rounded-md"
       >
-        Slet
+        Slet del
       </button>
       {showPopUp && (
         <PopUpWrapper>
@@ -63,16 +61,16 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
                 onClick={() => {
                   setShowPopUp(false);
                 }}
-                disabled={loading}
+                disabled={pending}
                 type="button"
                 className="absolute top-0 left-0"
               >
                 <RxCross1 />
               </button>
-              <h1 className="text-title">Slet mærke &apos;{brandName}&apos;</h1>
+              <h1 className="text-title">Slet delen &apos;{part.name}&apos;</h1>
               <span>
-                Er du sikker på, at du vil slette mærket &apos;{brandName}&apos;
-                samt alle enheder og alt tilbehør forbundet med dette mærke?{' '}
+                Er du sikker på, at du vil slette delen &apos;{part.name}&apos;
+                samt alle alle del-varianter forbundet med denne del?
                 <p className="font-medium underline">
                   Denne handling kan ikke fortrydes.
                 </p>
@@ -81,7 +79,7 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
             <div className="w-full flex flex-col gap-4">
               <div>
                 <label htmlFor="confirmation" className="select-none">
-                  Skriv &apos;{brandName}&apos; for at bekræfte sletning
+                  Skriv &apos;{part.name}&apos; for at bekræfte sletning
                 </label>
                 <input
                   type="text"
@@ -91,28 +89,25 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
                   value={confirmationString}
                   required
                   onChange={(e) => setConfirmationString(e.target.value)}
-                  placeholder={brandName}
+                  placeholder={part.name}
                 />
               </div>
 
               <div className="w-full flex justify-center">
                 <input
                   type="hidden"
-                  name="brandName"
-                  id="brandName"
-                  defaultValue={brandName}
+                  name="partId"
+                  id="partId"
+                  defaultValue={part.id}
                 />
                 <button
-                  onClick={() => {
-                    setLoading(true);
-                  }}
-                  disabled={!confirmationString.match(brandName)}
+                  disabled={!confirmationString.match(part.name) || pending}
                   className="
-                  border bg-red-600 text-white px-2 rounded-md shadow-lg
-                  hover:shadow-inner 
-                  disabled:shadow-none disabled:bg-gray-300 disabled:border-transparent disabled:text-white"
+                border bg-red-600 text-white px-2 rounded-md shadow-lg
+                hover:shadow-inner 
+                disabled:shadow-none disabled:bg-gray-300 disabled:border-transparent disabled:text-white"
                 >
-                  Bekræft sletning af &apos;{brandName}&apos;
+                  Bekræft sletning af &apos;{part.name}&apos;
                 </button>
               </div>
             </div>
@@ -123,4 +118,4 @@ const DeleteBrandButton: FC<DeleteBrandButtonProps> = ({ brandName }) => {
   );
 };
 
-export default DeleteBrandButton;
+export default DeletePartButton;

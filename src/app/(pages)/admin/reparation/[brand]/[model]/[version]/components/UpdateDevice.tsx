@@ -1,9 +1,9 @@
 'use client';
 
-import AccessoryForm from '@components/forms/new/AccessoryForm';
+import DeviceForm from '@components/forms/new/DeviceForm';
 import PopUpWrapper from '@components/wrappers/PopUpWrapper';
-import Accessory from '@schemas/accessory';
 import Brand from '@schemas/brand';
+import Device from '@schemas/device';
 import AppError from '@schemas/errors/appError';
 import handleInternalApi from '@utils/api';
 import { useRouter } from 'next/navigation';
@@ -11,21 +11,20 @@ import React, { FC, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 import { toast } from 'sonner';
 
-interface UpdateAccessoryButtonProps {
-  accessory: Accessory;
+interface UpdateDeviceButtonProps {
+  device: Device;
   brands: Brand[];
-  types: string[];
 }
 
-const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
-  accessory,
+const UpdateDeviceButton: FC<UpdateDeviceButtonProps> = ({
+  device,
   brands,
-  types,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
 
   const router = useRouter();
+  const deviceName = `${device.brand} ${device.model} ${device.version}`;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
@@ -35,7 +34,7 @@ const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Accessory>('/accessories', {
+      const reponse = await handleInternalApi<Device>('/devices', {
         method: 'PATCH',
         body: formData,
       });
@@ -43,7 +42,7 @@ const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
       toast.success(reponse.message);
     } catch (err: unknown) {
       const error = err as AppError | Error;
-      console.error(`Failed to update accessory '${accessory.name}':` + error);
+      console.error(`Failed to update accessory '${deviceName}':` + error);
       toast.error(error.message ? error.message : 'Noget gik galt');
     } finally {
       setLoading(false);
@@ -77,17 +76,16 @@ const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
                 <RxCross1 />
               </button>
               <h1 className="text-title">
-                Redigér tilbehør &apos;{accessory.name}&apos;
+                Redigér enhed &apos;{deviceName}&apos;
               </h1>
             </div>
 
-            <AccessoryForm
-              className="flex flex-col items-center gap-8 w-full"
+            <DeviceForm
+              className="flex flex-col gap-8 w-full"
               onSubmit={handleSubmit}
               buttonText="Gem ændringer"
-              accessory={accessory}
+              defaultDevice={device}
               brands={brands}
-              types={types}
               loading={loading}
             />
           </div>
@@ -97,4 +95,4 @@ const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
   );
 };
 
-export default UpdateAccessoryButton;
+export default UpdateDeviceButton;

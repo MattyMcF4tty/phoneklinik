@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { signOut } from '../auth/login/actions';
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
 

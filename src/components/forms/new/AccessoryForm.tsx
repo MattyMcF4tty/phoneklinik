@@ -91,7 +91,7 @@ const AccessoryForm: FC<AccessoryFormProps> = ({
                 setShowCustomType(e.target.value === 'custom');
               }}
             >
-              {types.map((type, index) => (
+              {types.map((type) => (
                 <option key={type} value={type}>
                   {type}
                 </option>

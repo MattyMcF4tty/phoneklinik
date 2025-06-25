@@ -3,7 +3,6 @@ import DeviceClient from '@/lib/clients/deviceClient';
 
 import { BrandClient } from '@lib/clients/brandClient';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import AddDeviceCard from '../../components/AddDeviceCard';
 
@@ -19,14 +18,8 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
 }) => {
   const { brand, model } = await params;
 
-  console.log('🧪 raw brand:', brand);
-  console.log('🧪 raw model:', model);
-
   const formattedBrand = decodeURIComponent(brand);
   const formattedModel = decodeURIComponent(model);
-
-  console.log('🧪 formattedBrand:', formattedBrand);
-  console.log('🧪 formattedModel:', formattedModel);
 
   const [devices, allBrands] = await Promise.all([
     await DeviceClient.query().brand(formattedBrand).model(formattedModel),
@@ -57,6 +50,10 @@ const VersionSelectionPage: NextPage<VersionSelectionPageProps> = async ({
         </svg>
       </header>{' '}
       <div className="flex flex-wrap justify-evenly gap-8 ">
+        <AddDeviceCard
+          brands={allBrands}
+          defaultDevice={{ brand: brand, model: model }}
+        />
         {devices.map((device) => (
           <ItemCard
             key={device.id}

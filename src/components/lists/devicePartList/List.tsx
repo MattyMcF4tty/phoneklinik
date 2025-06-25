@@ -14,10 +14,9 @@ interface PartListProps {
 }
 
 const PartList: FC<PartListProps> = ({ device, parts }) => {
-  const [selectedPartVariants, setSelectedPartVariants] = useSessionStorage<PartVariant[]>(
-    `${device.brand}_${device.model}_${device.version}_parts`,
-    []
-  );
+  const [selectedPartVariants, setSelectedPartVariants] = useSessionStorage<
+    PartVariant[]
+  >(`${device.brand}_${device.model}_${device.version}_parts`, []);
 
   // ✅ Save device.id once in sessionStorage (no hook needed)
   useEffect(() => {

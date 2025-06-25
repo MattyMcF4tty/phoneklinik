@@ -6,7 +6,6 @@ import ItemCard from '@/components/cards/ItemCard';
 import DeviceClient from '@/lib/clients/deviceClient';
 import AddDeviceCard from './components/AddDeviceCard';
 import { BrandClient } from '@lib/clients/brandClient';
-import { brands } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 const BrandSelectionPage: NextPage = async () => {
   const [deviceBrands, allBrands] = await Promise.all([

@@ -3,7 +3,6 @@ import { BrandClient } from '@lib/clients/brandClient';
 import { ErrorBadRequest } from '@schemas/errors/appErrorTypes';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { deleteAccessory } from './actions';
 import UpdateAccessoryButton from './components/UpdateAccessoryButton';
 import DeleteAccessoryButton from './components/DeleteAccessoryButton';
 

@@ -1,12 +1,10 @@
 import AppError from '@/schemas/errors/appError';
-import { ActionResponse, ApiResponse } from '@/schemas/types';
-import { NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+import { ActionResponse } from '@/schemas/types';
 
-export function handleActionError(
+export function handleActionError<T>(
   err: unknown,
   defaultMessage: string = 'Noget gik galt'
-): ActionResponse {
+): ActionResponse<T> {
   if (err instanceof AppError) {
     if (err.httpCode === 400) {
       console.warn(err.details);

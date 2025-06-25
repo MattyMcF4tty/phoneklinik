@@ -3,10 +3,9 @@
 import { BrandClient } from '@lib/clients/brandClient';
 import React, { FC } from 'react';
 
-interface BrandSelectProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement> {}
-
-const BrandSelect: FC<BrandSelectProps> = async ({ ...rest }) => {
+const BrandSelect: FC<React.SelectHTMLAttributes<HTMLSelectElement>> = async ({
+  ...rest
+}) => {
   const brands = await BrandClient.query();
   return (
     <select {...rest}>

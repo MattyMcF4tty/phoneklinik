@@ -20,7 +20,7 @@ export default class DevicePartClient {
     return new DevicePartHandler(id);
   }
 
-  public async addPart(
+  static async addPart(
     deviceId: number,
     deviceData: Omit<DevicePart, 'id' | 'createdAt' | 'deviceId' | 'variants'>
   ): Promise<DevicePart> {

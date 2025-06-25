@@ -1,6 +1,5 @@
 'use client';
 
-import Brand from '@schemas/brand';
 import React, { FC, useActionState, useEffect, useState } from 'react';
 import { ActionResponse } from '@schemas/types';
 import { toast } from 'sonner';
@@ -21,7 +20,6 @@ const DeleteAccessoryButton: FC<DeleteAccessoryButtonProps> = ({
 }) => {
   const router = useRouter();
   const [showPopUp, setShowPopUp] = useState(false);
-  const [confirmationString, setConfirmationString] = useState('');
 
   const initialState: ActionResponse = {
     success: undefined,
@@ -47,7 +45,7 @@ const DeleteAccessoryButton: FC<DeleteAccessoryButtonProps> = ({
     } else if (pending) {
       toast.loading(`Sletter tilbehør...`, { id: loadingToastId });
     }
-  }, [state, pending]);
+  }, [state, pending, router]);
 
   return (
     <div className="w-full">
@@ -78,7 +76,8 @@ const DeleteAccessoryButton: FC<DeleteAccessoryButtonProps> = ({
               </button>
               <h1 className="text-title">Slet tilbehør</h1>
               <span>
-                Er du sikker på, at du vil slette tilbehøret '{accessoryName}'?
+                Er du sikker på, at du vil slette tilbehøret &apos;
+                {accessoryName}&apos;?
                 <p className="font-medium underline">
                   Denne handling kan ikke fortrydes.
                 </p>
@@ -99,7 +98,7 @@ const DeleteAccessoryButton: FC<DeleteAccessoryButtonProps> = ({
                   hover:shadow-inner 
                   disabled:shadow-none disabled:bg-gray-300 disabled:border-transparent disabled:text-white"
                 >
-                  Bekræft sletning af '{accessoryName}'
+                  Bekræft sletning af &apos;{accessoryName}&apos;
                 </button>
               </div>
             </div>

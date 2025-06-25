@@ -112,7 +112,7 @@ export async function updateValuation(
 
 export async function submitValuation(
   prevState: ActionResponse<ValuationRequest['id']>,
-  formData: FormData
+  _formData: FormData
 ): Promise<ActionResponse<ValuationRequest['id']>> {
   try {
     if (!prevState.data) {
@@ -192,7 +192,7 @@ export async function submitValuation(
 
 export async function rejectValuation(
   prevState: ActionResponse<ValuationRequest['id']>,
-  formData: FormData
+  _formData: FormData
 ): Promise<ActionResponse<ValuationRequest['id']>> {
   try {
     if (!prevState.data) {

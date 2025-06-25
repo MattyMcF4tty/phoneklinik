@@ -96,3 +96,67 @@ export async function POST(
     );
   }
 }
+
+export async function PATCH(
+  req: NextRequest
+): Promise<NextResponse<ApiResponse<Device>>> {
+  try {
+    const formData = await req.formData();
+
+    const idRaw = formData.get('id')?.toString();
+    const id = parseInt(idRaw || '', 10);
+    if (isNaN(id) || id <= 0) {
+      throw new ErrorBadRequest(
+        'Ugyldigt ID. Enheden kunne ikke opdateres.',
+        `Invalid id in formData. Expected a positive integer, got: ${idRaw}`
+      );
+    }
+
+    const brand = formData.get('deviceBrand')?.toString();
+    const model = formData.get('deviceModel')?.toString();
+    const version = formData.get('deviceVersion')?.toString();
+    const type = formData.get('deviceType')?.toString();
+    const releaseDateRaw = formData.get('deviceReleaseDate')?.toString();
+    const deviceImage = formData.get('deviceImage') as Blob | null;
+
+    const releaseDate = releaseDateRaw ? new Date(releaseDateRaw) : undefined;
+
+    let deviceAvif: Buffer | undefined;
+    if (deviceImage) {
+      deviceAvif = await convertToAvif(deviceImage);
+    }
+
+    const updatedDevice = await DeviceClient.id(id).updateDevice(
+      {
+        brand: brand,
+        model: model,
+        version: version,
+        type: type,
+        releaseDate: releaseDate,
+      },
+      deviceAvif
+    );
+
+    return NextResponse.json(
+      {
+        data: updatedDevice,
+        message: `Enhed "${updatedDevice.brand} ${updatedDevice.model} ${updatedDevice.version}" opdateret.`,
+      },
+      { status: 200 }
+    );
+  } catch (err) {
+    if (err instanceof AppError) {
+      console.error('AppError:', err.details);
+      return NextResponse.json(
+        { success: false, message: err.message },
+        { status: err.httpCode }
+      );
+    }
+
+    console.error('Unexpected error:', err);
+    return NextResponse.json(
+      { success: false, message: 'Noget gik galt.' },
+      { status: 500 }
+    );
+  }
+}
