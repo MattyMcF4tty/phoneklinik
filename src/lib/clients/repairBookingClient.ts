@@ -1,6 +1,10 @@
 import { createClient } from '../supabase/serverClient';
-import { deserializeFromDbFormat, serializeToDbFormat } from '@/utils/dbFormat';
-import { ErrorSupabase } from '@/schemas/errors/appErrorTypes';
+import {
+  deserializeFromDbFormat,
+  Serialize,
+  serializeToDbFormat,
+} from '@/utils/dbFormat';
+import { ErrorNotFound, ErrorSupabase } from '@/schemas/errors/appErrorTypes';
 import RepairBooking from '@schemas/repairBooking';
 
 // Config
@@ -68,6 +72,122 @@ export default class RepairBookingClient {
         'Noget gik galt under bookning af reparation.',
         `Supabase returned with null when trying to book repair`
       );
+    }
+
+    const deserializedBooking =
+      deserializeFromDbFormat<RepairBooking>(bookingData);
+
+    return deserializedBooking;
+  }
+
+  static async getBookings(range: {
+    start: Date;
+    end: Date;
+  }): Promise<RepairBooking[]> {
+    const supabase = await createClient();
+
+    const { data: bookingData, error } = await supabase
+      .from(repairBookingsTable)
+      .select('*')
+      .gte('booking_date', range.start.toISOString())
+      .lte('booking_date', range.end.toISOString());
+
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af bookinger.',
+        `Supabase error when trying to get booked repair booking time slots: ${error.message}`
+      );
+    }
+
+    if (!bookingData) {
+      console.warn(
+        'Supbase returned with no data when trying to get booked repair time.'
+      );
+      return [];
+    }
+
+    const deserializedBookings = bookingData.map(
+      (serializedBooking: Serialize<RepairBooking>) => {
+        return deserializeFromDbFormat<RepairBooking>(serializedBooking);
+      }
+    );
+
+    return deserializedBookings;
+  }
+
+  static id(id: RepairBooking['id']) {
+    return new RepairBookingHandler(id);
+  }
+}
+
+class RepairBookingHandler {
+  private _id: RepairBooking['id'];
+
+  constructor(id: RepairBooking['id']) {
+    this._id = id;
+  }
+
+  public async updateBooking(
+    updatedBooking: Partial<Omit<RepairBooking, 'id'>>
+  ): Promise<RepairBooking> {
+    const supabase = await createClient();
+
+    const serializedUpdatedBooking = serializeToDbFormat(updatedBooking);
+
+    const { data: bookingData, error } = await supabase
+      .from(repairBookingsTable)
+      .update(serializedUpdatedBooking)
+      .eq('id', this._id)
+      .select('*')
+      .single();
+
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt under opdatering af booking.',
+        `Supabase error when trying to update booked repair timeslot [${this._id}]: ${error.message}`
+      );
+    }
+
+    if (!bookingData) {
+      console.warn(
+        `Supabase returned no data when updating repair booking [${this._id}].`
+      );
+      const Booking = await RepairBookingClient.id(this._id).getBooking();
+
+      if (!Booking) {
+        throw new ErrorNotFound(
+          `Booking [${this._id}] kunne ikke findes`,
+          `Repair booking [${this._id}] could not be found.`
+        );
+      }
+
+      return Booking;
+    }
+
+    const deserializedBooking =
+      deserializeFromDbFormat<RepairBooking>(bookingData);
+    return deserializedBooking;
+  }
+
+  public async getBooking(): Promise<RepairBooking | null> {
+    const supabase = await createClient();
+
+    const { data: bookingData, error } = await supabase
+      .from(repairBookingsTable)
+      .select('*')
+      .eq('id', this._id)
+      .single();
+
+    if (error) {
+      throw new ErrorSupabase(
+        'Noget gik galt under hentning af booking.',
+        `Supabase error when trying to get booked repair timeslot [${this._id}]: ${error.message}`
+      );
+    }
+
+    if (!bookingData) {
+      console.warn(`Repair booking [${this._id}] could not be found.`);
+      return null;
     }
 
     const deserializedBooking =
