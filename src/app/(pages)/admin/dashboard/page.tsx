@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
 import RepairBookingClient from '@lib/clients/repairBookingClient';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import BookingList from '@components/lists/bookingList/List';
 
 const AdminDashboardPage: NextPage = async () => {
@@ -10,8 +10,8 @@ const AdminDashboardPage: NextPage = async () => {
 
   const today = new Date();
   const todaysBookings = await RepairBookingClient.getBookings({
-    start: startOfDay(today),
-    end: endOfDay(today),
+    start: startOfWeek(today),
+    end: endOfWeek(today),
   });
 
   console.log(todaysBookings);
@@ -53,7 +53,7 @@ const AdminDashboardPage: NextPage = async () => {
 
       <div className="content-box h-1/2 flex flex-col gap-2">
         <h1 className="w-full text-center text-title">
-          Anmodninger om salg af enhed
+          Reparation af enheder denne uge
         </h1>
         <div className="h-full overflow-y-hidden">
           <BookingList bookings={todaysBookings} />

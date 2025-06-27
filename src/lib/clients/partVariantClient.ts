@@ -8,8 +8,8 @@ import DevicePart from '@schemas/devicePart';
 const partVariantsTable = process.env.PART_VARIANTS_TABLE as string;
 
 export default class DevicePartVariantClient {
-  public static id(partId: number, variantId: number) {
-    return new DevicePartVariantHandler(partId, variantId);
+  public static id(variantId: number) {
+    return new DevicePartVariantHandler(variantId);
   }
 
   public static async addPartVariant(
@@ -76,11 +76,9 @@ export default class DevicePartVariantClient {
 }
 
 class DevicePartVariantHandler {
-  private _partId: number;
   private _variantId: number;
 
-  constructor(partId: number, variantId: number) {
-    this._partId = partId;
+  constructor(variantId: number) {
     this._variantId = variantId;
   }
 
@@ -91,20 +89,19 @@ class DevicePartVariantHandler {
       .from(partVariantsTable)
       .select('*')
       .eq('id', this._variantId)
-      .eq('part_id', this._partId)
       .single();
 
     if (error) {
       throw new ErrorSupabase(
         'Noget gik galt under hentning af del variant',
-        `Supabase error fetching part variant [${this._variantId}] for part [${this._partId}]: ${error.message}`
+        `Supabase error fetching part variant [${this._variantId}]: ${error.message}`
       );
     }
 
     if (!variantData) {
       throw new ErrorNotFound(
         'Del variant ikke fundet',
-        `Part variant with id [${this._variantId}] for part [${this._partId}] could not be found`
+        `Part variant with id [${this._variantId}] could not be found`
       );
     }
 
@@ -122,21 +119,20 @@ class DevicePartVariantHandler {
       .from(partVariantsTable)
       .update(serializedVariant)
       .eq('id', this._variantId)
-      .eq('part_id', this._partId)
       .select('*')
       .single();
 
     if (error) {
       throw new ErrorSupabase(
         'Noget gik galt under opdatering af del variant',
-        `Supabase error updating part variant [${this._variantId}] on part [${this._partId}]: ${error.message}`
+        `Supabase error updating part variant [${this._variantId}]: ${error.message}`
       );
     }
 
     if (!variantData) {
       throw new ErrorSupabase(
         'Noget gik galt under opdatering af del variant',
-        `Supabase update operation succeeded but no data was returned for part variant ID ${this._variantId} on part ${this._partId}`
+        `Supabase update operation succeeded but no data was returned for part variant ID ${this._variantId}`
       );
     }
 
@@ -152,13 +148,12 @@ class DevicePartVariantHandler {
     const { error } = await supabase
       .from(partVariantsTable)
       .delete()
-      .eq('id', this._variantId)
-      .eq('part_id', this._partId);
+      .eq('id', this._variantId);
 
     if (error) {
       throw new ErrorSupabase(
         'Noget gik galt under sletning af del variant',
-        `Supabase error deleting part variant [${this._variantId}] on part [${this._partId}]: ${error.message}`
+        `Supabase error deleting part variant [${this._variantId}]: ${error.message}`
       );
     }
 

@@ -102,7 +102,6 @@ export async function updateVariant(
   formData: FormData
 ): Promise<ActionResponse<PartVariant>> {
   try {
-    const partId = parseInt(formData.get('partId')?.toString() || '', 10);
     const variantId = parseInt(formData.get('variantId')?.toString() || '', 10);
     const name = formData.get('variantName')?.toString();
     const description = formData.get('variantdescription')?.toString();
@@ -113,12 +112,6 @@ export async function updateVariant(
     );
     const price = Number(formData.get('variantprice'));
 
-    if (isNaN(partId) || partId <= 0) {
-      throw new ErrorBadRequest(
-        'Ugyldigt ID. Varianten kunne ikke opdateres.',
-        `Invalid partId in formData. Expected postive integer, got: ${partId}`
-      );
-    }
     if (isNaN(variantId) || variantId <= 0) {
       throw new ErrorBadRequest(
         'Ugyldigt ID. Varianten kunne ikke opdateres.',
@@ -140,7 +133,6 @@ export async function updateVariant(
     }
 
     const variant = await DevicePartVariantClient.id(
-      partId,
       variantId
     ).updatePartVariant({
       price: price,
@@ -234,17 +226,16 @@ export async function deleteVariant(
   formData: FormData
 ): Promise<ActionResponse> {
   try {
-    const partId = parseInt(formData.get('partId')?.toString() || '', 10);
     const variantId = parseInt(formData.get('variantId')?.toString() || '', 10);
 
-    if (isNaN(partId) || isNaN(variantId)) {
+    if (isNaN(variantId)) {
       throw new ErrorBadRequest(
-        'Ugyldigt ID. Delvarianten kunne ikke slettes.',
-        `Invalid partId or variantId in formData. Expected postive integers, got: partId=${partId}, variantId=${variantId}`
+        'Ugyldigt ID. Del-varianten kunne ikke slettes.',
+        `Invalid variantId in formData. Expected postive integer. Got ${variantId}`
       );
     }
 
-    await DevicePartVariantClient.id(partId, variantId).deletePartVariant();
+    await DevicePartVariantClient.id(variantId).deletePartVariant();
 
     return {
       success: true,

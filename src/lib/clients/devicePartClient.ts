@@ -224,6 +224,6 @@ class DevicePartHandler {
   }
 
   public variant(variantId: number) {
-    return DevicePartVariantClient.id(this._id, variantId);
+    return DevicePartVariantClient.id(variantId);
   }
 }

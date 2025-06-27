@@ -10,10 +10,11 @@ interface BookingListRowProps {
 
 const BookingListRow: FC<BookingListRowProps> = ({ booking, device }) => {
   const deviceName = `${device.brand} ${device.model} ${device.version}`;
+  const bookingDate = new Date(booking.bookingDate);
   return (
     <li className="w-full  h-10 bg-slate-100 shadow-sm rounded-md hover:shadow-md">
       <Link
-        href={`/admin/bookings/${booking.id}`}
+        href={`/admin/reparation/booking/${booking.id}`}
         className="w-full h-full flex flex-row justify-between p-2"
       >
         <span>{booking.email}</span>
@@ -21,7 +22,9 @@ const BookingListRow: FC<BookingListRowProps> = ({ booking, device }) => {
         <span>{booking.estimatedRepairTime} minutter</span>
         <span>{booking.estimatedPrice} kr</span>
 
-        <span>{new Date(booking.bookingDate).toLocaleString()}</span>
+        <span>
+          {bookingDate.toLocaleTimeString()} {bookingDate.toLocaleDateString()}
+        </span>
       </Link>
     </li>
   );

@@ -18,19 +18,13 @@ const BookingList: FC<BookingListProps> = async ({ bookings }) => {
 
   return (
     <ul className="w-full h-full overflow-y-scroll flex flex-col p-1 gap-2">
-      <Suspense fallback={<p>Henter bookinger...</p>}>
-        {bookings.length > 0 ? (
-          bookings.map((booking) => (
-            <BookingListRow
-              key={booking.id}
-              device={deviceMap.get(booking.deviceId) as Device}
-              booking={booking}
-            />
-          ))
-        ) : (
-          <p>Ingen bookinger fundet</p>
-        )}
-      </Suspense>
+      {bookings.map((booking) => (
+        <BookingListRow
+          key={booking.id}
+          device={deviceMap.get(booking.deviceId) as Device}
+          booking={booking}
+        />
+      ))}
     </ul>
   );
 };

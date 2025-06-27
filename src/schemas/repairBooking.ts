@@ -14,7 +14,7 @@ export default interface RepairBooking {
   estimatedPrice: number;
   actualPrice: number;
 
-  status:
+  repairStatus:
     | 'pending'
     | 'repairing'
     | 'repaired'
