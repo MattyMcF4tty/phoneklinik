@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
 import RepairBookingClient from '@lib/clients/repairBookingClient';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
+import { startOfWeek, endOfWeek } from 'date-fns';
 import BookingList from '@components/lists/bookingList/List';
 
 const AdminDashboardPage: NextPage = async () => {
@@ -14,7 +14,6 @@ const AdminDashboardPage: NextPage = async () => {
     end: endOfWeek(today),
   });
 
-  console.log(todaysBookings);
   return (
     <div className="flex flex-col w-full h-[calc(90vh_-_var(--navbar-height))] gap-8">
       <div className="flex flex-row gap-8 h-1/2">

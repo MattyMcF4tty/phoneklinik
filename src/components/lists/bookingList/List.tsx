@@ -1,5 +1,5 @@
 import RepairBooking from '@schemas/repairBooking';
-import React, { FC, Suspense } from 'react';
+import React, { FC } from 'react';
 import BookingListRow from './Row';
 import DeviceClient from '@lib/clients/deviceClient';
 import Device from '@schemas/device';

@@ -2,17 +2,28 @@
 
 import DevicePart from '@schemas/devicePart';
 import RepairBooking from '@schemas/repairBooking';
-import React, { FC, useEffect, useState } from 'react';
+import { ActionResponse } from '@schemas/types';
+import React, { FC, useActionState, useEffect, useState } from 'react';
+import { updateBooking } from '../actions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface InternalFormProps {
   booking: RepairBooking;
   deviceParts: DevicePart[];
+  deviceName: string;
 }
 
-const InternalForm: FC<InternalFormProps> = ({ booking, deviceParts }) => {
+const InternalForm: FC<InternalFormProps> = ({
+  booking,
+  deviceParts,
+  deviceName,
+}) => {
+  const router = useRouter();
+
   const [appliedParts, setAppliedParts] = useState(booking.appliedPartVariants);
   const partVariants = deviceParts.flatMap((part) => part.variants);
-  const [actualPrice, setActualPrice] = useState(booking.actualPrice);
+  const [actualPrice, setActualPrice] = useState(booking.actualPrice ?? 0);
   const [internalNotes, setInternalNotes] = useState(
     booking.internalNotes || ''
   );
@@ -25,11 +36,6 @@ const InternalForm: FC<InternalFormProps> = ({ booking, deviceParts }) => {
     setActualPrice(total);
   }, [appliedParts, partVariants]);
 
-  const disableUpdate =
-    booking.repairStatus === 'repaired' ||
-    booking.repairStatus === 'no_show' ||
-    booking.repairStatus === 'cancelled';
-
   const areArraysEqual = (a: number[], b: number[]) =>
     a.length === b.length && a.every((val) => b.includes(val));
 
@@ -38,9 +44,47 @@ const InternalForm: FC<InternalFormProps> = ({ booking, deviceParts }) => {
     repairStatus !== booking.repairStatus ||
     !areArraysEqual(appliedParts, booking.appliedPartVariants);
 
+  const initalState: ActionResponse<RepairBooking> = {
+    success: undefined,
+    message: '',
+    data: booking,
+  };
+
+  const [state, formAction, pending] = useActionState(
+    updateBooking,
+    initalState
+  );
+
+  const disableUpdate =
+    booking.repairStatus === 'repaired' ||
+    booking.repairStatus === 'no_show' ||
+    booking.repairStatus === 'cancelled' ||
+    pending;
+
+  useEffect(() => {
+    if (pending === true) {
+      toast.loading('Opdatere booking...', { id: 'update-booking' });
+    } else {
+      toast.dismiss('update-booking');
+
+      if (state.success === true) {
+        toast.success(state.message || 'Booking opdateret');
+        router.refresh();
+      } else if (state.success === false) {
+        toast.error(state.message || 'Noget gik galt');
+      }
+    }
+  }, [pending, state, router]);
+
   return (
-    <form className="w-full flex flex-col gap-4">
+    <form action={formAction} className="w-full flex flex-col gap-4">
       <div className="flex flex-row gap-4">
+        <input
+          type="hidden"
+          name="deviceName"
+          id="deviceName"
+          defaultValue={deviceName}
+        />
         <label
           htmlFor="internalNotes"
           className="w-full font-medium flex flex-col"
@@ -83,24 +127,30 @@ const InternalForm: FC<InternalFormProps> = ({ booking, deviceParts }) => {
               );
             })}
           </div>
+          {appliedParts.map((part) => (
+            <input
+              key={part}
+              type="hidden"
+              name="appliedPart"
+              id="appliedPart"
+              value={part}
+            />
+          ))}
         </fieldset>
 
         <div className="w-full flex flex-col gap-4">
-          <label
-            htmlFor="actualPrice"
-            className="w-full font-medium flex flex-col"
-          >
-            Aktuel pris af reparation
+          <div className="w-full flex flex-col">
+            <p className="w-full font-medium ">
+              Faktisk pris for reparationen (uden moms)
+            </p>
+            <p>{actualPrice} kr.</p>
             <input
-              disabled={disableUpdate}
-              type="text"
-              id="actualPrice"
+              type="hidden"
               name="actualPrice"
-              readOnly
-              value={`${actualPrice} kr`}
-              className="input-default bg-slate-100 font-normal"
+              id="actualPrice"
+              value={actualPrice}
             />
-          </label>
+          </div>
 
           <label
             htmlFor="repairStatus"

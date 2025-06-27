@@ -63,11 +63,17 @@ export default function ContactUs() {
 
             <h3 className="text-lg font-bold mb-1">Kontakt:</h3>
             <p className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faPhone} className="text-[#1561c9] size-5" />
+              <FontAwesomeIcon
+                icon={faPhone}
+                className="text-[#1561c9] size-5"
+              />
               +45 22 55 66 67
             </p>
             <p className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faEnvelope} className="text-[#1561c9] size-5" />
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="text-[#1561c9] size-5"
+              />
               info@phoneklinik.dk
             </p>
           </div>

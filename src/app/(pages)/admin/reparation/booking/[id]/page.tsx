@@ -1,5 +1,4 @@
 import DeviceClient from '@lib/clients/deviceClient';
-import DevicePartClient from '@lib/clients/devicePartClient';
 import DevicePartVariantClient from '@lib/clients/partVariantClient';
 import RepairBookingClient from '@lib/clients/repairBookingClient';
 import { ErrorBadRequest, ErrorNotFound } from '@schemas/errors/appErrorTypes';
@@ -61,22 +60,22 @@ const Page: NextPage<PageProps> = async ({ params }) => {
             </h2>
 
             <div className="w-full flex flex-col gap-4">
-              <div className="border-l pl-1 hover:bg-slate-100 rounded-r-md">
+              <div className="hover:bg-slate-100 rounded-r-md">
                 <p className="font-medium">Navn</p>
                 <p>{booking.name}</p>
               </div>
 
-              <div className="border-l pl-1 hover:bg-slate-100 rounded-r-md">
+              <div className="hover:bg-slate-100 rounded-r-md">
                 <p className="font-medium">Email</p>
                 <p>{booking.email}</p>
               </div>
 
-              <div className="border-l pl-1 hover:bg-slate-100 rounded-r-md">
+              <div className="hover:bg-slate-100 rounded-r-md">
                 <p className="font-medium">Telefon</p>
                 <p>{booking.phone}</p>
               </div>
 
-              <div className="border-l pl-1 hover:bg-slate-100 rounded-r-md">
+              <div className="hover:bg-slate-100 rounded-r-md">
                 <p className="font-medium">Booking dato</p>
                 <span>
                   <p>{bookingDate.toLocaleDateString()}</p>
@@ -88,7 +87,7 @@ const Page: NextPage<PageProps> = async ({ params }) => {
                   </p>
                 </span>
               </div>
-              <div className="border-l pl-1 hover:bg-slate-100 rounded-r-md">
+              <div className="hover:bg-slate-100 rounded-r-md">
                 <p className="font-medium">Afhentnings kode</p>
                 <p>{booking.pickUpCode}</p>
               </div>
@@ -139,7 +138,11 @@ const Page: NextPage<PageProps> = async ({ params }) => {
         <h2 className="text-subtitle place-self-center text-center border-b w-1/2">
           Intern info
         </h2>
-        <InternalForm booking={booking} deviceParts={deviceParts} />
+        <InternalForm
+          booking={booking}
+          deviceParts={deviceParts}
+          deviceName={deviceName}
+        />
       </div>
     </div>
   );

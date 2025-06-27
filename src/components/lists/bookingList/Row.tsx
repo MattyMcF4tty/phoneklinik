@@ -21,6 +21,7 @@ const BookingListRow: FC<BookingListRowProps> = ({ booking, device }) => {
         <span>{deviceName}</span>
         <span>{booking.estimatedRepairTime} minutter</span>
         <span>{booking.estimatedPrice} kr</span>
+        <span>{booking.pickUpCode}</span>
 
         <span>
           {bookingDate.toLocaleTimeString()} {bookingDate.toLocaleDateString()}
