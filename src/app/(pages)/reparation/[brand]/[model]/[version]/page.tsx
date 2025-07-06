@@ -1,4 +1,4 @@
-import PartList from '@components/lists/devicePartList/List';
+import PartList from '@/app/(pages)/reparation/[brand]/[model]/[version]/components/PartList';
 import DeviceClient from '@/lib/clients/deviceClient';
 import { NextPage } from 'next';
 import Image from 'next/image';

@@ -3,7 +3,7 @@ import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
 import RepairBookingClient from '@lib/clients/repairBookingClient';
 import { startOfWeek, endOfWeek } from 'date-fns';
-import BookingList from '@components/lists/bookingList/List';
+import BookingList from '@/app/(pages)/admin/dashboard/components/BookingList';
 
 const AdminDashboardPage: NextPage = async () => {
   const valuations = await ValuationRequestClient.query();

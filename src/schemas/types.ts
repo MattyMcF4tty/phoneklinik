@@ -12,3 +12,9 @@ export type ApiResponse<T = undefined> = {
 };
 
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+export type InferActionData<A> = A extends (
+  formData: FormData
+) => Promise<ActionResponse<infer T>>
+  ? T
+  : never;

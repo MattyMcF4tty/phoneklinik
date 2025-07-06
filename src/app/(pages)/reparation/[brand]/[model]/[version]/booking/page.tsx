@@ -1,6 +1,6 @@
 'use client';
 
-import BookRepairForm from '@/components/forms/BookRepairForm';
+import BookRepairForm from '@/app/(pages)/reparation/[brand]/[model]/[version]/booking/components/BookRepairForm';
 import useSessionStorage from '@/hooks/useSessionStorage';
 import PartVariant from '@/schemas/partVariant';
 import { NextPage } from 'next';
@@ -51,7 +51,7 @@ const BookingPage: NextPage = () => {
                   <h3 className="text-base">{part.name}</h3>
                 </div>
 
-                <p className="">{part.price} kr.</p>
+                <p>{part.price} kr.</p>
               </div>
             ))}
           </div>

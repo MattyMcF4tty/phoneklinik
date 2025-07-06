@@ -1,8 +1,38 @@
-import Device from '@schemas/device';
 import RepairBooking from '@schemas/repairBooking';
-import Link from 'next/link';
 import React, { FC } from 'react';
+import DeviceClient from '@lib/clients/deviceClient';
+import Device from '@schemas/device';
+import Link from 'next/link';
 
+/* --- LIST --- */
+interface BookingListProps {
+  bookings: RepairBooking[];
+}
+
+const BookingList: FC<BookingListProps> = async ({ bookings }) => {
+  const uniqueDeviceIds = [...new Set(bookings.map((b) => b.deviceId))];
+  const devicesArray = await Promise.all(
+    uniqueDeviceIds.map((id) => DeviceClient.id(id).getDevice())
+  );
+
+  const deviceMap = new Map(devicesArray.map((device) => [device.id, device]));
+
+  return (
+    <ul className="w-full h-full overflow-y-scroll flex flex-col p-1 gap-2">
+      {bookings.map((booking) => (
+        <BookingListRow
+          key={booking.id}
+          device={deviceMap.get(booking.deviceId) as Device}
+          booking={booking}
+        />
+      ))}
+    </ul>
+  );
+};
+
+export default BookingList;
+
+/* --- ROW --- */
 interface BookingListRowProps {
   booking: RepairBooking;
   device: Device;
@@ -30,5 +60,3 @@ const BookingListRow: FC<BookingListRowProps> = ({ booking, device }) => {
     </li>
   );
 };
-
-export default BookingListRow;

@@ -34,7 +34,7 @@ const YoutubeVideo: FC<VideoProps> = ({ videoId, options }) => {
         allow="autoplay; encrypted-media"
         allowFullScreen
         title="YouTube video background"
-      ></iframe>
+      />
     </div>
   );
 };

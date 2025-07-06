@@ -1,7 +1,7 @@
 'use client';
 
 import ItemCard from '@components/cards/ItemCard';
-import DeviceForm from '@components/forms/new/DeviceForm';
+import DeviceForm from '@components/forms/presets/DeviceForm';
 import PopUpWrapper from '@components/wrappers/PopUpWrapper';
 import Brand from '@schemas/brand';
 import Device from '@schemas/device';

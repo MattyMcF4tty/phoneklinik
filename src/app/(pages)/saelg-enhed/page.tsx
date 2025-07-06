@@ -1,4 +1,4 @@
-import RequestValuationForm from '@/components/forms/RequestValuationForm';
+import RequestValuationForm from '@/app/(pages)/saelg-enhed/components/RequestValuationForm';
 
 export default async function SellPhonePage() {
   return (
@@ -13,7 +13,7 @@ export default async function SellPhonePage() {
             <p className="text-sm md:text-base text-gray-600">
               Giv din telefon nyt liv og sælg den til os. I stedet for at din
               gamle iPhone ligger og samler støv i skuffen, så sælg den hellere
-              til os og få en fair pris – uanset stand og alder på enheden.
+              til os og få en fair pris - uanset stand og alder på enheden.
             </p>
             <p className="mt-4 text-gray-600">
               Svar på nedenstående skema og så vender vi tilbage hurtigst

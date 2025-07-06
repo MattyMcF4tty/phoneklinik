@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import LoginForm from '@/components/forms/auth/LoginForm';
+import LoginForm from '@components/forms/presets/LoginForm';
 
 interface LoginPageProps {
   searchParams: Promise<{ error?: string }>;

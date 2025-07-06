@@ -1,4 +1,4 @@
-import ValuationList from '@components/lists/valutionList/List';
+import ValuationList from '@/app/(pages)/admin/brugtsalg/components/ValuationList';
 import ValuationRequestClient from '@lib/clients/valuationBookingClient';
 import { NextPage } from 'next';
 

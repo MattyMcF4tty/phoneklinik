@@ -9,7 +9,7 @@ import React, { FC, useActionState, useEffect, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 import { toast } from 'sonner';
 import { updatePart } from '../actions';
-import PartForm from '@components/forms/new/PartForm';
+import PartForm from '@components/forms/presets/PartForm';
 
 interface UpdatePartButtonProps {
   deviceId: Device['id'];

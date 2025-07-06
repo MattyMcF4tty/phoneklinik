@@ -1,32 +1,16 @@
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import ContactForm from '@/components/forms/ContactForm';
+import ContactForm from '@/app/(pages)/kontakt-os/components/ContactForm';
+import WaveHeader from '@components/headers/WaveHeader';
 
 export default function ContactUs() {
   return (
     <div className="bg-gray-50 min-h-screen w-full relative overflow-x-hidden">
-      {/* ---------- Gradient hero with wave ---------- */}
-      <header className="relative h-[42vh] bg-gradient-to-r from-[#12308b] via-[#1561c9] to-[#08a5f4] flex flex-col items-center justify-center text-center px-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-          Kontakt os
-        </h1>
-        <p className="text-white text-base md:text-lg opacity-90">
-          Har du spørgsmål? Vi er her for at hjælpe!
-        </p>
-
-        {/* decorative bottom wave */}
-        <svg
-          className="absolute -bottom-px w-full h-24 text-gray-50"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="currentColor"
-            d="M0,192L60,170.7C120,149,240,107,360,90.7C480,75,600,85,720,117.3C840,149,960,203,1080,202.7C1200,203,1320,149,1380,122.7L1440,96V320H0Z"
-          />
-        </svg>
-      </header>
+      <WaveHeader
+        title="Kontakt os"
+        subtitle="Har du spørgsmål? Vi er her for at hjælpe!"
+      />
 
       {/* ---------- Floating info card ---------- */}
       <section className="max-w-3xl mx-auto -mt-5 px-6">

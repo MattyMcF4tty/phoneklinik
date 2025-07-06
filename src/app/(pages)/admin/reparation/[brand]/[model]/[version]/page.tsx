@@ -4,7 +4,7 @@ import DeviceClient from '@/lib/clients/deviceClient';
 import DeleteDeviceButton from './components/DeleteDevice';
 import { BrandClient } from '@lib/clients/brandClient';
 import UpdateDeviceButton from './components/UpdateDevice';
-import AdminPartList from '@components/lists/parList/List';
+import AdminPartList from '@/app/(pages)/admin/reparation/[brand]/[model]/[version]/components/AdminPartList';
 
 interface DevicePageProps {
   params: Promise<{ brand: string; model: string; version: string }>;

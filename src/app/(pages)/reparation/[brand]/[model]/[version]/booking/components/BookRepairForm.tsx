@@ -4,9 +4,10 @@ import bookRepair from '@/app/(pages)/reparation/[brand]/[model]/[version]/booki
 import useSessionStorage from '@/hooks/useSessionStorage';
 import Device from '@/schemas/device';
 import DevicePart from '@/schemas/devicePart';
-import { ActionResponse } from '@/schemas/types';
+import ActionForm from '@components/forms/ActionForm';
+import { useRouter } from 'next/navigation';
 
-import React, { FC, useActionState, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface BookRepairFormProps {
@@ -14,6 +15,7 @@ interface BookRepairFormProps {
 }
 
 const BookRepairForm: FC<BookRepairFormProps> = ({ deviceName }) => {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -56,24 +58,20 @@ const BookRepairForm: FC<BookRepairFormProps> = ({ deviceName }) => {
     fetchSlots();
   }, [selectedDate]);
 
-  const initialState: ActionResponse = {
-    success: undefined,
-    message: '',
-  };
-
-  const [state, formAction] = useActionState(bookRepair, initialState);
-
-  useEffect(() => {
-    if (state.success === true) {
-      toast.success('Reparation booket!');
-    } else if (state.success === false) {
-      toast.error(state.message);
-    }
-  }, [state]);
-
   return (
-    <form
-      action={formAction}
+    <ActionForm
+      action={bookRepair}
+      initialActionState={{
+        success: undefined,
+        message: '',
+      }}
+      onSuccess={() => {
+        router.replace('/');
+      }}
+      whileLoading={() => {
+        router.prefetch('/');
+      }}
+      loadingText="Reservere tid..."
       className="w-full h-full bg-transparent flex flex-col items-center"
     >
       <div className="w-full flex flex-col mb-4 gap-4">
@@ -195,6 +193,7 @@ const BookRepairForm: FC<BookRepairFormProps> = ({ deviceName }) => {
           id="deviceId"
           defaultValue={deviceId}
         />
+
         {selectedParts.length > 0 &&
           selectedParts.map((part) => (
             <input
@@ -207,7 +206,7 @@ const BookRepairForm: FC<BookRepairFormProps> = ({ deviceName }) => {
           ))}
       </div>
       <button className="button-highlighted">Book reparation</button>
-    </form>
+    </ActionForm>
   );
 };
 

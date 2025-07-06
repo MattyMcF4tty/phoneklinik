@@ -7,7 +7,7 @@ import React, { FC, useActionState, useEffect, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 import { toast } from 'sonner';
 import { updateVariant } from '../actions';
-import PartVariantForm from '@components/forms/new/PartVariantForm';
+import PartVariantForm from '@components/forms/presets/PartVariantForm';
 import PartVariant from '@schemas/partVariant';
 
 interface UpdateVariantButtonProps {

@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react';
 export default function useLocalStorage<T>(
   key: string,
   initialValue: T
-): [T, (value: T) => void] {
+): [T, (value: T) => void, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     try {
@@ -16,6 +17,8 @@ export default function useLocalStorage<T>(
       }
     } catch (error) {
       console.error('Error reading localStorage:', error);
+    } finally {
+      setIsHydrated(true);
     }
   }, [key]);
 
@@ -28,5 +31,5 @@ export default function useLocalStorage<T>(
     }
   };
 
-  return [storedValue, setValue];
+  return [storedValue, setValue, isHydrated];
 }

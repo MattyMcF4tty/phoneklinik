@@ -1,6 +1,6 @@
 'use client';
 
-import AccessoryForm from '@components/forms/new/AccessoryForm';
+import AccessoryForm from '@components/forms/presets/AccessoryForm';
 import PopUpWrapper from '@components/wrappers/PopUpWrapper';
 import Accessory from '@schemas/accessory';
 import Brand from '@schemas/brand';
