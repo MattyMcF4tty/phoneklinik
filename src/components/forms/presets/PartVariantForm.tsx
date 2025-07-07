@@ -23,6 +23,12 @@ const PartVariantForm: FC<PartVariantFormProps> = ({
   return (
     <form {...rest}>
       <input type="hidden" id="partId" name="partId" defaultValue={partId} />
+      <input
+        type="hidden"
+        id="variantId"
+        name="variantId"
+        defaultValue={defaultVariant?.id}
+      />
 
       <label htmlFor="variantName">
         <p className="label-default">Variantens navn</p>

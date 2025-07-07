@@ -4,7 +4,7 @@ import React, { FC, useActionState, useEffect } from 'react';
 import { ActionResponse } from '@schemas/types';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { deletePart } from '../actions';
+import { deletePart, deleteVariant } from '../actions';
 import PartVariant from '@schemas/partVariant';
 
 interface DeleteVariantButtonProps {
@@ -19,7 +19,10 @@ const DeleteVariantButton: FC<DeleteVariantButtonProps> = ({ variant }) => {
     message: '',
   };
 
-  const [state, formAction, pending] = useActionState(deletePart, initialState);
+  const [state, formAction, pending] = useActionState(
+    deleteVariant,
+    initialState
+  );
 
   useEffect(() => {
     if (pending === true) {

@@ -78,7 +78,7 @@ export async function deletePart(
   formData: FormData
 ): Promise<ActionResponse> {
   try {
-    const id = parseInt(formData.get('id')?.toString() || '', 10);
+    const id = parseInt(formData.get('partId')?.toString() || '', 10);
 
     if (isNaN(id)) {
       throw new ErrorBadRequest(
@@ -104,13 +104,13 @@ export async function updateVariant(
   try {
     const variantId = parseInt(formData.get('variantId')?.toString() || '', 10);
     const name = formData.get('variantName')?.toString();
-    const description = formData.get('variantdescription')?.toString();
+    const description = formData.get('variantDescription')?.toString();
     const variantRepairTime = Number(formData.get('variantRepairTime'));
     const variantGrade = parseInt(
       formData.get('variantGrade')?.toString() || '',
       10
     );
-    const price = Number(formData.get('variantprice'));
+    const price = Number(formData.get('variantPrice'));
 
     if (isNaN(variantId) || variantId <= 0) {
       throw new ErrorBadRequest(
@@ -164,7 +164,9 @@ export async function addVariant(
       formData.get('variantGrade')?.toString() || '',
       10
     );
-    const price = Number(formData.get('variantprice'));
+    const price = Number(formData.get('variantPrice'));
+
+    console.log(partId);
 
     if (isNaN(partId) || partId <= 0) {
       throw new ErrorBadRequest(

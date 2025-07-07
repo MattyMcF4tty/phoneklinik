@@ -18,7 +18,11 @@ export default class DevicePartVariantClient {
   ) {
     const supabase = await createClient();
 
-    const serializedVariant = serializeToDbFormat(newVariant);
+    const serializedVariant = serializeToDbFormat({
+      ...newVariant,
+      partId: partId,
+    });
+
     const { data: variantData, error } = await supabase
       .from(partVariantsTable)
       .insert(serializedVariant)
