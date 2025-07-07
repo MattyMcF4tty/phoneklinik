@@ -27,6 +27,12 @@ const PartForm: FC<PartFormProps> = ({
         name="deviceId"
         defaultValue={deviceId}
       />
+      <input
+        type="hidden"
+        id="partId"
+        name="partId"
+        defaultValue={defaultPart?.id}
+      />
 
       <label htmlFor="partName">
         <p className="label-default">Delens navn</p>

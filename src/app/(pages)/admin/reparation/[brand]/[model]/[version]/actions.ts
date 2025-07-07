@@ -13,9 +13,9 @@ export async function updatePart(
   prevState: ActionResponse<DevicePart>,
   formData: FormData
 ): Promise<ActionResponse<DevicePart>> {
-  const id = parseInt(formData.get('id')?.toString() || '', 10);
-  const name = formData.get('name')?.toString();
-  const description = formData.get('description')?.toString();
+  const id = parseInt(formData.get('partId')?.toString() || '', 10);
+  const name = formData.get('partName')?.toString();
+  const description = formData.get('partDescription')?.toString();
 
   const part = await DevicePartClient.id(id).updatePart({
     name: name,

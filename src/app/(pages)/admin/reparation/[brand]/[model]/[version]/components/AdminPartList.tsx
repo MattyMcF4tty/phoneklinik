@@ -88,7 +88,7 @@ const AdminPartListRow: FC<AdminPartListRowProps> = ({
       </div>
 
       <PartVariantList
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 min-h-12"
         partId={devicePart.id}
         variants={devicePart.variants}
       />
