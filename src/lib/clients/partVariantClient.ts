@@ -58,7 +58,7 @@ export default class DevicePartVariantClient {
       );
     }
 
-    if (!variantsData || variantsData.length === 0) {
+    if (!variantsData) {
       throw new ErrorNotFound(
         'Ingen del varianter fundet',
         `No part variants found for part with id [${partId}]`
