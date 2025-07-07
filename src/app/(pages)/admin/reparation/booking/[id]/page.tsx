@@ -37,7 +37,6 @@ const Page: NextPage<PageProps> = async ({ params }) => {
   ]);
 
   const deviceName = `${device.brand} ${device.model} ${device.version}`;
-  console.log(deviceName);
   const bookingDate = new Date(booking.bookingDate);
 
   return (
@@ -124,7 +123,7 @@ const Page: NextPage<PageProps> = async ({ params }) => {
               </div>
 
               <div className="w-full">
-                <p className="font-medium">Forventet pris (uden moms)</p>
+                <p className="font-medium">Forventet pris (inkl. moms)</p>
                 <div className="pl-1 hover:bg-gray-100 rounded-md ">
                   {booking.estimatedPrice} kr.
                 </div>

@@ -141,7 +141,7 @@ const InternalForm: FC<InternalFormProps> = ({
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex flex-col">
             <p className="w-full font-medium ">
-              Faktisk pris for reparationen (uden moms)
+              Faktisk pris for reparationen (inkl. moms)
             </p>
             <p>{actualPrice} kr.</p>
             <input

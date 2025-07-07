@@ -63,7 +63,10 @@ const PartList: FC<PartListProps> = ({ device, parts }) => {
 
       {/* Total Price */}
       <div className="w-full flex justify-between items-center border-t pt-4 text-base font-medium">
-        <p className="text-gray-700">Pris i alt</p>
+        <p className="text-gray-700">
+          Pris i alt
+          <p className="text-subtle text-sm">(inkl. moms)</p>
+        </p>
         <p className="text-gray-900">{combinedPartsPrice} kr.</p>
       </div>
 

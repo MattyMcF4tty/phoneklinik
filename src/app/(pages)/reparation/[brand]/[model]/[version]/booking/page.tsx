@@ -27,8 +27,7 @@ const BookingPage: NextPage = () => {
   );
 
   const totalPrice = parts.reduce((sum, part) => sum + part.price, 0);
-  const vatPrice = totalPrice * 0.25;
-
+  const vatPrice = (totalPrice * 0.25) / 1.25;
   return (
     <div className="w-full flex flex-col gap-4 grow">
       <h1 className="content-box text-2xl font-semibold text-center">
@@ -36,9 +35,10 @@ const BookingPage: NextPage = () => {
       </h1>
 
       <div className="w-full md:flex md:flex-row gap-4">
-        <div className="content-box mb-4 md:w-1/3 flex flex-col hover:cursor-default gap-4">
-          <h1 className="w-full text-xl font-medium text-center border-b h-10">
+        <div className="content-box md:w-1/3 flex flex-col hover:cursor-default gap-4">
+          <h1 className="w-full text-xl font-medium text-center border-b h-14">
             Kvittering
+            <p className="text-subtle text-sm">(alle priser inkl. moms)</p>
           </h1>
 
           <div className="flex flex-col border-b px-2 pb-4 gap-2 overflow-y-scroll">
@@ -56,20 +56,20 @@ const BookingPage: NextPage = () => {
             ))}
           </div>
 
-          <div className="w-full flex flex-col items-center px-2 pb-4 gap-2 border-b">
+          {/*           <div className="w-full flex flex-col items-center px-2 pb-4 gap-2 border-b">
             <div className="w-full justify-between flex flex-row">
               <p className="text-base">Eksklusiv moms</p>
-              <p>{totalPrice} kr.</p>
+              <p>{(totalPrice - vatPrice).toFixed(2)} kr.</p>
             </div>
             <div className="w-full justify-between flex flex-row">
               <p className="text-base">Moms (25%)</p>
-              <p>{vatPrice} kr.</p>
+              <p>{vatPrice.toFixed(2)} kr.</p>
             </div>
-          </div>
+          </div> */}
 
           <div className="w-full justify-between text-lg font-medium flex flex-row px-2">
             <h1>Total</h1>
-            <h1>{totalPrice + vatPrice} kr.</h1>
+            <h1>{totalPrice.toFixed(2)} kr.</h1>
           </div>
         </div>
         <div className="content-box md:w-2/3 overflow-y-scroll">

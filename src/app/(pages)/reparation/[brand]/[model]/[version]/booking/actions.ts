@@ -7,7 +7,6 @@ export default async function bookRepair(
   prevState: ActionResponse,
   formData: FormData
 ): Promise<ActionResponse> {
-  console.log('Form data:', formData);
   try {
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
@@ -67,7 +66,7 @@ export default async function bookRepair(
       deviceId: Number(deviceId),
     });
 
-    console.log('Booking successful:', booking);
+    console.log('Booking successful: ', booking.id);
 
     return {
       success: true,
