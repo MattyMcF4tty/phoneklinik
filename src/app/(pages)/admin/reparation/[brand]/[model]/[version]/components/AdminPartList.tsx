@@ -24,7 +24,6 @@ const AdminPartList: FC<AdminDevicePartListProps> = ({
   return (
     <ul
       {...rest}
-      {...rest}
       onMouseOver={(e) => {
         setShowSettings(true);
         if (rest.onMouseOver) {

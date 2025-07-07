@@ -58,7 +58,11 @@ const DevicePage: NextPage<DevicePageProps> = async ({ params }) => {
       {/* RIGHT: Editable Parts */}
       <div className="w-full flex flex-col gap-4 overflow-y-scroll">
         <div className="content-box w-full flex flex-col gap-4">
-          <AdminPartList deviceId={device.id} parts={deviceParts} />
+          <AdminPartList
+            className="min-h-32"
+            deviceId={device.id}
+            parts={deviceParts}
+          />
         </div>
         <div className="flex flex-row gap-4">
           <UpdateDeviceButton device={device} brands={allBrands} />
