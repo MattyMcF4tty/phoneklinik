@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/GeistVF.woff') format('woff');
+  font-weight: 100 900; /* Adjust depending on font's weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMonoVF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  font-family: 'Geist', sans-serif;
+}
+
+:root {
+  --navbar-height: 4rem; /* 64px */
+}
+
+.input-default {
+  @apply w-full border-b outline-none focus:bg-slate-100 px-1 h-8 focus:shadow-inner focus-within:bg-slate-100;
+}
+
+.input-search {
+  @apply w-full border-b outline-none focus:bg-slate-50 px-1 h-8 focus:shadow-inner rounded-t-sm;
+}
+
+.label-default {
+  @apply w-full font-semibold;
+}
+
+.button-navbar {
+  @apply hover:underline text-wrap text-center p-4;
+}
+
+.button-highlighted {
+  @apply text-white bg-main-purple px-6 py-3 font-semibold rounded shadow-md disabled:bg-slate-400;
+}
+
+.content-box {
+  @apply rounded-md shadow-lg bg-white p-4 duration-150;
+}
+
+.text-title {
+  @apply text-2xl font-medium;
+}
+
+.text-subtitle {
+  @apply text-lg font-semibold;
+}
+
+.text-subtle {
+  @apply text-slate-500 italic;
+}

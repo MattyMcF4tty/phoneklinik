@@ -1,48 +1,32 @@
-import { DevicePartSchema } from '@/schemas/devicePartSchema';
-import { DeviceSchema } from '@/schemas/deviceScema';
-import { sendMail } from './misc';
+import nodemailer from 'nodemailer';
 
-export interface bookRepair {
-  device: DeviceSchema;
-  selectedParts: DevicePartSchema[];
-  email: string;
-  phone: string;
-  name: string;
-  comment: string;
-  date: string;
-  time: string;
-  location: string;
+export default async function sendMail(
+  toEmail: string,
+  subject: string,
+  body: {
+    plainText: string;
+    html?: string;
+  },
+  replyToEmail?: string
+) {
+  const transporter = nodemailer.createTransport({
+    host: 'asmtp.dandomain.dk',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.NO_REPLY_MAIL,
+      pass: process.env.MAIL_PASSWORD,
+    },
+  });
+
+  const info = await transporter.sendMail({
+    from: process.env.NO_REPLY_MAIL,
+    to: toEmail,
+    subject,
+    text: body.plainText,
+    html: body.html,
+    replyTo: replyToEmail,
+  });
+
+  console.log('Email sent:', info.messageId);
 }
-
-export const bookRepair = async ({
-  device,
-  selectedParts,
-  email,
-  phone,
-  name,
-  comment,
-  date,
-  time,
-  location,
-}: bookRepair) => {
-  await sendMail(
-    `REPAIR: ${device.model} ${device.version}`,
-    `Customer: ${name} has reserved a timeslot at ${location} on ${date} at ${time}.
-          Parts needed:
-          ${selectedParts
-            .map((part) => `- ${part.name}, price of part: ${part.price}kr\n`)
-            .join('')}
-          Full price of repair: ${selectedParts.reduce(
-            (total, part) => total + part.price,
-            0
-          )}kr
-          
-          Customer comment:
-          "${comment}"
-          
-          Contact customer:
-          Email: ${email}
-          Phone: ${phone}
-          `
-  );
-};

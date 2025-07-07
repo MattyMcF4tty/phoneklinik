@@ -1,6 +1,10 @@
-import { emailRegex } from '@/schemas/customTypes';
+import { fileTypeFromBuffer } from 'file-type';
+
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { emailRegex } from '@/schemas/types';
+import { headers } from 'next/headers';
+import { ErrorInternal } from '@schemas/errors/appErrorTypes';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -13,13 +17,6 @@ export const validateEmail = (email: string) => {
   return email;
 };
 
-export const validateTime = (time: string) => {
-  if (emailRegex.test(time)) {
-    throw new Error(`${time} is not a valid time. Must be HH:MM:SS`);
-  }
-  return time;
-};
-
 export const validateDate = (dateString: string) => {
   if (!dateString || isNaN(Date.parse(dateString))) {
     throw new Error(`${dateString} is not a valid Date object.`);
@@ -29,63 +26,31 @@ export const validateDate = (dateString: string) => {
   return formattedDate as Date;
 };
 
-export const decodeUrlSpaces = (input: string): string => {
-  return input.replace(/%20/g, ' ');
-};
+export async function getMimeType(buffer: Buffer): Promise<string | undefined> {
+  const fileType = await fileTypeFromBuffer(buffer);
+  return fileType?.mime;
+}
 
-export const sendMail = async (title: string, body: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_WEBSITE_URL}/api/email`,
-    {
-      method: 'POST',
-      cache: 'no-cache',
-      body: JSON.stringify({
-        title: title,
-        body: body,
-      }),
-    }
-  );
+export async function getSearchParamsFromHeaders(): Promise<URLSearchParams> {
+  const headersList = await headers();
+  const rawParams = headersList.get('x-search-params');
 
-  if (!response.ok) {
-    const error = (await response.json()).error;
-    throw new Error(error);
-  }
-};
+  // Ensure it's in the format "?id=123"
+  const search = rawParams?.startsWith('?') ? rawParams : `?${rawParams || ''}`;
 
-export const createDateTimeObject = (date: string, time: string): Date => {
-  return new Date(`${date}T${time}:00`);
-};
+  return new URLSearchParams(search);
+}
 
-export const isTimeReserved = (
-  datetime: Date,
-  reservedTimes: Date[]
-): boolean => {
-  return reservedTimes.some(
-    (reserved) => reserved.getTime() === datetime.getTime()
-  );
-};
+export async function getPathnameFromHeaders(): Promise<string> {
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname');
 
-export const generateTimeSlots = (): string[] => {
-  const slots = [];
-  const start = 10; // Start time in hours
-  const end = 18; // End time in hours
-
-  for (let hour = start; hour < end; hour++) {
-    slots.push(`${hour}:00`, `${hour}:30`);
+  if (!pathname) {
+    throw new ErrorInternal(
+      'Noget gik galt.',
+      `Expected header [x-pathname] to be string, got ${pathname}`
+    );
   }
 
-  return slots;
-};
-
-/* export const getBaseUrl = (): string => {
-  if (typeof window !== 'undefined') {
-    // Client-side: Use `window.location`
-    return `${window.location.protocol}//${window.location.host}`;
-  } else {
-    // Server-side: Use `process.env.NEXT_PUBLIC_VERCEL_URL` or fall back to localhost
-    const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
-    return vercelUrl
-      ? `https://${vercelUrl}`
-      : `http://localhost:${process.env.PORT || 3000}`;
-  }
-}; */
+  return pathname;
+}
