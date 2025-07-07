@@ -251,7 +251,7 @@ export async function deleteDevice(
   formData: FormData
 ): Promise<ActionResponse> {
   try {
-    const idRaw = formData.get('id')?.toString();
+    const idRaw = formData.get('deviceId')?.toString();
 
     const id = parseInt(idRaw || '', 10);
 

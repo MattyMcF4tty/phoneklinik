@@ -27,7 +27,7 @@ export default async function RootLayout({
     <html lang="da" className="h-full">
       <body className="bg-slate-50 min-h-screen flex flex-col">
         <Toaster richColors={true} position="top-right" />
-        {pathname.includes('admin') ? (
+        {pathname.includes('admin') && !pathname.includes('auth') ? (
           <AdminNavbar />
         ) : !underMaintenance ? (
           <Navbar />
