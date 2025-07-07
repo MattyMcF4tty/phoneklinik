@@ -6,6 +6,7 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isMaintenanceMode = process.env.MAINTENENCE_MODE === 'true';
 
+  console.log(process.env.MAINTENENCE_MODE);
   if (isMaintenanceMode) {
     if (
       !pathname.startsWith('/admin') &&
