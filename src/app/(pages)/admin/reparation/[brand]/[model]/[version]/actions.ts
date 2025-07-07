@@ -158,7 +158,7 @@ export async function addVariant(
   try {
     const partId = parseInt(formData.get('partId')?.toString() || '', 10);
     const name = formData.get('variantName')?.toString();
-    const description = formData.get('variantdescription')?.toString();
+    const description = formData.get('variantDescription')?.toString();
     const variantRepairTime = Number(formData.get('variantRepairTime'));
     const variantGrade = parseInt(
       formData.get('variantGrade')?.toString() || '',
