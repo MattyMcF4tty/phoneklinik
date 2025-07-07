@@ -4,7 +4,7 @@ import React, { FC, useActionState, useEffect } from 'react';
 import { ActionResponse } from '@schemas/types';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { deletePart, deleteVariant } from '../actions';
+import { deleteVariant } from '../actions';
 import PartVariant from '@schemas/partVariant';
 
 interface DeleteVariantButtonProps {
