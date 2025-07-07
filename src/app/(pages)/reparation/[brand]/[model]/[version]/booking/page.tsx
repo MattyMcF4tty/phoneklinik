@@ -27,7 +27,8 @@ const BookingPage: NextPage = () => {
   );
 
   const totalPrice = parts.reduce((sum, part) => sum + part.price, 0);
-  const vatPrice = (totalPrice * 0.25) / 1.25;
+  /*   const vatPrice = (totalPrice * 0.25) / 1.25;  */
+
   return (
     <div className="w-full flex flex-col gap-4 grow">
       <h1 className="content-box text-2xl font-semibold text-center">
