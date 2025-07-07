@@ -117,7 +117,7 @@ const ValuationPage: NextPage = () => {
                     defaultValue="rejected"
                   />
                   <button className="border border-slate-400 h-full w-full">
-                    nej
+                    Nej
                   </button>
                 </form>
                 <form action={responseFormAction} className="w-full">

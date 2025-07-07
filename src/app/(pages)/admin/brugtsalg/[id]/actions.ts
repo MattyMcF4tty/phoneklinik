@@ -155,8 +155,8 @@ export async function submitValuation(
               </p>
               <p>
                 Du kan se resultatet af vurderingen via følgende link:<br/>
-                <a href="https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}">
-                  https://phoneklinik.dk/enhed/vurdering/${valuationRequest.id}
+                <a href="https://phoneklinik.dk/valuation?id=${valuationRequest.id}">
+                  https://phoneklinik.dk/valuation?id=${valuationRequest.id}
                 </a>
               </p>
               <p>
