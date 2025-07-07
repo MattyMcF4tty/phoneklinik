@@ -27,7 +27,7 @@ const Page: NextPage<PageProps> = async ({ params }) => {
   }
 
   const [device, selectedParts, deviceParts] = await Promise.all([
-    DeviceClient.id(booking.id).getDevice(),
+    DeviceClient.id(booking.deviceId).getDevice(),
     Promise.all(
       booking.selectedPartVariants.map(async (id) => {
         return DevicePartVariantClient.id(id).getVariant();
@@ -37,6 +37,7 @@ const Page: NextPage<PageProps> = async ({ params }) => {
   ]);
 
   const deviceName = `${device.brand} ${device.model} ${device.version}`;
+  console.log(deviceName);
   const bookingDate = new Date(booking.bookingDate);
 
   return (

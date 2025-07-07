@@ -248,6 +248,7 @@ class DeviceQueryBuilder {
 
     const query = supabase.from(deviceTable).select('*');
 
+    console.log('device id', this._id);
     if (this._id) {
       query.eq('id', this._id);
     }
