@@ -1,18 +1,10 @@
 import { NextPage } from 'next';
 import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import Link from 'next/link';
-import RepairBookingClient from '@lib/clients/repairBookingClient';
-import { startOfWeek, endOfWeek } from 'date-fns';
 import BookingList from '@/app/(pages)/admin/dashboard/components/BookingList';
 
 const AdminDashboardPage: NextPage = async () => {
   const valuations = await ValuationRequestClient.query();
-
-  const today = new Date();
-  const todaysBookings = await RepairBookingClient.getBookings({
-    start: startOfWeek(today),
-    end: endOfWeek(today),
-  });
 
   return (
     <div className="flex flex-col w-full h-[calc(90vh_-_var(--navbar-height))] gap-8">
@@ -51,12 +43,7 @@ const AdminDashboardPage: NextPage = async () => {
       </div>
 
       <div className="content-box h-1/2 flex flex-col gap-2">
-        <h1 className="w-full text-center text-title">
-          Reparation af enheder denne uge
-        </h1>
-        <div className="h-full overflow-y-hidden">
-          <BookingList bookings={todaysBookings} />
-        </div>
+        <BookingList />
       </div>
     </div>
   );

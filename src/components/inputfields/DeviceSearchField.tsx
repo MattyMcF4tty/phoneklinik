@@ -1,8 +1,10 @@
 'use client';
 
 import Device from '@schemas/device';
+import handleInternalApi from '@utils/api';
 import Link from 'next/link';
 import React, { FC, useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 interface DeviceSearchFieldProps {
   onSearch?: (value: string) => void;
@@ -39,18 +41,17 @@ const DeviceSearchField: FC<DeviceSearchFieldProps> = ({
   }, [debouncedValue, onSearch]);
 
   async function fetchSearch(search: string) {
-    const response = await fetch(`/api/devices/search?name=${search}`, {
+    const response = await handleInternalApi('/devices/search', {
       method: 'GET',
+      params: { name: search },
     });
 
-    const responseJson = await response.json();
-
-    if (!response.ok) {
-      throw new Error(responseJson.error);
+    if (response.success === false) {
+      toast.error(response.message);
+      return;
     }
 
-    setSearchResult(responseJson.data);
-    return;
+    setSearchResult(response.data);
   }
 
   return (

@@ -2,11 +2,12 @@ import ValuationRequestClient from '@/lib/clients/valuationBookingClient';
 import AppError from '@/schemas/errors/appError';
 import { ErrorBadRequest } from '@/schemas/errors/appErrorTypes';
 import { ApiResponse } from '@/schemas/types';
+import ValuationRequest from '@schemas/valuationRequest';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   req: NextRequest
-): Promise<NextResponse<ApiResponse>> {
+): Promise<NextResponse<ApiResponse<ValuationRequest>>> {
   const formData = await req.formData();
   const data = Object.fromEntries(formData.entries());
   const deviceName = String(data.deviceLabel) || undefined;
@@ -72,7 +73,7 @@ export async function POST(
     );
   }
 
-  await ValuationRequestClient.requestValuation(
+  const newValuationRequest = await ValuationRequestClient.requestValuation(
     {
       firstName,
       lastName,
@@ -91,6 +92,7 @@ export async function POST(
       {
         success: true,
         message: 'Vurdering af enhed anmodet. Du vil høre fra os snarest.',
+        data: newValuationRequest,
       },
       { status: 200 }
     );

@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   req: NextRequest
-): Promise<NextResponse<ApiResponse>> {
+): Promise<NextResponse<ApiResponse<Accessory>>> {
   try {
     const formData = await req.formData();
     const data = Object.fromEntries(formData.entries());
@@ -78,7 +78,7 @@ export async function POST(
       type = customType;
     }
 
-    await AccessoryClient.createAccessory(
+    const newAccessory = await AccessoryClient.createAccessory(
       {
         name,
         description,
@@ -91,7 +91,7 @@ export async function POST(
     );
 
     return NextResponse.json(
-      { success: true, message: 'Tilbehør oprettet' },
+      { success: true, message: 'Tilbehør oprettet', data: newAccessory },
       { status: 200 }
     );
   } catch (err: unknown) {
@@ -171,7 +171,9 @@ export async function PATCH(
       accesorryAvif = await convertToAvif(accesorryImage);
     }
 
-    const accessory = await AccessoryClient.id(accessoryId).updateAccessory(
+    const updatedAccessory = await AccessoryClient.id(
+      accessoryId
+    ).updateAccessory(
       {
         brand: accessoryBrand,
         description: accessoryDescription,
@@ -184,8 +186,9 @@ export async function PATCH(
     );
 
     return NextResponse.json({
-      message: `Tilbehør ${accessory.name} opdateret.`,
-      data: accessory,
+      message: `Tilbehør ${updatedAccessory.name} opdateret.`,
+      success: true,
+      data: updatedAccessory,
     });
   } catch (err: unknown) {
     if (err instanceof AppError) {

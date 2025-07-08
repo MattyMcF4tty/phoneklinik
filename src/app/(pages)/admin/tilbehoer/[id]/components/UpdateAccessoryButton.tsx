@@ -35,7 +35,7 @@ const UpdateAccessoryButton: FC<UpdateAccessoryButtonProps> = ({
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Accessory>('/accessories', {
+      const reponse = await handleInternalApi('/accessories', {
         method: 'PATCH',
         body: formData,
       });

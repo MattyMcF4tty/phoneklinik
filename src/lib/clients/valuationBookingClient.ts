@@ -185,7 +185,6 @@ class ValuationRequestQueryBuilder {
     }
 
     if (!data || data.length === 0) {
-      console.warn('No valuation requests found');
       return [];
     }
 

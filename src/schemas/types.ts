@@ -5,11 +5,19 @@ export type ActionResponse<T = undefined> = {
   data?: T;
 };
 
-export type ApiResponse<T = undefined> = {
-  success?: boolean;
+type ApiResponseSuccess<T> = {
+  success: true;
   message: string;
-  data?: T;
+  data: T;
 };
+
+type ApiResponseError = {
+  success: false;
+  message: string;
+  data?: undefined;
+};
+
+export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
 
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

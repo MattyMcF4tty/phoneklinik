@@ -3,7 +3,6 @@
 import ItemCard from '@components/cards/ItemCard';
 import AccessoryForm from '@components/forms/presets/AccessoryForm';
 import PopUpWrapper from '@components/wrappers/PopUpWrapper';
-import Accessory from '@schemas/accessory';
 import Brand from '@schemas/brand';
 import AppError from '@schemas/errors/appError';
 import handleInternalApi from '@utils/api';
@@ -32,7 +31,7 @@ const AddAccessoryCard: FC<AddAccessoryCardProps> = ({ types, brands }) => {
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Accessory>('/accessories', {
+      const reponse = await handleInternalApi('/accessories', {
         method: 'POST',
         body: formData,
       });

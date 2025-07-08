@@ -6,6 +6,57 @@ import DeviceClient from '@/lib/clients/deviceClient';
 import { ApiResponse } from '@/schemas/types';
 import Device from '@/schemas/device';
 
+export async function GET(
+  req: NextRequest
+): Promise<NextResponse<ApiResponse<Device[]>>> {
+  try {
+    const searchParams = req.nextUrl.searchParams;
+
+    const ids = searchParams.getAll('id');
+
+    if (ids.length === 0) {
+      throw new ErrorBadRequest(
+        'Mindst ét ID skal angives.',
+        'Expected one or more ?id parameters in the query string'
+      );
+    }
+
+    const parsedIds = ids.map(Number).filter((n) => !isNaN(n));
+    if (parsedIds.length === 0) {
+      throw new ErrorBadRequest(
+        'Ingen gyldige IDs blev angivet.',
+        `Got: ${ids.join(', ')}`
+      );
+    }
+
+    const devices = await Promise.all(
+      parsedIds.map((id) => {
+        return DeviceClient.id(id).getDevice();
+      })
+    );
+
+    return NextResponse.json({
+      success: true,
+      data: devices,
+      message: `Found ${devices.length} devices`,
+    });
+  } catch (err: unknown) {
+    if (err instanceof AppError) {
+      console.error('AppError:', err.details);
+      return NextResponse.json(
+        { success: false, message: err.message },
+        { status: err.httpCode }
+      );
+    }
+
+    console.error('Unexpected error:', err);
+    return NextResponse.json(
+      { success: false, message: 'Noget gik galt.' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(
   req: NextRequest
 ): Promise<NextResponse<ApiResponse<Device>>> {
@@ -80,7 +131,7 @@ export async function POST(
       },
       { status: 200 }
     );
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof AppError) {
       console.error('AppError:', err.details);
       return NextResponse.json(
@@ -141,6 +192,7 @@ export async function PATCH(
       {
         data: updatedDevice,
         message: `Enhed "${updatedDevice.brand} ${updatedDevice.model} ${updatedDevice.version}" opdateret.`,
+        success: true,
       },
       { status: 200 }
     );

@@ -31,7 +31,7 @@ const AddDeviceCard: FC<AddDeviceCardProps> = ({ defaultDevice, brands }) => {
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Device>('/devices', {
+      const reponse = await handleInternalApi('/devices', {
         method: 'POST',
         body: formData,
       });

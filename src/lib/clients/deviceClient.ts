@@ -93,7 +93,7 @@ export default class DeviceClient {
 
   public static async searchByName(
     name: string
-  ): Promise<Pick<Device, 'id' | 'brand' | 'model' | 'version'>> {
+  ): Promise<Pick<Device, 'id' | 'brand' | 'model' | 'version'>[]> {
     const supabase = await createClient();
 
     const lowerCaseName = name.toLowerCase();
@@ -120,7 +120,7 @@ export default class DeviceClient {
     const deserializedDeviceNames: Pick<
       Device,
       'id' | 'brand' | 'model' | 'version'
-    > = deviceNameData.map(
+    >[] = deviceNameData.map(
       (
         serializedDeviceName: Serialize<
           Pick<Device, 'id' | 'brand' | 'model' | 'version'>
@@ -248,7 +248,6 @@ class DeviceQueryBuilder {
 
     const query = supabase.from(deviceTable).select('*');
 
-    console.log('device id', this._id);
     if (this._id) {
       query.eq('id', this._id);
     }

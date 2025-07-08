@@ -27,7 +27,7 @@ const UpdateBrandButton: FC<UpdateBrandButtonProps> = ({ brand }) => {
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Brand>('/brands', {
+      const reponse = await handleInternalApi('/brands', {
         method: 'PATCH',
         body: formData,
       });

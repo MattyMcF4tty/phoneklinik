@@ -34,7 +34,7 @@ const UpdateDeviceButton: FC<UpdateDeviceButtonProps> = ({
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const reponse = await handleInternalApi<Device>('/devices', {
+      const reponse = await handleInternalApi('/devices', {
         method: 'PATCH',
         body: formData,
       });
